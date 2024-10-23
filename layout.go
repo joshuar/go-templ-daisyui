@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 //go:generate stringer -type=Layout -linecomment -output layout_generated.go
-package main
+package components
 
 // Layout options. Vertical is the default in DaisyUI so it goes first.
 const (

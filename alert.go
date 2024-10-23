@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 //go:generate stringer -type=Alert -linecomment -output alert_generated.go
-package main
+package components
 
 const (
 	AlertInfo    Alert = iota // alert-info

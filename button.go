@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 //go:generate go run golang.org/x/tools/cmd/stringer -type=ButtonModifier,ButtonShape -linecomment -output button_generated.go
-package main
+package components
 
 import (
 	"strings"

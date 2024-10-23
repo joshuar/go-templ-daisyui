@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 //go:generate stringer -type=Size -linecomment -output size_generated.go
-package main
+package components
 
 // Size options. MD is default in DaisyUI so it goes first.
 const (

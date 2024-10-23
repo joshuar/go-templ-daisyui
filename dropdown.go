@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 //go:generate go run golang.org/x/tools/cmd/stringer -type=DropDownOpen,DropDownStyle -linecomment -output dropdown_generated.go
-package main
+package components
 
 import "strings"
 

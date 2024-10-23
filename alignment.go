@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 //go:generate go run golang.org/x/tools/cmd/stringer -type=Alignment -linecomment -output alignment_generated.go
-package main
+package components
 
 const (
 	AlignEnd Alignment = iota

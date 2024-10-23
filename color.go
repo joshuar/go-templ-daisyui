@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 //go:generate stringer -type=Color -linecomment -output color_generated.go
-package main
+package components
 
 const (
 	ColorNeutral          Color = iota // bg-neutral

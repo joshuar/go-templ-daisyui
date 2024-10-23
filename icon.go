@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 //go:generate go run golang.org/x/tools/cmd/stringer -type=FAStyle -linecomment -output icon_generated.go
-package main
+package components
 
 import "strings"
 

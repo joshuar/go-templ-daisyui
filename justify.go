@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 //go:generate stringer -type=JustifyContent -linecomment -output justify_generated.go
-package main
+package components
 
 const (
 	JustifyNormal  JustifyContent = iota //

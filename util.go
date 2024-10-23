@@ -1,7 +1,7 @@
 // Copyright 2024 Joshua Rich <joshua.rich@gmail.com>.
 // SPDX-License-Identifier: MIT
 
-package main
+package components
 
 type OrderedMap[K comparable, V any] struct {
 	store map[K]V
