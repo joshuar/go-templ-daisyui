@@ -1,0 +1,22 @@
+// Copyright 2024 Joshua Rich <joshua.rich@gmail.com>.
+// SPDX-License-Identifier: MIT
+
+package main
+
+templ ModalTempl(id string, content templ.Component) {
+	<div class="modal-box">
+		@content
+		<form method="dialog">
+			@ButtonTempl(NewButton("Close", "close",
+				AsShape(ButtonCircle),
+				WithModifier(ButtonGhost),
+				WithSize(SM),
+				WithIcon(NewIcon("xmark"), AlignMiddle),
+				WithButtonClasses("absolute", "right-2", "top-2"),
+				ButtonAttributes(templ.Attributes{
+					"_": "on click or keyup[key=='Esc'] take .modal-open from #" + id + " wait 200ms",
+				}),
+			))
+		</form>
+	</div>
+}

@@ -1,0 +1,28 @@
+// Copyright 2024 Joshua Rich <joshua.rich@gmail.com>.
+// SPDX-License-Identifier: MIT
+
+package main
+
+templ FormTempl(form Form) {
+	<form
+		id={ form.ID }
+		{ form.Attributes... }
+	>
+		if form.Info != "" {
+			<p class="py-6">
+				{ form.Info }
+			</p>
+		}
+		if form.Inputs != nil {
+			for _, input := range form.GetInputs() {
+				@InputTempl(input)
+			}
+		}
+		if form.Buttons != nil {
+			for _, button := range form.GetButtons() {
+				@ButtonTempl(button)
+			}
+		}
+		{ children... }
+	</form>
+}

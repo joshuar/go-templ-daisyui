@@ -1,0 +1,37 @@
+// Copyright 2024 Joshua Rich <joshua.rich@gmail.com>.
+// SPDX-License-Identifier: MIT
+
+package main
+
+templ unorderedList(list List) {
+	<ul
+		{ list.Attributes... }
+	>
+		for _, item := range list.Items {
+			<li>
+				@item
+			</li>
+		}
+	</ul>
+}
+
+templ orderedList(list List) {
+	<ol
+		{ list.Attributes... }
+	>
+		for _, item := range list.Items {
+			<li>
+				@item
+			</li>
+		}
+	</ol>
+}
+
+templ ListTempl(list List) {
+	switch list.Style {
+		case ListUnordered:
+			@unorderedList(list)
+		case ListOrdered:
+			@orderedList(list)
+	}
+}

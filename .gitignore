@@ -1,0 +1,22 @@
+# Ignore everything
+*
+
+# But not these files...
+!/.gitignore
+
+!*.go
+*_templ.go
+!*.templ
+!go.sum
+!go.mod
+
+!*.yaml
+!*.json
+
+!*.md
+!LICENSE
+
+# !Makefile
+
+# ...even if they are in subdirectories
+!*/

@@ -1,0 +1,55 @@
+// Copyright 2024 Joshua Rich <joshua.rich@gmail.com>.
+// SPDX-License-Identifier: MIT
+
+package main
+
+templ regularButton(button Button) {
+	<button
+		class={ button.Class() }
+		{ button.Attributes... }
+	>
+		if button.Icon != nil {
+			switch button.Icon.Alignment {
+				case AlignLeft:
+					@FontAwesomeTempl(button.Icon.Icon)
+					if button.Label != "" {
+						{ button.Label }
+					}
+				case AlignRight:
+					if button.Label != "" {
+						{ button.Label }
+					}
+					@FontAwesomeTempl(button.Icon.Icon)
+			}
+		} else {
+			{ button.Label }
+		}
+	</button>
+}
+
+templ shapedButton(button Button) {
+	<button
+		class={ button.Class(), button.Shape.String() }
+		{ button.Attributes... }
+	>
+		@FontAwesomeTempl(button.Icon.Icon)
+	</button>
+}
+
+templ ButtonTempl(button Button) {
+	if button.Shape == ButtonRegular {
+		@regularButton(button)
+	} else {
+		@shapedButton(button)
+	}
+}
+
+templ LinkButtonTempl(button Button) {
+	<a
+		role="button"
+		class={ button.Class() }
+		{ button.Attributes... }
+	>
+		{ button.Label }
+	</a>
+}

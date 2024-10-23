@@ -1,0 +1,87 @@
+// Copyright 2024 Joshua Rich <joshua.rich@gmail.com>.
+// SPDX-License-Identifier: MIT
+
+package main
+
+templ InputTempl(input Input) {
+	switch  {
+		case input.FormControl:
+			@formInput(input)
+		case input.Label != "":
+			@textLabelInput(input)
+		case input.Icon != nil:
+			@iconLabelInput(input)
+		default:
+			@baseInput(input, input.Class(), "w-full max-w-xs")
+	}
+}
+
+templ baseInput(input Input, classes ...string) {
+	<input
+		name={ input.ID }
+		type={ input.Type.String() }
+		if input.Placeholder != "" {
+			placeholder={ input.Placeholder }
+		}
+		class={ classes }
+		{ input.Attributes... }
+	/>
+}
+
+templ textLabelInput(input Input) {
+	<label class={ input.Class(), "flex items-center gap-2" }>
+		{ input.Label }
+		@baseInput(input, "grow")
+		{ children... }
+	</label>
+}
+
+templ iconLabelInput(input Input) {
+	<label class={ input.Class(), "flex items-center gap-2" }>
+		switch input.Icon.Alignment {
+			case AlignLeft:
+				@FontAwesomeTempl(input.Icon.Icon)
+				@baseInput(input, "grow")
+			case AlignRight:
+				@baseInput(input, "grow")
+				@FontAwesomeTempl(input.Icon.Icon)
+		}
+		{ children... }
+	</label>
+}
+
+templ formInput(input Input) {
+	<div
+		id={ input.ID }
+		hx-target="this"
+		hx-swap="outerHTML"
+		class="w-full"
+	>
+		<label class="form-control w-full max-w-xs">
+			if input.Label != "" {
+				<div class="label">
+					<span class="label-text">{ input.Label }</span>
+					if input.Optional {
+						<span class="badge badge-info">Optional</span>
+					}
+				</div>
+			}
+			switch  {
+				case input.Label != "":
+					@textLabelInput(input)
+				case input.Icon != nil:
+					@iconLabelInput(input)
+				default:
+					@baseInput(input, input.Class(), "w-full max-w-xs")
+			}
+			if input.Error != "" {
+				<div class="label">
+					<span class="label-text-alt text-error">
+						@FontAwesomeTempl(NewIcon("circle-exclamation", WithColor(ColorError)))
+						{ input.Error }
+					</span>
+				</div>
+			}
+		</label>
+	</div>
+}

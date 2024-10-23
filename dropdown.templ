@@ -1,0 +1,27 @@
+// Copyright 2024 Joshua Rich <joshua.rich@gmail.com>.
+// SPDX-License-Identifier: MIT
+
+package main
+
+templ DropDownTempl(dropdown DropDown) {
+	<div class={ "dropdown", dropdown.Class() }>
+		switch dropdown.Style {
+			case DropDownCard:
+				<div
+					tabindex="0"
+					class="dropdown-content card card-compact bg-primary text-primary-content z-[1] w-64 p-2 shadow"
+				>
+					<div class="card-body">
+						{ children... }
+					</div>
+				</div>
+			case DropDownButton:
+				<div tabindex="0" role="button" class="btn m-1">{ dropdown.Label }</div>
+				<ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
+					{ children... }
+				</ul>
+			case DropDownCustom:
+				{ children... }
+		}
+	</div>
+}

@@ -1,0 +1,15 @@
+{
+  "editor.formatOnSave": true,
+  "[templ]": {
+    "editor.defaultFormatter": "a-h.templ"
+  },
+  "tailwindCSS.includeLanguages": {
+    "templ": "html"
+  },
+  "emmet.includeLanguages": {
+    "templ": "html"
+  },
+  "licenser.author": "Joshua Rich",
+  "licenser.useSPDXLicenseFormat": true,
+  "licenser.license": "MIT"
+}

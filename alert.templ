@@ -1,0 +1,32 @@
+// Copyright 2024 Joshua Rich <joshua.rich@gmail.com>.
+// SPDX-License-Identifier: MIT
+
+package main
+
+templ AlertTempl(alertType Alert, message, id string, oob bool) {
+	<div
+		if id != "" {
+			id={ id }
+		}
+		role="alert"
+		class={ "alert", alertType.String() }
+		if oob {
+			hx-swap-oob="true"
+		}
+	>
+		switch alertType {
+			case AlertInfo:
+				@FontAwesomeTempl(NewIcon("circle-info"))
+			case AlertSuccess:
+				@FontAwesomeTempl(NewIcon("circle-check"))
+			case AlertWarning:
+				@FontAwesomeTempl(NewIcon("circle-exclamation"))
+			case AlertError:
+				@FontAwesomeTempl(NewIcon("circle-xmark"))
+			default:
+				@FontAwesomeTempl(NewIcon("circle-info"))
+		}
+		<span>{ message }</span>
+		{ children... }
+	</div>
+}
