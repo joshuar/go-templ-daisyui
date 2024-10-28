@@ -7,7 +7,7 @@ templ ModalTempl(id string, content templ.Component) {
 	<div class="modal-box">
 		@content
 		<form method="dialog">
-			@ButtonTempl(NewButton("Close", "close",
+			@NewButton("Close", "close",
 				AsShape(ButtonCircle),
 				WithModifier(ButtonGhost),
 				WithSize(SM),
@@ -16,7 +16,7 @@ templ ModalTempl(id string, content templ.Component) {
 				ButtonAttributes(templ.Attributes{
 					"_": "on click or keyup[key=='Esc'] take .modal-open from #" + id + " wait 200ms",
 				}),
-			))
+			).Show()
 		</form>
 	</div>
 }

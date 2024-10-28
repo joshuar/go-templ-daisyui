@@ -3,53 +3,53 @@
 
 package components
 
-templ regularButton(button Button) {
+templ (b Button) buttonRegular() {
 	<button
-		class={ button.Class() }
-		{ button.Attributes... }
+		class={ b.Class() }
+		{ b.Attributes... }
 	>
-		if button.Icon != nil {
-			switch button.Icon.Alignment {
+		if b.Icon != nil {
+			switch b.Icon.Alignment {
 				case AlignLeft:
-					@FontAwesomeTempl(button.Icon.Icon)
-					if button.Label != "" {
-						{ button.Label }
+					@FontAwesomeTempl(b.Icon.Icon)
+					if b.Label != "" {
+						{ b.Label }
 					}
 				case AlignRight:
-					if button.Label != "" {
-						{ button.Label }
+					if b.Label != "" {
+						{ b.Label }
 					}
-					@FontAwesomeTempl(button.Icon.Icon)
+					@FontAwesomeTempl(b.Icon.Icon)
 			}
 		} else {
-			{ button.Label }
+			{ b.Label }
 		}
 	</button>
 }
 
-templ shapedButton(button Button) {
+templ (b Button) buttonShape() {
 	<button
-		class={ button.Class(), button.Shape.String() }
-		{ button.Attributes... }
+		class={ b.Class(), b.Shape.String() }
+		{ b.Attributes... }
 	>
-		@FontAwesomeTempl(button.Icon.Icon)
+		@FontAwesomeTempl(b.Icon.Icon)
 	</button>
 }
 
-templ ButtonTempl(button Button) {
-	if button.Shape == ButtonRegular {
-		@regularButton(button)
+templ (b Button) Show() {
+	if b.Shape == ButtonRegular {
+		@b.buttonRegular()
 	} else {
-		@shapedButton(button)
+		@b.buttonShape()
 	}
 }
 
-templ LinkButtonTempl(button Button) {
+templ (b Button) ShowAsLink() {
 	<a
 		role="button"
-		class={ button.Class() }
-		{ button.Attributes... }
+		class={ b.Class() }
+		{ b.Attributes... }
 	>
-		{ button.Label }
+		{ b.Label }
 	</a>
 }

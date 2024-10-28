@@ -3,24 +3,24 @@
 
 package components
 
-templ FormTempl(form Form) {
+templ (f Form) Show() {
 	<form
-		id={ form.ID }
-		{ form.Attributes... }
+		id={ f.ID }
+		{ f.Attributes... }
 	>
-		if form.Info != "" {
+		if f.Info != "" {
 			<p class="py-6">
-				{ form.Info }
+				{ f.Info }
 			</p>
 		}
-		if form.Inputs != nil {
-			for _, input := range form.GetInputs() {
-				@InputTempl(input)
+		if f.Inputs != nil {
+			for _, input := range f.GetInputs() {
+				@input.Show()
 			}
 		}
-		if form.Buttons != nil {
-			for _, button := range form.GetButtons() {
-				@ButtonTempl(button)
+		if f.Buttons != nil {
+			for _, button := range f.GetButtons() {
+				@button.Show()
 			}
 		}
 		{ children... }

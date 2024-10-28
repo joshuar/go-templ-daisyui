@@ -3,82 +3,82 @@
 
 package components
 
-templ InputTempl(input Input) {
+templ (i Input) Show() {
 	switch  {
-		case input.FormControl:
-			@formInput(input)
-		case input.Label != "":
-			@textLabelInput(input)
-		case input.Icon != nil:
-			@iconLabelInput(input)
+		case i.FormControl:
+			@i.asForm()
+		case i.Label != "":
+			@i.withTextLabel()
+		case i.Icon != nil:
+			@i.withIconLabel()
 		default:
-			@baseInput(input, input.Class(), "w-full max-w-xs")
+			@i.show("w-full max-w-xs")
 	}
 }
 
-templ baseInput(input Input, classes ...string) {
+templ (i Input) show(classes ...string) {
 	<input
-		name={ input.ID }
-		type={ input.Type.String() }
-		if input.Placeholder != "" {
-			placeholder={ input.Placeholder }
+		name={ i.ID }
+		type={ i.Type.String() }
+		if i.Placeholder != "" {
+			placeholder={ i.Placeholder }
 		}
-		class={ classes }
-		{ input.Attributes... }
+		class={ i.Class(), classes }
+		{ i.Attributes... }
 	/>
 }
 
-templ textLabelInput(input Input) {
-	<label class={ input.Class(), "flex items-center gap-2" }>
-		{ input.Label }
-		@baseInput(input, "grow")
+templ (i Input) withTextLabel() {
+	<label class={ i.Class(), "flex items-center gap-2" }>
+		{ i.Label }
+		@i.show("grow")
 		{ children... }
 	</label>
 }
 
-templ iconLabelInput(input Input) {
-	<label class={ input.Class(), "flex items-center gap-2" }>
-		switch input.Icon.Alignment {
+templ (i Input) withIconLabel() {
+	<label class={ i.Class(), "flex items-center gap-2" }>
+		switch i.Icon.Alignment {
 			case AlignLeft:
-				@FontAwesomeTempl(input.Icon.Icon)
-				@baseInput(input, "grow")
+				@FontAwesomeTempl(i.Icon.Icon)
+				@i.show("grow")
 			case AlignRight:
-				@baseInput(input, "grow")
-				@FontAwesomeTempl(input.Icon.Icon)
+				@i.show("grow")
+				@FontAwesomeTempl(i.Icon.Icon)
 		}
 		{ children... }
 	</label>
 }
 
-templ formInput(input Input) {
+templ (i Input) asForm() {
 	<div
-		id={ input.ID }
+		id={ i.ID }
 		hx-target="this"
 		hx-swap="outerHTML"
 		class="w-full"
 	>
 		<label class="form-control w-full max-w-xs">
-			if input.Label != "" {
+			if i.Label != "" {
 				<div class="label">
-					<span class="label-text">{ input.Label }</span>
-					if input.Optional {
+					<span class="label-text">{ i.Label }</span>
+					if i.Optional {
 						<span class="badge badge-info">Optional</span>
 					}
 				</div>
 			}
 			switch  {
-				case input.Label != "":
-					@textLabelInput(input)
-				case input.Icon != nil:
-					@iconLabelInput(input)
+				case i.Label != "":
+					@i.withTextLabel()
+				case i.Icon != nil:
+					@i.withIconLabel()
 				default:
-					@baseInput(input, input.Class(), "w-full max-w-xs")
+					@i.show("w-full max-w-xs")
 			}
-			if input.Error != "" {
+			if i.Error != "" {
 				<div class="label">
 					<span class="label-text-alt text-error">
 						@FontAwesomeTempl(NewIcon("circle-exclamation", WithColor(ColorError)))
-						{ input.Error }
+						{ i.Error }
 					</span>
 				</div>
 			}
