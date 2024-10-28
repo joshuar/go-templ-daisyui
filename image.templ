@@ -3,14 +3,14 @@
 
 package components
 
-templ Image(url, alt string, mask Mask) {
+templ (i Image) Show(image Image) {
 	<img
-		if mask != 0 {
-			class={ "mask", mask.String() }
+		if len(image.class) > 0 {
+			class={ image.Class() }
 		}
-		src={ url }
-		if alt != "" {
-			alt={ alt }
+		src={ image.URL }
+		if image.Alt != "" {
+			alt={ image.Alt }
 		}
 	/>
 }
