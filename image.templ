@@ -1,0 +1,16 @@
+// Copyright 2024 Joshua Rich <joshua.rich@gmail.com>.
+// SPDX-License-Identifier: 	AGPL-3.0-or-later
+
+package components
+
+templ Image(url, alt string, mask Mask) {
+	<img
+		if mask != 0 {
+			class={ "mask", mask.String() }
+		}
+		src={ url }
+		if alt != "" {
+			alt={ alt }
+		}
+	/>
+}
