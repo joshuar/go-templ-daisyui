@@ -1,7 +1,7 @@
 // Copyright 2024 Joshua Rich <joshua.rich@gmail.com>.
 // SPDX-License-Identifier: 	AGPL-3.0-or-later
 
-//go:generate stringer -type=Mask -linecomment -output mask_generated.go
+//go:generate go run golang.org/x/tools/cmd/stringer -type=Mask -linecomment -output mask_generated.go
 package components
 
 const (
