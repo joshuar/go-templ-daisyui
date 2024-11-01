@@ -15,5 +15,6 @@
   "licenser.author": "Joshua Rich",
   "licenser.useSPDXLicenseFormat": true,
   "licenser.license": "MIT",
-  "conventionalCommits.lineBreak": "\\n"
+  "conventionalCommits.lineBreak": "\\n",
+  "conventionalCommits.scopes": ["devcontainer", "README"]
 }

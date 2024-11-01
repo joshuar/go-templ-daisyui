@@ -93,7 +93,7 @@
 Include as a module in your Go project:
 
 ```go
-import "github.com/joshuar/go-templ-daisyui" 
+import components "github.com/joshuar/go-templ-daisyui" 
 ```
 
 ## 👋 Contributing
