@@ -6,10 +6,14 @@
   "tailwindCSS.includeLanguages": {
     "templ": "html"
   },
+  "files.associations": {
+    "*.scss": "tailwindcss"
+  },
   "emmet.includeLanguages": {
     "templ": "html"
   },
   "licenser.author": "Joshua Rich",
   "licenser.useSPDXLicenseFormat": true,
-  "licenser.license": "MIT"
+  "licenser.license": "MIT",
+  "conventionalCommits.lineBreak": "\\n"
 }

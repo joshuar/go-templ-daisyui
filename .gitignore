@@ -11,10 +11,14 @@
 !go.mod
 
 !*.yaml
+!*.yml
 !*.json
 
 !*.md
 !LICENSE
+
+!.github/*
+!.devcontainer/*
 
 # !Makefile
 

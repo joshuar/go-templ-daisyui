@@ -1,0 +1,39 @@
+{
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "devcontainer",
+  "postCreateCommand": ".devcontainer/postcreate.sh",
+  "containerUser": "vscode",
+  "containerEnv": {
+    "TZ": "${localEnv:TZ:Australia/Brisbane}",
+    "HOME": "/home/vscode"
+  },
+  "updateRemoteUserUID": true,
+  "workspaceFolder": "/workspace",
+  "shutdownAction": "stopCompose",
+  "features": {
+    "ghcr.io/devcontainers/features/go:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers/features/node:1": {},
+    "ghcr.io/michidk/devcontainers-features/bun:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vivaxy.vscode-conventional-commits",
+        "golang.go",
+        "ymotongpoo.licenser",
+        "valentjn.vscode-ltex",
+        "tamasfe.even-better-toml",
+        "redhat.vscode-yaml",
+        "ms-azuretools.vscode-docker",
+        "esbenp.prettier-vscode",
+        "a-h.templ",
+        "bradlc.vscode-tailwindcss",
+        "yzhang.markdown-all-in-one",
+        "DavidAnson.vscode-markdownlint",
+        "mtxr.sqltools-driver-pg",
+        "mtxr.sqltools"
+      ]
+    }
+  }
+}
