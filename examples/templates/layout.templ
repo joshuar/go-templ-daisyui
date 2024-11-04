@@ -1,0 +1,44 @@
+package templates
+
+templ ResponsiveLayoutTemplate() {
+	<div class="w-full flex h-svh max-h-svh">
+		<div class="hidden h-full flex-[0.3] md:block">
+			<!-- Left Sidebar -->
+			<div class="grid h-full place-content-center bg-green-600">
+				<h1 class="text-xl">Left</h1>
+				<h1 class="text-xl">Sidebar</h1>
+			</div>
+		</div>
+		<div class="flex h-full flex-1 flex-col">
+			<!-- Main Content Area-->
+			<div class="flex h-full flex-col justify-between overflow-y-scroll">
+				<div class="sticky top-0 w-full">
+					<!-- Header -->
+					<div class="bg-orange-500 py-5">
+						<h1 class="text-center text-xl">Header</h1>
+					</div>
+				</div>
+				<div>
+					<!-- Content -->
+					<h1 class="text-center text-xl">Content</h1>
+				</div>
+				<div class="w-full">
+					<!-- Footer -->
+					<div class="bg-yellow-600 py-12">
+						<h1 class="text-center text-xl">Footer</h1>
+					</div>
+				</div>
+			</div>
+			<div class="sticky top-0 block bg-pink-500 py-5 md:hidden">
+				<h1 class="text-center text-xl">Bottom Navigation</h1>
+			</div>
+		</div>
+		<div class="hidden h-full flex-[0.3] lg:block">
+			<!-- Right Sidebar -->
+			<div class="grid h-full place-content-center bg-blue-600">
+				<h1 class="text-xl">Right</h1>
+				<h1 class="text-xl">Sidebar</h1>
+			</div>
+		</div>
+	</div>
+}

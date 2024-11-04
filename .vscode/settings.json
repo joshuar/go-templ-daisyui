@@ -16,5 +16,5 @@
   "licenser.useSPDXLicenseFormat": true,
   "licenser.license": "MIT",
   "conventionalCommits.lineBreak": "\\n",
-  "conventionalCommits.scopes": ["devcontainer", "README", "github"]
+  "conventionalCommits.scopes": ["devcontainer", "README", "github", "examples"]
 }

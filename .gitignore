@@ -12,7 +12,15 @@
 
 !*.yaml
 !*.yml
+!*.toml
 !*.json
+!*.js
+!*.scss
+
+!.*ignore
+!.*rc
+
+!Dockerfile
 
 !*.md
 !LICENSE
