@@ -1,7 +1,7 @@
 // Copyright 2024 Joshua Rich <joshua.rich@gmail.com>.
 // SPDX-License-Identifier: MIT
 
-//go:generate stringer -type=Color -linecomment -output color_generated.go
+//go:generate go run golang.org/x/tools/cmd/stringer -type=Color -linecomment -output color_generated.go
 package components
 
 const (

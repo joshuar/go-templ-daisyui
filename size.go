@@ -1,7 +1,7 @@
 // Copyright 2024 Joshua Rich <joshua.rich@gmail.com>.
 // SPDX-License-Identifier: MIT
 
-//go:generate stringer -type=Size -linecomment -output size_generated.go
+//go:generate go run golang.org/x/tools/cmd/stringer -type=Size -linecomment -output size_generated.go
 package components
 
 // Size options. MD is default in DaisyUI so it goes first.
