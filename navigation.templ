@@ -4,7 +4,7 @@
 package components
 
 templ BottomNavTempl(size Size, justify JustifyContent, content templ.Component) {
-	<div class={ "btm-nav", AddSize("btm-nav",size), "flex", justify.String() }>
+	<div class={ "btm-nav", size.SizeObject("btm-nav"), "flex", justify.String() }>
 		@content
 	</div>
 }

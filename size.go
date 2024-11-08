@@ -14,6 +14,9 @@ const (
 
 type Size int
 
-func AddSize(object string, size Size) string {
-	return object + "-" + size.String()
+// SizeObject returns the given object class with an appropriate size
+// modifier. For e.g., if Size is SM and object is menu, the return
+// value will be "menu-sm".
+func (s Size) SizeObject(object string) string {
+	return object + "-" + s.String()
 }
