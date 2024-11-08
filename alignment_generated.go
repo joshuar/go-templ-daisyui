@@ -16,9 +16,9 @@ func _() {
 	_ = x[AlignRight-5]
 }
 
-const _Alignment_name = "AlignEndAlignTopAlignBottomAlignMiddleAlignLeftAlignRight"
+const _Alignment_name = "endtopbottommiddleleftright"
 
-var _Alignment_index = [...]uint8{0, 8, 16, 27, 38, 47, 57}
+var _Alignment_index = [...]uint8{0, 3, 6, 12, 18, 22, 27}
 
 func (i Alignment) String() string {
 	if i < 0 || i >= Alignment(len(_Alignment_index)-1) {
