@@ -12,6 +12,9 @@ const (
 
 type Layout int
 
-func AddLayout(object string, layout Layout) string {
-	return object + "-" + layout.String()
+// LayoutObject returns the given object class with an appropriate layout
+// modifier. For e.g., if Layout is VerticalLayout and object is menu, the return
+// value will be "menu-vertical".
+func (l Layout) LayoutObject(object string) string {
+	return object + "-" + l.String()
 }
