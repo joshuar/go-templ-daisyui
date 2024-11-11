@@ -7,7 +7,7 @@ templ ModalTempl(id string, content templ.Component) {
 	<div class="modal-box">
 		@content
 		<form method="dialog">
-			@NewButton("Close", "close",
+			@NewButton("", "close",
 				AsShape(ButtonCircle),
 				WithModifier(ButtonGhost),
 				WithSize(SM),
