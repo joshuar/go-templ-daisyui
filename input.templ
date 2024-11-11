@@ -24,6 +24,9 @@ templ (i Input) show(classes ...string) {
 			placeholder={ i.Placeholder }
 		}
 		class={ i.Class(), classes }
+		if i.Value !="" {
+			value={ i.Value }
+		}
 		{ i.Attributes... }
 	/>
 }

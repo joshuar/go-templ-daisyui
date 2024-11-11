@@ -36,23 +36,31 @@ type InputModifier int
 type Input struct {
 	Attributes    templ.Attributes
 	Icon          *Icon
-	IconAlignment Alignment
 	ID            string
 	Placeholder   string
 	Label         string
 	Error         string
+	Value         string
 	class         []string
+	IconAlignment Alignment
 	Type          InputType
 	FormControl   bool
 	Optional      bool
 }
 
+// Class creates a "class" attribute for the input.
 func (i Input) Class() string {
 	return strings.Join(i.class, " ")
 }
 
-type InputOption func(Input) Input
+// SetValue assigns the given value to the input.
+func (i *Input) SetValue(value string) {
+	i.Value = value
+}
 
+type InputOption Option[Input]
+
+// WithInputType defines the type of input (i.e., text, password, search, etc.).
 func WithInputType(t InputType) InputOption {
 	return func(i Input) Input {
 		i.Type = t
@@ -60,6 +68,7 @@ func WithInputType(t InputType) InputOption {
 	}
 }
 
+// WithInputModifier applies the given DaisyUI modifier to the input.
 func WithInputModifier(m InputModifier) InputOption {
 	return func(i Input) Input {
 		i.class = append(i.class, m.String())
@@ -67,6 +76,7 @@ func WithInputModifier(m InputModifier) InputOption {
 	}
 }
 
+// WithInputSize sets the size of the input.
 func WithInputSize(s Size) InputOption {
 	return func(i Input) Input {
 		i.class = append(i.class, s.String())
@@ -74,6 +84,8 @@ func WithInputSize(s Size) InputOption {
 	}
 }
 
+// WithPlaceholder assigns placeholder text for when the input has no current
+// value.
 func WithPlaceholder(s string) InputOption {
 	return func(i Input) Input {
 		i.Placeholder = s
@@ -81,6 +93,7 @@ func WithPlaceholder(s string) InputOption {
 	}
 }
 
+// WithInputLabel assigns a label to the input.
 func WithInputLabel(s string) InputOption {
 	return func(i Input) Input {
 		i.Label = s
@@ -88,14 +101,19 @@ func WithInputLabel(s string) InputOption {
 	}
 }
 
+// WithInputIcon assigns an icon to the input. The icon can be aligned either
+// Left or Right.
 func WithInputIcon(icon Icon, alignment Alignment) InputOption {
 	return func(i Input) Input {
 		i.Icon = &icon
 		i.IconAlignment = alignment
+
 		return i
 	}
 }
 
+// OptionalInput if set, will mark the input with a badge indicating it is
+// optional.
 func OptionalInput() InputOption {
 	return func(i Input) Input {
 		i.Optional = true
@@ -103,6 +121,8 @@ func OptionalInput() InputOption {
 	}
 }
 
+// AsFormControl adds necessary attributes to the input to allow it to be used
+// within form elements.
 func AsFormControl() InputOption {
 	return func(i Input) Input {
 		i.FormControl = true
@@ -110,6 +130,7 @@ func AsFormControl() InputOption {
 	}
 }
 
+// WithInputAttributes adds the given attributes to the input.
 func WithInputAttributes(attrs templ.Attributes) InputOption {
 	return func(i Input) Input {
 		i.Attributes = attrs
@@ -117,6 +138,15 @@ func WithInputAttributes(attrs templ.Attributes) InputOption {
 	}
 }
 
+// WithInputClasses adds the given class values to the input class.
+func WithInputClasses(classes ...string) InputOption {
+	return func(i Input) Input {
+		i.class = append(i.class, classes...)
+		return i
+	}
+}
+
+// NewInput creates a new input with the given values.
 func NewInput(id string, options ...InputOption) Input {
 	input := Input{
 		ID:    id,
