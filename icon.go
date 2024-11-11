@@ -23,11 +23,6 @@ func (i Icon) Class() string {
 	return strings.Join(i.class, " ")
 }
 
-type IconLayout struct {
-	Icon
-	Alignment Alignment
-}
-
 type IconOption func(Icon) Icon
 
 func WithStyle(s FAStyle) IconOption {

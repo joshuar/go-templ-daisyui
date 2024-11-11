@@ -16,15 +16,15 @@ templ AlertTempl(alertType Alert, message, id string, oob bool) {
 	>
 		switch alertType {
 			case AlertInfo:
-				@FontAwesomeTempl(NewIcon("circle-info"))
+				@NewIcon("circle-info").Show()
 			case AlertSuccess:
-				@FontAwesomeTempl(NewIcon("circle-check"))
+				@NewIcon("circle-check").Show()
 			case AlertWarning:
-				@FontAwesomeTempl(NewIcon("circle-exclamation"))
+				@NewIcon("circle-exclamation").Show()
 			case AlertError:
-				@FontAwesomeTempl(NewIcon("circle-xmark"))
+				@NewIcon("circle-xmark").Show()
 			default:
-				@FontAwesomeTempl(NewIcon("circle-info"))
+				@NewIcon("circle-info").Show()
 		}
 		<span>{ message }</span>
 		{ children... }

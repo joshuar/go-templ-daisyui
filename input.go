@@ -34,16 +34,17 @@ const (
 type InputModifier int
 
 type Input struct {
-	Attributes  templ.Attributes
-	Icon        *IconLayout
-	ID          string
-	Placeholder string
-	Label       string
-	Error       string
-	class       []string
-	Type        InputType
-	FormControl bool
-	Optional    bool
+	Attributes    templ.Attributes
+	Icon          *Icon
+	IconAlignment Alignment
+	ID            string
+	Placeholder   string
+	Label         string
+	Error         string
+	class         []string
+	Type          InputType
+	FormControl   bool
+	Optional      bool
 }
 
 func (i Input) Class() string {
@@ -87,10 +88,11 @@ func WithInputLabel(s string) InputOption {
 	}
 }
 
-func WithInputIcon(i Icon, l Alignment) InputOption {
-	return func(ic Input) Input {
-		ic.Icon = &IconLayout{Icon: i, Alignment: l}
-		return ic
+func WithInputIcon(icon Icon, alignment Alignment) InputOption {
+	return func(i Input) Input {
+		i.Icon = &icon
+		i.IconAlignment = alignment
+		return i
 	}
 }
 
