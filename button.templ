@@ -8,18 +8,18 @@ templ (b Button) buttonRegular() {
 		class={ b.Class() }
 		{ b.Attributes... }
 	>
-		if b.Icon != nil {
-			switch b.Icon.Alignment {
-				case AlignLeft:
-					@FontAwesomeTempl(b.Icon.Icon)
-					if b.Label != "" {
+		if icon := b.Icon; icon != nil {
+			if b.Label != "" {
+				switch b.IconAlignment {
+					case AlignLeft:
+						@icon.Show()
 						{ b.Label }
-					}
-				case AlignRight:
-					if b.Label != "" {
+					case AlignRight:
 						{ b.Label }
-					}
-					@FontAwesomeTempl(b.Icon.Icon)
+						@icon.Show()
+				}
+			} else {
+				@icon.Show()
 			}
 		} else {
 			{ b.Label }
@@ -27,20 +27,11 @@ templ (b Button) buttonRegular() {
 	</button>
 }
 
-templ (b Button) buttonShape() {
-	<button
-		class={ b.Class(), b.Shape.String() }
-		{ b.Attributes... }
-	>
-		@FontAwesomeTempl(b.Icon.Icon)
-	</button>
-}
-
 templ (b Button) Show() {
-	if b.Shape == ButtonRegular {
-		@b.buttonRegular()
+	if tooltip := b.Tooltip; tooltip != nil {
+		@tooltip.AsDiv(b.buttonRegular())
 	} else {
-		@b.buttonShape()
+		@b.buttonRegular()
 	}
 }
 

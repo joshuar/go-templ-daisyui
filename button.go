@@ -35,12 +35,13 @@ const (
 type ButtonShape int
 
 type Button struct {
-	Icon       *IconLayout
-	Attributes templ.Attributes
-	Label      string
-	ID         string
-	class      []string
-	Shape      ButtonShape
+	Icon          *Icon
+	IconAlignment Alignment
+	Attributes    templ.Attributes
+	Tooltip       *Tooltip
+	Label         string
+	ID            string
+	class         []string
 }
 
 func (b Button) Class() string {
@@ -98,16 +99,33 @@ func Disabled() ButtonOption {
 	}
 }
 
-func WithIcon(i Icon, l Alignment) ButtonOption {
+func WithIcon(icon Icon, alignment Alignment) ButtonOption {
 	return func(b Button) Button {
-		b.Icon = &IconLayout{Icon: i, Alignment: l}
+		b.Icon = &icon
+		b.IconAlignment = alignment
 		return b
 	}
 }
 
-func AsShape(s ButtonShape) ButtonOption {
+// WithButtonTooltip adds a tooltip to the button.
+func WithButtonTooltip(tip string, alignment Alignment) ButtonOption {
+	return func(btn Button) Button {
+		tooltip := NewTooltip(
+			ToolTipAlignment(alignment),
+			Tip(tip),
+		)
+		btn.Tooltip = &tooltip
+
+		return btn
+	}
+}
+
+func AsShape(shape ButtonShape) ButtonOption {
 	return func(b Button) Button {
-		b.Shape = s
+		if shape != ButtonRegular {
+			b.class = append(b.class, shape.String())
+		}
+
 		return b
 	}
 }
@@ -127,15 +145,15 @@ func ButtonAttributes(attrs templ.Attributes) ButtonOption {
 }
 
 func NewButton(label, id string, options ...ButtonOption) Button {
-	button := Button{
+	btn := Button{
 		Label: label,
 		ID:    id,
 		class: []string{"btn"},
 	}
 
 	for _, option := range options {
-		button = option(button)
+		btn = option(btn)
 	}
 
-	return button
+	return btn
 }
