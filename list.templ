@@ -3,11 +3,11 @@
 
 package components
 
-templ unorderedList(list List) {
+templ (l List) unorderedList() {
 	<ul
-		{ list.Attributes... }
+		{ l.Attributes... }
 	>
-		for _, item := range list.Items {
+		for _, item := range l.Items {
 			<li>
 				@item
 			</li>
@@ -15,11 +15,11 @@ templ unorderedList(list List) {
 	</ul>
 }
 
-templ orderedList(list List) {
+templ (l List) orderedList() {
 	<ol
-		{ list.Attributes... }
+		{ l.Attributes... }
 	>
-		for _, item := range list.Items {
+		for _, item := range l.Items {
 			<li>
 				@item
 			</li>
@@ -27,11 +27,11 @@ templ orderedList(list List) {
 	</ol>
 }
 
-templ ListTempl(list List) {
-	switch list.Style {
+templ (l List) Show() {
+	switch l.Style {
 		case ListUnordered:
-			@unorderedList(list)
+			@l.unorderedList()
 		case ListOrdered:
-			@orderedList(list)
+			@l.orderedList()
 	}
 }
