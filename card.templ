@@ -15,7 +15,9 @@ templ (c Card) Show() {
 			if c.Title != "" {
 				<h2 class="card-title">{ c.Title }</h2>
 			}
-			@c.Body
+			if c.Body != nil {
+				@c.Body
+			}
 			if c.Actions != nil {
 				<div class="card-actions justify-end">
 					@c.Actions
