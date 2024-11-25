@@ -23,13 +23,14 @@ type CardLayout int
 // Card represents a DaisyUI Card component.
 // https://daisyui.com/components/card/
 type Card struct {
-	Body    templ.Component
-	Actions templ.Component
-	Image   *Image
-	Title   string
-	ID      string
-	class   []string
-	Layout  CardLayout
+	Body       templ.Component
+	Actions    []templ.Component
+	Badges     []Badge
+	Image      *Image
+	Attributes templ.Attributes
+	Title      Header
+	ID         string
+	class      []string
 }
 
 func (c Card) Class() string {
@@ -48,17 +49,25 @@ func WithBody(t templ.Component) CardOption {
 }
 
 // WithActions sets the container for card actions.
-func WithActions(t templ.Component) CardOption {
+func WithActions(actions ...templ.Component) CardOption {
 	return func(c Card) Card {
-		c.Actions = t
+		c.Actions = append(c.Actions, actions...)
+		return c
+	}
+}
+
+// WithBadges adds the provided list of badges to the Card.
+func WithBadges(badges ...Badge) CardOption {
+	return func(c Card) Card {
+		c.Badges = append(c.Badges, badges...)
 		return c
 	}
 }
 
 // WithTitle sets the title for card body.
-func WithTitle(t string) CardOption {
+func WithTitle(title string, size HeaderSize) CardOption {
 	return func(c Card) Card {
-		c.Title = t
+		c.Title = NewHeader(title, size)
 		return c
 	}
 }
@@ -99,6 +108,30 @@ func WithBorder() CardOption {
 func WithFullImage() CardOption {
 	return func(c Card) Card {
 		c.class = append(c.class, "image-full")
+		return c
+	}
+}
+
+// WithCardShadow adds a shadow to the card.
+func WithCardShadow(size Size) CardOption {
+	return func(c Card) Card {
+		c.class = append(c.class, size.SizeObject("shadow"))
+		return c
+	}
+}
+
+// CardAttributes adds additional attributes to the card.
+func CardAttributes(attrs templ.Attributes) CardOption {
+	return func(c Card) Card {
+		c.Attributes = attrs
+		return c
+	}
+}
+
+// CardClasses adds additional class values to the card.
+func CardClasses(classes ...string) CardOption {
+	return func(c Card) Card {
+		c.class = append(c.class, classes...)
 		return c
 	}
 }

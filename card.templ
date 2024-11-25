@@ -5,22 +5,35 @@ package components
 
 // Show will render the Card component.
 templ (c Card) Show() {
-	<div id={ c.ID } class={ c.Class() }>
+	<div
+		id={ c.ID }
+		class={ c.Class() }
+		{ c.Attributes... }
+	>
 		if c.Image != nil {
 			<figure>
-				*@c.Image.Show()
+				@c.Image.Show()
 			</figure>
 		}
 		<div class="card-body">
-			if c.Title != "" {
-				<h2 class="card-title">{ c.Title }</h2>
+			if c.Title.Title != "" {
+				@c.Title.Show()
 			}
 			if c.Body != nil {
 				@c.Body
 			}
 			if c.Actions != nil {
-				<div class="card-actions justify-end">
-					@c.Actions
+				<div class="card-actions">
+					for _, action := range c.Actions {
+						@action
+					}
+				</div>
+			}
+			if c.Badges != nil {
+				<div class="card-actions justify-right">
+					for _, badge := range c.Badges {
+						@badge.Show()
+					}
 				</div>
 			}
 		</div>
