@@ -3,14 +3,14 @@
 
 package components
 
-templ (i Image) Show(image Image) {
+templ (i Image) Show() {
 	<img
-		if len(image.class) > 0 {
-			class={ image.Class() }
+		if len(i.class) > 0 {
+			class={ i.Class() }
 		}
-		src={ image.URL }
-		if image.Alt != "" {
-			alt={ image.Alt }
+		src={ i.URL }
+		if i.Alt != "" {
+			alt={ i.Alt }
 		}
 	/>
 }

@@ -42,6 +42,17 @@ func WithMask(mask Mask) ImageOption {
 	}
 }
 
+// WithObjectFit will add an Object Fit setting to the image class.
+func WithImageObjectFit(fit ObjectFit) ImageOption {
+	return func(i Image) Image {
+		if fit > 0 {
+			i.class = append(i.class, fit.String())
+		}
+
+		return i
+	}
+}
+
 // NewImage creates a new image component with the given options. The created
 // image can be rendered by calling its Show method.
 func NewImage(options ...ImageOption) Image {
