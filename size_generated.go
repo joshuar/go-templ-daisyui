@@ -12,11 +12,12 @@ func _() {
 	_ = x[XS-1]
 	_ = x[SM-2]
 	_ = x[LG-3]
+	_ = x[XL-4]
 }
 
-const _Size_name = "mdxssmlg"
+const _Size_name = "mdxssmlgxl"
 
-var _Size_index = [...]uint8{0, 2, 4, 6, 8}
+var _Size_index = [...]uint8{0, 2, 4, 6, 8, 10}
 
 func (i Size) String() string {
 	if i < 0 || i >= Size(len(_Size_index)-1) {

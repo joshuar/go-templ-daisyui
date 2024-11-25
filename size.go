@@ -10,6 +10,7 @@ const (
 	XS             // xs
 	SM             // sm
 	LG             // lg
+	XL             // xl
 )
 
 type Size int
