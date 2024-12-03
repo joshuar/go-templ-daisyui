@@ -4,12 +4,6 @@
 //go:generate go run golang.org/x/tools/cmd/stringer -type=ButtonModifier,ButtonShape -linecomment -output button_generated.go
 package components
 
-import (
-	"strings"
-
-	"github.com/a-h/templ"
-)
-
 const (
 	ButtonNoModifier ButtonModifier = iota //
 	ButtonNeutral                          // btn-neutral
@@ -35,71 +29,62 @@ const (
 type ButtonShape int
 
 type Button struct {
-	Icon          *Icon
+	Icon *Icon
+	componentAttributes
+	Tooltip *Tooltip
+	Label   string
+	ID      string
+	componentClasses
 	IconAlignment Alignment
-	Attributes    templ.Attributes
-	Tooltip       *Tooltip
-	Label         string
-	ID            string
-	class         []string
 }
 
-func (b Button) Class() string {
-	return strings.Join(b.class, " ")
+func (b *Button) String() string {
+	return "btn"
 }
 
-type ButtonOption func(Button) Button
-
-func WithModifier(m ButtonModifier) ButtonOption {
+func WithModifier(m ButtonModifier) Option[Button] {
 	return func(b Button) Button {
-		b.class = append(b.class, m.String())
+		b.AddClasses(m.String())
 		return b
 	}
 }
 
-func WithSize(s Size) ButtonOption {
+func Active() Option[Button] {
 	return func(b Button) Button {
-		b.class = append(b.class, s.String())
+		b.AddClasses("btn-active")
 		return b
 	}
 }
 
-func Active() ButtonOption {
+func Outline() Option[Button] {
 	return func(b Button) Button {
-		b.class = append(b.class, "btn-active")
+		b.AddClasses("btn-outline")
 		return b
 	}
 }
 
-func Outline() ButtonOption {
+func Wide() Option[Button] {
 	return func(b Button) Button {
-		b.class = append(b.class, "btn-outline")
+		b.AddClasses("btn-wide")
 		return b
 	}
 }
 
-func Wide() ButtonOption {
+func Glass() Option[Button] {
 	return func(b Button) Button {
-		b.class = append(b.class, "btn-wide")
+		b.AddClasses("glass")
 		return b
 	}
 }
 
-func Glass() ButtonOption {
+func Disabled() Option[Button] {
 	return func(b Button) Button {
-		b.class = append(b.class, "glass")
+		b.AddClasses("btn-disabled")
 		return b
 	}
 }
 
-func Disabled() ButtonOption {
-	return func(b Button) Button {
-		b.class = append(b.class, "btn-disabled")
-		return b
-	}
-}
-
-func WithIcon(icon Icon, alignment Alignment) ButtonOption {
+func WithIcon(icon Icon, alignment Alignment) Option[Button] {
 	return func(b Button) Button {
 		b.Icon = &icon
 		b.IconAlignment = alignment
@@ -108,7 +93,7 @@ func WithIcon(icon Icon, alignment Alignment) ButtonOption {
 }
 
 // WithButtonTooltip adds a tooltip to the button.
-func WithButtonTooltip(tip string, alignment Alignment) ButtonOption {
+func WithButtonTooltip(tip string, alignment Alignment) Option[Button] {
 	return func(btn Button) Button {
 		tooltip := NewTooltip(
 			ToolTipAlignment(alignment),
@@ -120,36 +105,23 @@ func WithButtonTooltip(tip string, alignment Alignment) ButtonOption {
 	}
 }
 
-func AsShape(shape ButtonShape) ButtonOption {
+func AsShape(shape ButtonShape) Option[Button] {
 	return func(b Button) Button {
 		if shape != ButtonRegular {
-			b.class = append(b.class, shape.String())
+			b.AddClasses(shape.String())
 		}
 
 		return b
 	}
 }
 
-func WithButtonClasses(classes ...string) ButtonOption {
-	return func(b Button) Button {
-		b.class = append(b.class, classes...)
-		return b
-	}
-}
-
-func ButtonAttributes(attrs templ.Attributes) ButtonOption {
-	return func(b Button) Button {
-		b.Attributes = attrs
-		return b
-	}
-}
-
-func NewButton(label, id string, options ...ButtonOption) Button {
+func NewButton(label, id string, options ...Option[Button]) Button {
 	btn := Button{
 		Label: label,
 		ID:    id,
-		class: []string{"btn"},
 	}
+
+	btn = WithClasses[Button](btn.String())(btn)
 
 	for _, option := range options {
 		btn = option(btn)

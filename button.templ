@@ -6,7 +6,7 @@ package components
 templ (b Button) buttonRegular() {
 	<button
 		class={ b.Class() }
-		{ b.Attributes... }
+		{ b.Attributes()... }
 	>
 		if icon := b.Icon; icon != nil {
 			if b.Label != "" {
@@ -39,7 +39,7 @@ templ (b Button) ShowAsLink() {
 	<a
 		role="button"
 		class={ b.Class() }
-		{ b.Attributes... }
+		{ b.Attributes()... }
 	>
 		{ b.Label }
 	</a>

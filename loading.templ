@@ -5,7 +5,7 @@ package components
 
 templ LoadingTempl(class string, size Size) {
 	<span
-		class={ "loading", class, size.SizeObject("loading"), "htmx-indicator" }
+		class={ "loading", class, "loading-"+size.String(), "htmx-indicator" }
 	></span>
 }
 

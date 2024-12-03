@@ -5,8 +5,6 @@
 package components
 
 import (
-	"strings"
-
 	"github.com/a-h/templ"
 )
 
@@ -34,23 +32,22 @@ const (
 type InputModifier int
 
 type Input struct {
-	Attributes    templ.Attributes
+	componentAttributes
+	componentClasses
 	Icon          *Icon
 	ID            string
 	Placeholder   string
 	Label         string
 	Error         string
 	Value         string
-	class         []string
 	IconAlignment Alignment
 	Type          InputType
 	FormControl   bool
 	Optional      bool
 }
 
-// Class creates a "class" attribute for the input.
-func (i Input) Class() string {
-	return strings.Join(i.class, " ")
+func (i *Input) String() string {
+	return ""
 }
 
 // SetValue assigns the given value to the input.
@@ -58,10 +55,8 @@ func (i *Input) SetValue(value string) {
 	i.Value = value
 }
 
-type InputOption Option[Input]
-
 // WithInputType defines the type of input (i.e., text, password, search, etc.).
-func WithInputType(t InputType) InputOption {
+func WithInputType(t InputType) Option[Input] {
 	return func(i Input) Input {
 		i.Type = t
 		return i
@@ -69,24 +64,16 @@ func WithInputType(t InputType) InputOption {
 }
 
 // WithInputModifier applies the given DaisyUI modifier to the input.
-func WithInputModifier(m InputModifier) InputOption {
+func WithInputModifier(m InputModifier) Option[Input] {
 	return func(i Input) Input {
-		i.class = append(i.class, m.String())
-		return i
-	}
-}
-
-// WithInputSize sets the size of the input.
-func WithInputSize(s Size) InputOption {
-	return func(i Input) Input {
-		i.class = append(i.class, s.String())
+		i.AddClasses(m.String())
 		return i
 	}
 }
 
 // WithPlaceholder assigns placeholder text for when the input has no current
 // value.
-func WithPlaceholder(s string) InputOption {
+func WithPlaceholder(s string) Option[Input] {
 	return func(i Input) Input {
 		i.Placeholder = s
 		return i
@@ -94,7 +81,7 @@ func WithPlaceholder(s string) InputOption {
 }
 
 // WithInputLabel assigns a label to the input.
-func WithInputLabel(s string) InputOption {
+func WithInputLabel(s string) Option[Input] {
 	return func(i Input) Input {
 		i.Label = s
 		return i
@@ -103,7 +90,7 @@ func WithInputLabel(s string) InputOption {
 
 // WithInputIcon assigns an icon to the input. The icon can be aligned either
 // Left or Right.
-func WithInputIcon(icon Icon, alignment Alignment) InputOption {
+func WithInputIcon(icon Icon, alignment Alignment) Option[Input] {
 	return func(i Input) Input {
 		i.Icon = &icon
 		i.IconAlignment = alignment
@@ -114,7 +101,7 @@ func WithInputIcon(icon Icon, alignment Alignment) InputOption {
 
 // OptionalInput if set, will mark the input with a badge indicating it is
 // optional.
-func OptionalInput() InputOption {
+func OptionalInput() Option[Input] {
 	return func(i Input) Input {
 		i.Optional = true
 		return i
@@ -123,35 +110,20 @@ func OptionalInput() InputOption {
 
 // AsFormControl adds necessary attributes to the input to allow it to be used
 // within form elements.
-func AsFormControl() InputOption {
+func AsFormControl() Option[Input] {
 	return func(i Input) Input {
 		i.FormControl = true
 		return i
 	}
 }
 
-// WithInputAttributes adds the given attributes to the input.
-func WithInputAttributes(attrs templ.Attributes) InputOption {
-	return func(i Input) Input {
-		i.Attributes = attrs
-		return i
-	}
-}
-
-// WithInputClasses adds the given class values to the input class.
-func WithInputClasses(classes ...string) InputOption {
-	return func(i Input) Input {
-		i.class = append(i.class, classes...)
-		return i
-	}
-}
-
 // NewInput creates a new input with the given values.
-func NewInput(id string, options ...InputOption) Input {
+func NewInput(id string, options ...Option[Input]) Input {
 	input := Input{
-		ID:    id,
-		class: []string{"input"},
+		ID: id,
 	}
+
+	input = WithClasses[Input](input.String())(input)
 
 	for _, option := range options {
 		input = option(input)
@@ -169,7 +141,7 @@ type SearchInput struct {
 
 func (si *SearchInput) GenerateInput() Input {
 	input := si.Input
-	input.Attributes = templ.Attributes{
+	input.attributes = templ.Attributes{
 		"name":         "Terms",
 		"value":        si.Value,
 		"tabindex":     0,

@@ -31,6 +31,10 @@ type Card struct {
 	Title   Header
 }
 
+func (c *Card) String() string {
+	return "card"
+}
+
 // WithBody sets the container for card content.
 func WithBody(t templ.Component) Option[Card] {
 	return func(c Card) Card {
@@ -109,7 +113,7 @@ func WithFullImage() Option[Card] {
 // WithCardShadow adds a shadow to the card.
 func WithCardShadow(size Size) Option[Card] {
 	return func(c Card) Card {
-		c.classes = append(c.classes, size.SizeObject("shadow"))
+		c.classes = append(c.classes, "shadow-"+size.String())
 		return c
 	}
 }
@@ -117,15 +121,15 @@ func WithCardShadow(size Size) Option[Card] {
 // NewCard creates a new card component with the given options. The card can be
 // rendered by calling the Show method.
 func NewCard(id string, options ...Option[Card]) Card {
-	input := Card{
+	card := Card{
 		ID: id,
 	}
 
-	input = WithClasses[Card]("card")(input)
+	card = WithClasses[Card](card.String())(card)
 
 	for _, option := range options {
-		input = option(input)
+		card = option(card)
 	}
 
-	return input
+	return card
 }

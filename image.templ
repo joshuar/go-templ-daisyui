@@ -5,7 +5,7 @@ package components
 
 templ (i Image) Show() {
 	<img
-		if len(i.class) > 0 {
+		if len(i.classes) > 0 {
 			class={ i.Class() }
 		}
 		src={ i.URL }

@@ -27,7 +27,7 @@ templ (i Input) show(classes ...string) {
 		if i.Value !="" {
 			value={ i.Value }
 		}
-		{ i.Attributes... }
+		{ i.Attributes()... }
 	/>
 }
 
@@ -80,7 +80,7 @@ templ (i Input) asForm() {
 			if i.Error != "" {
 				<div class="label">
 					<span class="label-text-alt text-error">
-						@NewIcon("circle-exclamation", WithColor(ColorError)).Show()
+						@NewIcon("circle-exclamation", WithColor[Icon](ColorError)).Show()
 						{ i.Error }
 					</span>
 				</div>

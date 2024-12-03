@@ -23,4 +23,18 @@ const (
 	ColorErrorContent                  // bg-error-content
 )
 
+// Color represents a DaisyUI color.
+// https://daisyui.com/docs/colors/
 type Color int
+
+// WithColor styles the component with the given Color.
+func WithColor[T any](color Color) Option[T] {
+	return func(c T) T {
+		// Get a pointer to the underlying component.
+		component := &c
+		// Apply the given classes to the component.
+		addClassesToComponent(component, color.String())
+		// Return the modified component.
+		return *component
+	}
+}

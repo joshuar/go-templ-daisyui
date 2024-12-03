@@ -5,77 +5,49 @@ package components
 
 import (
 	"strings"
-
-	"github.com/a-h/templ"
 )
 
 // Option represents a generic option that can be applied to a component.
 type Option[T any] func(T) T
 
-// componentAttributes can be inherited by a component to be able to add customised
-// attributes to the component.
-type componentAttributes struct {
-	attributes templ.Attributes
-}
-
-func (c *componentAttributes) AddAttributes(attrs templ.Attributes) {
-	c.attributes = attrs
-}
-
-func (c *componentAttributes) Attributes() templ.Attributes {
-	return c.attributes
-}
-
-// componentClasses can be inherited by a component to be able to customise the
+// componentClasses can be inherited by a component to be able to customize the
 // class of the component.
 type componentClasses struct {
 	classes []string
 }
 
+// AddClasses will add the given classes to the component.
 func (c *componentClasses) AddClasses(classes ...string) {
 	c.classes = append(c.classes, classes...)
 }
 
+// Class will produce a space-delimeted string with all the classes assigned to
+// the component.
 func (c *componentClasses) Class() string {
 	return strings.Join(c.classes, " ")
-}
-
-type customisableAttributes interface {
-	AddAttributes(attrs templ.Attributes)
-}
-
-type customisableClasses interface {
-	AddClasses(classes ...string)
-}
-
-func AddClassesToComponent(component any, classes ...string) {
-	switch component := component.(type) {
-	case customisableClasses:
-		component.AddClasses(classes...)
-	}
-}
-
-func AddAttributesToComponent(component any, attr templ.Attributes) {
-	switch component := component.(type) {
-	case customisableAttributes:
-		component.AddAttributes(attr)
-	}
 }
 
 // WithClasses adds the given classes to the component.
 func WithClasses[T any](classes ...string) Option[T] {
 	return func(c T) T {
+		// Get a pointer to the underlying component.
 		component := &c
-		AddClassesToComponent(component, classes...)
+		// Apply the given classes to the component.
+		addClassesToComponent(component, classes...)
+		// Return the modified component.
 		return *component
 	}
 }
 
-// WithAttributes adds the given attributes to the component.
-func WithAttributes[T any](attr templ.Attributes) Option[T] {
-	return func(c T) T {
-		component := &c
-		AddAttributesToComponent(component, attr)
-		return *component
+// customisableClasses is an interface to detect components whose classes
+// can be customized.
+type customisableClasses interface {
+	AddClasses(classes ...string)
+}
+
+func addClassesToComponent(component any, classes ...string) {
+	switch component := component.(type) {
+	case customisableClasses:
+		component.AddClasses(classes...)
 	}
 }

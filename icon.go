@@ -4,59 +4,47 @@
 //go:generate go run golang.org/x/tools/cmd/stringer -type=FAStyle -linecomment -output icon_generated.go
 package components
 
-import "strings"
-
 const (
 	Solid FAStyle = iota // fa-solid
 )
 
+// FAStyle is a valid FontAwesome Icon style.
 type FAStyle int
 
 type Icon struct {
 	Label string
-	class []string
+	componentClasses
 	style FAStyle
 }
 
-func (i Icon) Class() string {
-	i.class = append(i.class, i.style.String())
-	return strings.Join(i.class, " ")
+// Class is a custom Class() method for the Icon component. It additionally
+// ensures that a default style is applied to the Icon if no style had been
+// optionally set.
+func (i *Icon) Class() string {
+	i.AddClasses(i.style.String())
+	return i.componentClasses.Class()
 }
 
-type IconOption func(Icon) Icon
-
-func WithStyle(s FAStyle) IconOption {
+// WithStyle assigns the given FontAwesome style to the Icon.
+func WithStyle(s FAStyle) Option[Icon] {
 	return func(i Icon) Icon {
 		i.style = s
 		return i
 	}
 }
 
-func WithColor(c Color) IconOption {
-	return func(i Icon) Icon {
-		i.class = append(i.class, c.String())
-		return i
-	}
-}
-
-func WithLabel(l string) IconOption {
+// WithLabel ensures the Icon has the given label.
+func WithLabel(l string) Option[Icon] {
 	return func(i Icon) Icon {
 		i.Label = l
 		return i
 	}
 }
 
-func WithExtraIconClasses(classes ...string) IconOption {
-	return func(i Icon) Icon {
-		i.class = append(i.class, classes...)
-		return i
-	}
-}
-
-func NewIcon(name string, options ...IconOption) Icon {
-	icon := Icon{
-		class: []string{"fa-" + name},
-	}
+// NewIcon creates an Icon component with the given options.
+func NewIcon(name string, options ...Option[Icon]) Icon {
+	icon := Icon{}
+	icon = WithClasses[Icon]("fa-" + name)(icon)
 
 	for _, option := range options {
 		icon = option(icon)

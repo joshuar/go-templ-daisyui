@@ -3,29 +3,21 @@
 
 package components
 
-import (
-	"strings"
-)
-
 type Menu struct {
 	Title string
-	class []string
+	componentClasses
 }
 
-func (m Menu) Class() string {
-	return strings.Join(m.class, " ")
+func (m *Menu) String() string {
+	return "menu"
 }
-
-type MenuOption Option[Menu]
 
 type MenuItem struct {
 	Tooltip *Tooltip
 }
 
-type MenuItemOption Option[MenuItem]
-
 // MenuTitle sets the menu title.
-func MenuTitle(title string) MenuOption {
+func MenuTitle(title string) Option[Menu] {
 	return func(m Menu) Menu {
 		m.Title = title
 		return m
@@ -33,34 +25,17 @@ func MenuTitle(title string) MenuOption {
 }
 
 // MenuLayout sets how the menu items will be layed out.
-func MenuLayout(layout Layout) MenuOption {
+func MenuLayout(layout Layout) Option[Menu] {
 	return func(m Menu) Menu {
-		m.class = append(m.class, layout.LayoutObject("menu"))
-		return m
-	}
-}
-
-// MenuSize sets the sizing of the menu.
-func MenuSize(size Size) MenuOption {
-	return func(m Menu) Menu {
-		m.class = append(m.class, size.SizeObject("menu"))
-		return m
-	}
-}
-
-// MenuClasses sets additional class attributes on the menu.
-func MenuClasses(classes ...string) MenuOption {
-	return func(m Menu) Menu {
-		m.class = append(m.class, classes...)
+		m.AddClasses(layout.LayoutObject("menu"))
 		return m
 	}
 }
 
 // NewMenu creates a new menu with the given options.
-func NewMenu(options ...MenuOption) Menu {
-	menu := Menu{
-		class: []string{"menu"},
-	}
+func NewMenu(options ...Option[Menu]) Menu {
+	menu := Menu{}
+	menu = WithClasses[Menu](menu.String())(menu)
 
 	for _, option := range options {
 		menu = option(menu)
@@ -70,7 +45,7 @@ func NewMenu(options ...MenuOption) Menu {
 }
 
 // MenuItemTooltip will wrap the menu item with the given tooltip.
-func MenuItemTooltip(tip Tooltip) MenuItemOption {
+func MenuItemTooltip(tip Tooltip) Option[MenuItem] {
 	return func(mi MenuItem) MenuItem {
 		mi.Tooltip = &tip
 		return mi
@@ -78,7 +53,7 @@ func MenuItemTooltip(tip Tooltip) MenuItemOption {
 }
 
 // NewMenuItem creates a new menu item with the given options.
-func NewMenuItem(options ...MenuItemOption) MenuItem {
+func NewMenuItem(options ...Option[MenuItem]) MenuItem {
 	item := MenuItem{}
 
 	for _, option := range options {

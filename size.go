@@ -15,9 +15,28 @@ const (
 
 type Size int
 
-// SizeObject returns the given object class with an appropriate size
-// modifier. For e.g., if Size is SM and object is menu, the return
-// value will be "menu-sm".
-func (s Size) SizeObject(object string) string {
-	return object + "-" + s.String()
+// WithSize adds the given size to the component.
+func WithSize[T any](size Size) Option[T] {
+	return func(c T) T {
+		// Get a pointer to the underlying component.
+		component := &c
+		// Apply the given classes to the component.
+		addSizeToComponent(component, size)
+		// Return the modified component.
+		return *component
+	}
+}
+
+// customisableSize is an interface to detect components whose classes
+// can be sized.
+type customisableSize interface {
+	String() string
+	customisableClasses
+}
+
+func addSizeToComponent(component any, size Size) {
+	switch component := component.(type) {
+	case customisableSize:
+		component.AddClasses(component.String() + "-" + size.String())
+	}
 }
