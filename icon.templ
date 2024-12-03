@@ -4,8 +4,9 @@
 package components
 
 templ (i Icon) Show() {
-	<i class={ i.Class() }></i>
-	if i.Label != "" {
-		{ i.Label }
-	}
+	<i class={ i.style.String(), i.name, i.Class() }>
+		if i.Label != "" {
+			{ i.Label }
+		}
+	</i>
 }

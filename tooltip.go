@@ -3,49 +3,28 @@
 
 package components
 
-import "strings"
-
 type Tooltip struct {
-	Tip   string
-	class []string
+	Tip string
+	componentClasses
 }
 
-func (t Tooltip) Class() string {
-	return strings.Join(t.class, " ")
+func (t *Tooltip) String() string {
+	return "tooltip"
 }
-
-type TooltipOption Option[Tooltip]
 
 // Tip sets the text to display in the tooltip.
-func Tip(tip string) TooltipOption {
+func Tip(tip string) Option[Tooltip] {
 	return func(t Tooltip) Tooltip {
 		t.Tip = tip
 		return t
 	}
 }
 
-// TooltipAlignment sets where the tooltip will open. Valid values of Alignment
-// are Top, Bottom, Left or Right. Other Alignment values, while applied, may
-// not render corrrectly.
-func ToolTipAlignment(a Alignment) TooltipOption {
-	return func(t Tooltip) Tooltip {
-		t.class = append(t.class, "tooltip-"+a.String())
-		return t
-	}
-}
+// NewTooltop
+func NewTooltip(options ...Option[Tooltip]) Tooltip {
+	tooltip := Tooltip{}
 
-// TooltipColor sets the color of the tooltip.
-func ToolTipColor(c Color) TooltipOption {
-	return func(t Tooltip) Tooltip {
-		t.class = append(t.class, c.String())
-		return t
-	}
-}
-
-func NewTooltip(options ...TooltipOption) Tooltip {
-	tooltip := Tooltip{
-		class: []string{"tooltip"},
-	}
+	tooltip = WithClasses[Tooltip](tooltip.String())(tooltip)
 
 	for _, option := range options {
 		tooltip = option(tooltip)

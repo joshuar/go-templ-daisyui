@@ -30,11 +30,7 @@ type Color int
 // WithColor styles the component with the given Color.
 func WithColor[T any](color Color) Option[T] {
 	return func(c T) T {
-		// Get a pointer to the underlying component.
-		component := &c
-		// Apply the given classes to the component.
-		addClassesToComponent(component, color.String())
-		// Return the modified component.
-		return *component
+		c = WithClasses[T](color.String())(c)
+		return c
 	}
 }

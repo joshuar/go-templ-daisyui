@@ -12,17 +12,10 @@ const (
 type FAStyle int
 
 type Icon struct {
+	name  string
 	Label string
 	componentClasses
 	style FAStyle
-}
-
-// Class is a custom Class() method for the Icon component. It additionally
-// ensures that a default style is applied to the Icon if no style had been
-// optionally set.
-func (i *Icon) Class() string {
-	i.AddClasses(i.style.String())
-	return i.componentClasses.Class()
 }
 
 // WithStyle assigns the given FontAwesome style to the Icon.
@@ -43,8 +36,9 @@ func WithLabel(l string) Option[Icon] {
 
 // NewIcon creates an Icon component with the given options.
 func NewIcon(name string, options ...Option[Icon]) Icon {
-	icon := Icon{}
-	icon = WithClasses[Icon]("fa-" + name)(icon)
+	icon := Icon{
+		name: "fa-" + name,
+	}
 
 	for _, option := range options {
 		icon = option(icon)

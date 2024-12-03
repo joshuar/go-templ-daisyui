@@ -4,6 +4,10 @@
 //go:generate go run golang.org/x/tools/cmd/stringer -type=Size -linecomment -output size_generated.go
 package components
 
+import (
+	"fmt"
+)
+
 // Size options. MD is default in DaisyUI so it goes first.
 const (
 	MD Size = iota // md
@@ -15,28 +19,17 @@ const (
 
 type Size int
 
+type componentSize interface {
+	fmt.Stringer
+}
+
 // WithSize adds the given size to the component.
 func WithSize[T any](size Size) Option[T] {
 	return func(c T) T {
-		// Get a pointer to the underlying component.
-		component := &c
-		// Apply the given classes to the component.
-		addSizeToComponent(component, size)
-		// Return the modified component.
-		return *component
-	}
-}
+		if component, ok := any(&c).(componentSize); ok {
+			c = WithClasses[T](component.String() + "-" + size.String())(c)
+		}
 
-// customisableSize is an interface to detect components whose classes
-// can be sized.
-type customisableSize interface {
-	String() string
-	customisableClasses
-}
-
-func addSizeToComponent(component any, size Size) {
-	switch component := component.(type) {
-	case customisableSize:
-		component.AddClasses(component.String() + "-" + size.String())
+		return c
 	}
 }

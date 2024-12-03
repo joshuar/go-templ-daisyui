@@ -10,7 +10,6 @@ templ ModalTempl(id string, content templ.Component) {
 			@NewButton("", "close",
 				AsShape(ButtonCircle),
 				WithModifier(ButtonGhost),
-				WithSize[Button](SM),
 				WithIcon(NewIcon("xmark"), AlignMiddle),
 				WithClasses[Button]("absolute", "right-2", "top-2"),
 				WithAttributes[Button](templ.Attributes{

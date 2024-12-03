@@ -4,6 +4,8 @@
 //go:generate go run golang.org/x/tools/cmd/stringer -type=Alignment -linecomment -output alignment_generated.go
 package components
 
+import "fmt"
+
 const (
 	AlignEnd    Alignment = iota // end
 	AlignTop                     // top
@@ -15,9 +17,17 @@ const (
 
 type Alignment int
 
-// AlignObject returns the given object class with an appropriate alignment
-// modifier. For e.g., if Alignment is AlignTop and object is menu, the return
-// value will be "menu-top".
-func (a Alignment) AlignObject(object string) string {
-	return object + "-" + a.String()
+type componentAlignment interface {
+	fmt.Stringer
+}
+
+// WithAlignment adds an alignment to the component.
+func WithAlignment[T any](alignment Alignment) Option[T] {
+	return func(c T) T {
+		if component, ok := any(&c).(componentAlignment); ok {
+			c = WithClasses[T](component.String() + "-" + alignment.String())(c)
+		}
+
+		return c
+	}
 }

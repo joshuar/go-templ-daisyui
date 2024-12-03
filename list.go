@@ -5,43 +5,42 @@ package components
 
 import "github.com/a-h/templ"
 
-const (
-	ListOrdered ListStyle = iota
-	ListUnordered
-)
-
-type ListStyle int
-
-type List struct {
-	Attributes templ.Attributes
-	Items      []templ.Component
-	Style      ListStyle
+type list struct {
+	componentAttributes
+	Items []templ.Component
 }
 
-type ListOption func(List) List
-
-func ListAttributes(attrs templ.Attributes) ListOption {
-	return func(l List) List {
-		l.Attributes = attrs
-		return l
-	}
+type OrderedList struct {
+	list
 }
 
-func WithItems(elements ...templ.Component) ListOption {
-	return func(l List) List {
+type UnorderedList struct {
+	list
+}
+
+func WithItems(elements ...templ.Component) Option[list] {
+	return func(l list) list {
 		l.Items = elements
 		return l
 	}
 }
 
-func NewList(style ListStyle, options ...ListOption) List {
-	list := List{
-		Style: style,
-	}
+func NewOrderedList(options ...Option[list]) OrderedList {
+	ol := OrderedList{}
 
 	for _, option := range options {
-		list = option(list)
+		ol.list = option(ol.list)
 	}
 
-	return list
+	return ol
+}
+
+func NewUnorderedList(options ...Option[list]) UnorderedList {
+	ul := UnorderedList{}
+
+	for _, option := range options {
+		ul.list = option(ul.list)
+	}
+
+	return ul
 }

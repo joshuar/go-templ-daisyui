@@ -96,7 +96,7 @@ func WithIcon(icon Icon, alignment Alignment) Option[Button] {
 func WithButtonTooltip(tip string, alignment Alignment) Option[Button] {
 	return func(btn Button) Button {
 		tooltip := NewTooltip(
-			ToolTipAlignment(alignment),
+			WithAlignment[Tooltip](alignment),
 			Tip(tip),
 		)
 		btn.Tooltip = &tooltip

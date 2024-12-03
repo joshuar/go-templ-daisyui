@@ -3,9 +3,9 @@
 
 package components
 
-templ (l List) unorderedList() {
+templ (l UnorderedList) Show() {
 	<ul
-		{ l.Attributes... }
+		{ l.Attributes()... }
 	>
 		for _, item := range l.Items {
 			<li>
@@ -15,9 +15,9 @@ templ (l List) unorderedList() {
 	</ul>
 }
 
-templ (l List) orderedList() {
+templ (l OrderedList) Show() {
 	<ol
-		{ l.Attributes... }
+		{ l.Attributes()... }
 	>
 		for _, item := range l.Items {
 			<li>
@@ -25,13 +25,4 @@ templ (l List) orderedList() {
 			</li>
 		}
 	</ol>
-}
-
-templ (l List) Show() {
-	switch l.Style {
-		case ListUnordered:
-			@l.unorderedList()
-		case ListOrdered:
-			@l.orderedList()
-	}
 }
