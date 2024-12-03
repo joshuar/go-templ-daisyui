@@ -6,16 +6,40 @@ package components
 templ (h Header) Show() {
 	switch h.Size {
 		case H1:
-			<h1>{ h.Title }</h1>
+			@showH1(h.Title, h.Class())
 		case H2:
-			<h2>{ h.Title }</h2>
+			@showH2(h.Title, h.Class())
 		case H3:
-			<h3>{ h.Title }</h3>
+			@showH3(h.Title, h.Class())
 		case H4:
-			<h4>{ h.Title }</h4>
+			@showH4(h.Title, h.Class())
 		case H5:
-			<h5>{ h.Title }</h5>
+			@showH5(h.Title, h.Class())
 		case H6:
-			<h6>{ h.Title }</h6>
+			@showH6(h.Title, h.Class())
 	}
+}
+
+templ showH1(title, class string) {
+	<h1 class={ class }>{ title }</h1>
+}
+
+templ showH2(title, class string) {
+	<h2 class={ class }>{ title }</h2>
+}
+
+templ showH3(title, class string) {
+	<h3 class={ class }>{ title }</h3>
+}
+
+templ showH4(title, class string) {
+	<h4 class={ class }>{ title }</h4>
+}
+
+templ showH5(title, class string) {
+	<h5 class={ class }>{ title }</h5>
+}
+
+templ showH6(title, class string) {
+	<h6 class={ class }>{ title }</h6>
 }

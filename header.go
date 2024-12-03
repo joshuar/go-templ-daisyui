@@ -17,13 +17,28 @@ type HeaderSize int
 
 type Header struct {
 	Title string
-	Size  HeaderSize
+	componentClasses
+	Size HeaderSize
+}
+
+// WithHeaderSize sets the header size. If not added as an option, the header
+// defaults to h1.
+func WithHeaderSize(size HeaderSize) Option[Header] {
+	return func(h Header) Header {
+		h.Size = size
+		return h
+	}
 }
 
 // NewHeader creates a new header component with the given title and size.
-func NewHeader(title string, size HeaderSize) Header {
-	return Header{
+func NewHeader(title string, options ...Option[Header]) Header {
+	header := Header{
 		Title: title,
-		Size:  size,
 	}
+
+	for _, option := range options {
+		header = option(header)
+	}
+
+	return header
 }
