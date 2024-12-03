@@ -5,8 +5,6 @@
 package components
 
 import (
-	"strings"
-
 	"github.com/a-h/templ"
 )
 
@@ -23,25 +21,18 @@ type CardLayout int
 // Card represents a DaisyUI Card component.
 // https://daisyui.com/components/card/
 type Card struct {
-	Body       templ.Component
-	Actions    []templ.Component
-	Badges     []Badge
-	Image      *Image
-	Attributes templ.Attributes
-	Title      Header
-	ID         string
-	class      []string
+	componentClasses
+	componentAttributes
+	Body    templ.Component
+	Image   *Image
+	ID      string
+	Actions []templ.Component
+	Badges  []Badge
+	Title   Header
 }
-
-func (c Card) Class() string {
-	return strings.Join(c.class, " ")
-}
-
-// CardOption adds an option to a card.
-type CardOption Option[Card]
 
 // WithBody sets the container for card content.
-func WithBody(t templ.Component) CardOption {
+func WithBody(t templ.Component) Option[Card] {
 	return func(c Card) Card {
 		c.Body = t
 		return c
@@ -49,7 +40,7 @@ func WithBody(t templ.Component) CardOption {
 }
 
 // WithActions sets the container for card actions.
-func WithActions(actions ...templ.Component) CardOption {
+func WithActions(actions ...templ.Component) Option[Card] {
 	return func(c Card) Card {
 		c.Actions = append(c.Actions, actions...)
 		return c
@@ -57,7 +48,7 @@ func WithActions(actions ...templ.Component) CardOption {
 }
 
 // WithBadges adds the provided list of badges to the Card.
-func WithBadges(badges ...Badge) CardOption {
+func WithBadges(badges ...Badge) Option[Card] {
 	return func(c Card) Card {
 		c.Badges = append(c.Badges, badges...)
 		return c
@@ -65,15 +56,18 @@ func WithBadges(badges ...Badge) CardOption {
 }
 
 // WithTitle sets the title for card body.
-func WithTitle(title string, size HeaderSize) CardOption {
+func WithTitle(title string) Option[Card] {
 	return func(c Card) Card {
-		c.Title = NewHeader(title, size)
+		c.Title = NewHeader(title,
+			WithHeaderSize(H2),
+			WithClasses[Header]("card-title"))
+
 		return c
 	}
 }
 
 // WithImage sets the figure displayed in the card body.
-func WithImage(i Image) CardOption {
+func WithImage(i Image) Option[Card] {
 	return func(c Card) Card {
 		c.Image = &i
 		return c
@@ -81,68 +75,53 @@ func WithImage(i Image) CardOption {
 }
 
 // WithCardLayout sets the card layout.
-func WithCardLayout(l CardLayout) CardOption {
+func WithCardLayout(l CardLayout) Option[Card] {
 	return func(c Card) Card {
-		c.class = append(c.class, l.String())
+		c.classes = append(c.classes, l.String())
 		return c
 	}
 }
 
 // WithGlass makes the card glassy.
-func WithGlass() CardOption {
+func WithGlass() Option[Card] {
 	return func(c Card) Card {
-		c.class = append(c.class, "glass")
+		c.classes = append(c.classes, "glass")
 		return c
 	}
 }
 
 // WithBorder sets a border around the card.
-func WithBorder() CardOption {
+func WithBorder() Option[Card] {
 	return func(c Card) Card {
-		c.class = append(c.class, "card-bordered")
+		c.classes = append(c.classes, "card-bordered")
 		return c
 	}
 }
 
 // WithFullImage sets the image as the card background.
-func WithFullImage() CardOption {
+func WithFullImage() Option[Card] {
 	return func(c Card) Card {
-		c.class = append(c.class, "image-full")
+		c.classes = append(c.classes, "image-full")
 		return c
 	}
 }
 
 // WithCardShadow adds a shadow to the card.
-func WithCardShadow(size Size) CardOption {
+func WithCardShadow(size Size) Option[Card] {
 	return func(c Card) Card {
-		c.class = append(c.class, size.SizeObject("shadow"))
-		return c
-	}
-}
-
-// CardAttributes adds additional attributes to the card.
-func CardAttributes(attrs templ.Attributes) CardOption {
-	return func(c Card) Card {
-		c.Attributes = attrs
-		return c
-	}
-}
-
-// CardClasses adds additional class values to the card.
-func CardClasses(classes ...string) CardOption {
-	return func(c Card) Card {
-		c.class = append(c.class, classes...)
+		c.classes = append(c.classes, size.SizeObject("shadow"))
 		return c
 	}
 }
 
 // NewCard creates a new card component with the given options. The card can be
 // rendered by calling the Show method.
-func NewCard(id string, options ...CardOption) Card {
+func NewCard(id string, options ...Option[Card]) Card {
 	input := Card{
-		ID:    id,
-		class: []string{"card"},
+		ID: id,
 	}
+
+	input = WithClasses[Card]("card")(input)
 
 	for _, option := range options {
 		input = option(input)

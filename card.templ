@@ -7,8 +7,8 @@ package components
 templ (c Card) Show() {
 	<div
 		id={ c.ID }
-		class={ c.Class() }
-		{ c.Attributes... }
+		class={ c.Class(), "bg-base-100" }
+		{ c.Attributes()... }
 	>
 		if c.Image != nil {
 			<figure>
