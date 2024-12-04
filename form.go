@@ -78,7 +78,7 @@ func Buttons(buttons ...Button) FormOption {
 func Inputs(inputs ...Input) FormOption {
 	return func(f Form) Form {
 		for _, input := range inputs {
-			f.Inputs.Set(input.ID, input)
+			f.Inputs.Set(input.ID(), input)
 		}
 
 		return f

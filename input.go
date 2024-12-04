@@ -12,6 +12,7 @@ const (
 	InputTypeText     InputType = iota // text
 	InputTypePassword                  // password
 	InputTypeSearch                    // search
+	InputTypeHidden                    // hidden
 )
 
 type InputType int
@@ -32,14 +33,15 @@ const (
 type InputModifier int
 
 type Input struct {
+	Icon        *Icon
+	Placeholder string
+	componentID
+	componentValue
+	Name string
 	componentAttributes
+	Label string
+	Error string
 	componentClasses
-	Icon          *Icon
-	ID            string
-	Placeholder   string
-	Label         string
-	Error         string
-	Value         string
 	IconAlignment Alignment
 	Type          InputType
 	FormControl   bool
@@ -47,12 +49,7 @@ type Input struct {
 }
 
 func (i *Input) String() string {
-	return ""
-}
-
-// SetValue assigns the given value to the input.
-func (i *Input) SetValue(value string) {
-	i.Value = value
+	return "input"
 }
 
 // WithInputType defines the type of input (i.e., text, password, search, etc.).
@@ -76,6 +73,14 @@ func WithInputModifier(m InputModifier) Option[Input] {
 func WithPlaceholder(s string) Option[Input] {
 	return func(i Input) Input {
 		i.Placeholder = s
+		return i
+	}
+}
+
+// WithInputLabel assigns a label to the input.
+func WithInputName(name string) Option[Input] {
+	return func(i Input) Input {
+		i.Name = name
 		return i
 	}
 }
@@ -118,10 +123,8 @@ func AsFormControl() Option[Input] {
 }
 
 // NewInput creates a new input with the given values.
-func NewInput(id string, options ...Option[Input]) Input {
-	input := Input{
-		ID: id,
-	}
+func NewInput(options ...Option[Input]) Input {
+	input := Input{}
 
 	input = WithClasses[Input](input.String())(input)
 
@@ -130,6 +133,17 @@ func NewInput(id string, options ...Option[Input]) Input {
 	}
 
 	return input
+}
+
+// NewHiddenInput is a convienience function for creating a hidden input with
+// the given id, name and value.
+func NewHiddenInput(id, name, value string) Input {
+	return NewInput(
+		WithInputType(InputTypeHidden),
+		WithID[Input](id),
+		WithInputName(name),
+		WithValue[Input](value),
+	)
 }
 
 type SearchInput struct {

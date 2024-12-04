@@ -4,9 +4,9 @@
 package components
 
 // Show will render the Card component.
+// id={ c.ID }
 templ (c Card) Show() {
 	<div
-		id={ c.ID }
 		class={ c.Class(), "bg-base-100" }
 		{ c.Attributes()... }
 	>

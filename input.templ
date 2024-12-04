@@ -18,14 +18,19 @@ templ (i Input) Show() {
 
 templ (i Input) show(classes ...string) {
 	<input
-		name={ i.ID }
+		if i.ID() != "" {
+			id={ i.ID() }
+		}
+		if i.Name != "" {
+			name={ i.Name }
+		}
 		type={ i.Type.String() }
 		if i.Placeholder != "" {
 			placeholder={ i.Placeholder }
 		}
 		class={ i.Class(), classes }
-		if i.Value !="" {
-			value={ i.Value }
+		if i.Value() != "" {
+			value={ i.Value() }
 		}
 		{ i.Attributes()... }
 	/>
@@ -55,7 +60,7 @@ templ (i Input) withIconLabel() {
 
 templ (i Input) asForm() {
 	<div
-		id={ i.ID }
+		id={ i.ID() }
 		hx-target="this"
 		hx-swap="outerHTML"
 		class="w-full"

@@ -21,11 +21,11 @@ type CardLayout int
 // Card represents a DaisyUI Card component.
 // https://daisyui.com/components/card/
 type Card struct {
-	componentClasses
+	Body  templ.Component
+	Image *Image
 	componentAttributes
-	Body    templ.Component
-	Image   *Image
-	ID      string
+	componentID
+	componentClasses
 	Actions []templ.Component
 	Badges  []Badge
 	Title   Header
@@ -120,10 +120,8 @@ func WithCardShadow(size Size) Option[Card] {
 
 // NewCard creates a new card component with the given options. The card can be
 // rendered by calling the Show method.
-func NewCard(id string, options ...Option[Card]) Card {
-	card := Card{
-		ID: id,
-	}
+func NewCard(options ...Option[Card]) Card {
+	card := Card{}
 
 	card = WithClasses[Card](card.String())(card)
 

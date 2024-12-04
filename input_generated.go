@@ -11,11 +11,12 @@ func _() {
 	_ = x[InputTypeText-0]
 	_ = x[InputTypePassword-1]
 	_ = x[InputTypeSearch-2]
+	_ = x[InputTypeHidden-3]
 }
 
-const _InputType_name = "textpasswordsearch"
+const _InputType_name = "textpasswordsearchhidden"
 
-var _InputType_index = [...]uint8{0, 4, 12, 18}
+var _InputType_index = [...]uint8{0, 4, 12, 18, 24}
 
 func (i InputType) String() string {
 	if i < 0 || i >= InputType(len(_InputType_index)-1) {
