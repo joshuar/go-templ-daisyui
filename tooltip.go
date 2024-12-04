@@ -20,7 +20,7 @@ func Tip(tip string) Option[Tooltip] {
 	}
 }
 
-// NewTooltop
+// NewTooltip creates a new Tooltip component with the specified options.
 func NewTooltip(options ...Option[Tooltip]) Tooltip {
 	tooltip := Tooltip{}
 
