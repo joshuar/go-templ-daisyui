@@ -19,14 +19,16 @@ const (
 
 type Size int
 
-type componentSize interface {
+// customisableSize is an inheritable struct for components that can have a size
+// property.
+type customisableSize interface {
 	fmt.Stringer
 }
 
 // WithSize adds the given size to the component.
 func WithSize[T any](size Size) Option[T] {
 	return func(c T) T {
-		if component, ok := any(&c).(componentSize); ok {
+		if component, ok := any(&c).(customisableSize); ok {
 			c = WithClasses[T](component.String() + "-" + size.String())(c)
 		}
 

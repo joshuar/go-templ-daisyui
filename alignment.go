@@ -17,15 +17,15 @@ const (
 
 type Alignment int
 
-type componentAlignment interface {
+type customisableAlignment interface {
 	fmt.Stringer
 }
 
 // WithAlignment adds an alignment to the component.
 func WithAlignment[T any](alignment Alignment) Option[T] {
 	return func(c T) T {
-		if component, ok := any(&c).(componentAlignment); ok {
-			c = WithClasses[T](component.String() + "-" + alignment.String())(c)
+		if settable, ok := any(&c).(customisableAlignment); ok {
+			c = WithClasses[T](settable.String() + "-" + alignment.String())(c)
 		}
 
 		return c

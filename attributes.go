@@ -38,27 +38,23 @@ func (c *componentAttributes) Attributes() templ.Attributes {
 	return c.attributes
 }
 
-// WithAttributes adds the given attributes to the component.
-func WithAttributes[T any](attr templ.Attributes) Option[T] {
-	return func(c T) T {
-		// Get a pointer to the underlying component.
-		component := &c
-		// Apply the given attributes to the component.
-		addAttributesToComponent(component, attr)
-		// Return the modified component.
-		return *component
-	}
-}
-
 // customisableAttributes is an interface to detect components whose attributes
 // can be customized.
 type customisableAttributes interface {
 	AddAttributes(attrs templ.Attributes)
 }
 
-func addAttributesToComponent(component any, attr templ.Attributes) {
-	switch component := component.(type) {
-	case customisableAttributes:
-		component.AddAttributes(attr)
+// WithAttributes adds the given attributes to the component.
+func WithAttributes[T any](attr templ.Attributes) Option[T] {
+	return func(c T) T {
+		// Get a pointer to the underlying component.
+		component := &c
+		// If the component supports customising attributes, set the attributes
+		// to the given value.
+		if settable, ok := any(component).(customisableAttributes); ok {
+			settable.AddAttributes(attr)
+		}
+		// Return the modified component.
+		return *component
 	}
 }
