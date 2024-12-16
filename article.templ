@@ -1,0 +1,15 @@
+// Copyright 2024 Joshua Rich <joshua.rich@gmail.com>.
+// SPDX-License-Identifier: 	AGPL-3.0-or-later
+
+
+package components
+
+// Show will display the article as a templ.Component.
+templ (a Article) Show() {
+	<article class={ a.Class() }>
+		if a.Title != "" {
+			@NewHeader(a.Title).Show()
+		}
+		@templ.Raw(a.Content)
+	</article>
+}
