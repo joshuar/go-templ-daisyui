@@ -21,25 +21,49 @@ templ (h Header) Show() {
 }
 
 templ showH1(title, class string) {
-	<h1 class={ class }>{ title }</h1>
+	<h1
+		if class != "" {
+			class={ class }
+		}
+	>{ title }</h1>
 }
 
 templ showH2(title, class string) {
-	<h2 class={ class }>{ title }</h2>
+	<h2
+		if class != "" {
+			class={ class }
+		}
+	>{ title }</h2>
 }
 
 templ showH3(title, class string) {
-	<h3 class={ class }>{ title }</h3>
+	<h3
+		if class != "" {
+			class={ class }
+		}
+	>{ title }</h3>
 }
 
 templ showH4(title, class string) {
-	<h4 class={ class }>{ title }</h4>
+	<h4
+		if class != "" {
+			class={ class }
+		}
+	>{ title }</h4>
 }
 
 templ showH5(title, class string) {
-	<h5 class={ class }>{ title }</h5>
+	<h5
+		if class != "" {
+			class={ class }
+		}
+	>{ title }</h5>
 }
 
 templ showH6(title, class string) {
-	<h6 class={ class }>{ title }</h6>
+	<h6
+		if class != "" {
+			class={ class }
+		}
+	>{ title }</h6>
 }
