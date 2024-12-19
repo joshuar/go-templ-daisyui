@@ -8,9 +8,9 @@ templ (i Image) Show() {
 		if len(i.classes) > 0 {
 			class={ i.Class() }
 		}
-		src={ i.URL }
-		if i.Alt != "" {
-			alt={ i.Alt }
+		src={ i.url }
+		if i.alt != "" {
+			alt={ i.alt }
 		}
 	/>
 }

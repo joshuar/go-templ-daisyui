@@ -1,7 +1,6 @@
 // Copyright 2024 Joshua Rich <joshua.rich@gmail.com>.
 // SPDX-License-Identifier: 	AGPL-3.0-or-later
 
-//go:generate go run golang.org/x/tools/cmd/stringer -type=CardLayout -linecomment -output card_generated.go
 package components
 
 import (
@@ -18,21 +17,28 @@ const (
 // CardLayout is used to define the card style.
 type CardLayout int
 
+// cardTitle defines a Card's title.
+type cardTitle struct {
+	text string
+	size HeaderSize
+}
+
 // Card represents a DaisyUI Card component.
 // https://daisyui.com/components/card/
 type Card struct {
-	Body  templ.Component
-	Image *Image
+	Body      templ.Component
+	Image     *Image
+	border    bool
+	glass     bool
+	layout    CardLayout
+	fullImage bool
+	centered  bool
 	componentAttributes
 	componentID
-	componentClasses
+	componentShadow
 	Actions []templ.Component
 	Badges  []Badge
-	Title   Header
-}
-
-func (c *Card) String() string {
-	return "card"
+	title   *cardTitle
 }
 
 // WithBody sets the container for card content.
@@ -60,11 +66,12 @@ func WithBadges(badges ...Badge) Option[Card] {
 }
 
 // WithTitle sets the title for card body.
-func WithTitle(title string) Option[Card] {
+func WithTitle(title string, size HeaderSize) Option[Card] {
 	return func(c Card) Card {
-		c.Title = NewHeader(title,
-			WithHeaderSize(H2),
-			WithClasses[Header]("card-title"))
+		c.title = &cardTitle{
+			text: title,
+			size: size,
+		}
 
 		return c
 	}
@@ -78,10 +85,27 @@ func WithImage(i Image) Option[Card] {
 	}
 }
 
+// WithFullImage sets the image as the card background.
+func WithFullImage() Option[Card] {
+	return func(c Card) Card {
+		c.fullImage = true
+		return c
+	}
+}
+
 // WithCardLayout sets the card layout.
 func WithCardLayout(l CardLayout) Option[Card] {
 	return func(c Card) Card {
-		c.classes = append(c.classes, l.String())
+		c.layout = l
+		return c
+	}
+}
+
+// WithCenteredContent aligns any image and text content in the center of the
+// card with appropriate padding.
+func WithCenteredLayout() Option[Card] {
+	return func(c Card) Card {
+		c.centered = true
 		return c
 	}
 }
@@ -89,7 +113,7 @@ func WithCardLayout(l CardLayout) Option[Card] {
 // WithGlass makes the card glassy.
 func WithGlass() Option[Card] {
 	return func(c Card) Card {
-		c.classes = append(c.classes, "glass")
+		c.glass = true
 		return c
 	}
 }
@@ -97,15 +121,7 @@ func WithGlass() Option[Card] {
 // WithBorder sets a border around the card.
 func WithBorder() Option[Card] {
 	return func(c Card) Card {
-		c.classes = append(c.classes, "card-bordered")
-		return c
-	}
-}
-
-// WithFullImage sets the image as the card background.
-func WithFullImage() Option[Card] {
-	return func(c Card) Card {
-		c.classes = append(c.classes, "image-full")
+		c.border = true
 		return c
 	}
 }
@@ -113,7 +129,7 @@ func WithFullImage() Option[Card] {
 // WithCardShadow adds a shadow to the card.
 func WithCardShadow(size Size) Option[Card] {
 	return func(c Card) Card {
-		c.classes = append(c.classes, "shadow-"+size.String())
+		c.shadowSize = size
 		return c
 	}
 }
@@ -122,8 +138,6 @@ func WithCardShadow(size Size) Option[Card] {
 // rendered by calling the Show method.
 func NewCard(options ...Option[Card]) Card {
 	card := Card{}
-
-	card = WithClasses[Card](card.String())(card)
 
 	for _, option := range options {
 		card = option(card)

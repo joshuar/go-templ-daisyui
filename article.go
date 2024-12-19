@@ -1,15 +1,14 @@
 // Copyright 2024 Joshua Rich <joshua.rich@gmail.com>.
 // SPDX-License-Identifier: 	AGPL-3.0-or-later
 
-//go:generate go run golang.org/x/tools/cmd/stringer -type=ProseGrayScale -linecomment -output article_generated.go
 package components
 
 const (
-	Gray    ProseGrayScale = iota // prose-gray
-	Slate                         // prose-slate
-	Zinc                          // prose-zinc
-	Neutral                       // prose-neutral
-	Stone                         // prose-stone
+	Gray    ProseGrayScale = iota + 1 // prose-gray
+	Slate                             // prose-slate
+	Zinc                              // prose-zinc
+	Neutral                           // prose-neutral
+	Stone                             // prose-stone
 )
 
 type ProseGrayScale int
@@ -19,19 +18,16 @@ type ProseGrayScale int
 // https://daisyui.com/docs/layout-and-typography/#-1
 type Article struct {
 	componentClasses
-	Title   string
-	Content string
-}
-
-func (a *Article) String() string {
-	return "prose"
+	grayscale ProseGrayScale
+	title     string
+	content   string
 }
 
 // WithGrayScale adds optional gray scale scheme to the prose.
 // https://github.com/tailwindlabs/tailwindcss-typography/blob/main/README.md#choosing-a-gray-scale
 func WithGrayScale(scale ProseGrayScale) Option[Article] {
 	return func(a Article) Article {
-		a.classes = append(a.classes, scale.String())
+		a.grayscale = scale
 		return a
 	}
 }
@@ -40,11 +36,9 @@ func WithGrayScale(scale ProseGrayScale) Option[Article] {
 // options. Title is optional.
 func NewArticle(title, content string, options ...Option[Article]) Article {
 	article := Article{
-		Title:   title,
-		Content: content,
+		title:   title,
+		content: content,
 	}
-
-	article = WithClasses[Article](article.String())(article)
 
 	for _, option := range options {
 		article = option(article)

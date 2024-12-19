@@ -24,11 +24,12 @@ func _() {
 	_ = x[ColorWarningContent-13]
 	_ = x[ColorError-14]
 	_ = x[ColorErrorContent-15]
+	_ = x[ColorGhost-16]
 }
 
-const _Color_name = "bg-neutralbg-neutral-contentbg-primarybg-primary-contentbg-secondarybg-secondary-contentbg-accentbg-accent-contentbg-infobg-info-contentbg-successbg-success-contentbg-warningbg-warning-contentbg-errorbg-error-content"
+const _Color_name = "bg-neutralbg-neutral-contentbg-primarybg-primary-contentbg-secondarybg-secondary-contentbg-accentbg-accent-contentbg-infobg-info-contentbg-successbg-success-contentbg-warningbg-warning-contentbg-errorbg-error-contentbg-ghost"
 
-var _Color_index = [...]uint8{0, 10, 28, 38, 56, 68, 88, 97, 114, 121, 136, 146, 164, 174, 192, 200, 216}
+var _Color_index = [...]uint8{0, 10, 28, 38, 56, 68, 88, 97, 114, 121, 136, 146, 164, 174, 192, 200, 216, 224}
 
 func (i Color) String() string {
 	if i < 0 || i >= Color(len(_Color_index)-1) {

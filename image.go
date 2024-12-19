@@ -4,15 +4,15 @@
 package components
 
 type Image struct {
-	URL string
-	Alt string
+	url string
+	alt string
 	componentClasses
 }
 
 // WithURL sets the URL for the image.
 func WithURL(url string) Option[Image] {
 	return func(i Image) Image {
-		i.URL = url
+		i.url = url
 		return i
 	}
 }
@@ -20,7 +20,7 @@ func WithURL(url string) Option[Image] {
 // WithAltText sets the alt text to be displayed for the image.
 func WithAltText(alt string) Option[Image] {
 	return func(i Image) Image {
-		i.Alt = alt
+		i.alt = alt
 		return i
 	}
 }

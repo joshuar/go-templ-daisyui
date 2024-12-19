@@ -3,13 +3,29 @@
 
 package components
 
+func setAlertType(alertType Alert) string {
+	switch alertType {
+	case AlertInfo:
+		return "alert-info"
+	case AlertSuccess:
+		return "alert-success"
+	case AlertError:
+		return "alert-error"
+	case AlertWarning:
+		return "alert-warning"
+	default:
+		return "alert-info"
+	}
+
+}
+
 templ AlertTempl(alertType Alert, message, id string, oob bool) {
 	<div
 		if id != "" {
 			id={ id }
 		}
 		role="alert"
-		class={ "alert", alertType.String() }
+		class={ "alert", setAlertType(alertType) }
 		if oob {
 			hx-swap-oob="true"
 		}

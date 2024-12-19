@@ -27,14 +27,6 @@ func (t Tabs) Class() string {
 
 type TabsOption Option[Tabs]
 
-// Set tab size.
-func WithTabSize(size Size) TabsOption {
-	return func(t Tabs) Tabs {
-		t.class = append(t.class, size.String())
-		return t
-	}
-}
-
 // Add borders to tabs.
 func WithTabBorders() TabsOption {
 	return func(t Tabs) Tabs {

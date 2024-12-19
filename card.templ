@@ -3,22 +3,38 @@
 
 package components
 
+func (c Card) setLayout() string {
+	switch c.layout {
+	case CardLayoutCompact:
+		return "card-compact"
+	case CardLayoutSide:
+		return "card-side"
+	default:
+		return "card-normal"
+	}
+}
+
 // Show will render the Card component.
 // id={ c.ID }
 templ (c Card) Show() {
 	<div
-		class={ c.Class(), "bg-base-100" }
+		class={ "card",
+		templ.KV("card-bordered",c.border),
+		templ.KV("glass",c.glass),
+		templ.KV("image-full",c.fullImage),
+		templ.KV(c.setLayout(),c.layout > 0),
+		templ.KV(c.setShadow(),c.shadowSize > 0),
+		"bg-base-100" }
 		{ c.Attributes()... }
 	>
-		if c.Image != nil {
-			<figure>
-				@c.Image.Show()
-			</figure>
-		}
-		<div class="card-body">
-			if c.Title.Title != "" {
-				@c.Title.Show()
+		@c.showImage()
+		<div
+			class={
+				"card-body",
+				templ.KV("items-center text-center", c.centered),
 			}
+		>
+			@c.showTitle()
 			if c.Body != nil {
 				@c.Body
 			}
@@ -38,4 +54,45 @@ templ (c Card) Show() {
 			}
 		</div>
 	</div>
+}
+
+// showImage will render the card image, if available.
+templ (c Card) showImage() {
+	if c.Image != nil {
+		<figure
+			if c.centered {
+				class="px-10 pt-10"
+			}
+		>
+			<img
+				src={ c.Image.url }
+				if c.Image.alt != "" {
+					alt={ c.Image.alt }
+				}
+				if c.centered {
+					class="rounded-xl"
+				}
+			/>
+		</figure>
+	}
+}
+
+// showTitle will render the card title, if available.
+templ (c Card) showTitle() {
+	if c.title != nil {
+		switch c.title.size {
+			case H1:
+				<h1 class="card-title">{ c.title.text }</h1>
+			case H2:
+				<h2 class="card-title">{ c.title.text }</h2>
+			case H3:
+				<h3 class="card-title">{ c.title.text }</h3>
+			case H4:
+				<h4 class="card-title">{ c.title.text }</h4>
+			case H5:
+				<h5 class="card-title">{ c.title.text }</h5>
+			case H6:
+				<h6 class="card-title">{ c.title.text }</h6>
+		}
+	}
 }

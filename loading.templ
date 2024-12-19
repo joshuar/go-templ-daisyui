@@ -3,9 +3,26 @@
 
 package components
 
+func setLoadingSize(size Size) string {
+	switch size {
+	case XS:
+		return "loading-xs"
+	case SM:
+		return "loading-sm"
+	case MD:
+		return "loading-md"
+	case LG:
+		return "loading-lg"
+	case XL:
+		return "loading-xl"
+	default:
+		return "loading-md"
+	}
+}
+
 templ LoadingTempl(class string, size Size) {
 	<span
-		class={ "loading", class, "loading-"+size.String(), "htmx-indicator" }
+		class={ "loading", class, setLoadingSize(size), "htmx-indicator" }
 	></span>
 }
 

@@ -3,7 +3,70 @@
 
 package components
 
+func (b Badge) setSize() string {
+	switch b.size {
+	case XS:
+		return "badge-xs"
+	case SM:
+		return "badge-sm"
+	case MD:
+		return "badge-md"
+	case LG:
+		return "badge-lg"
+	case XL:
+		return "badge-xl"
+	default:
+		return "badge-md"
+	}
+}
+
+func (b Badge) setState() string {
+	switch b.state {
+	case BadgeInfo:
+		return "badge-info"
+	case BadgeSuccess:
+		return "badge-success"
+	case BadgeWarning:
+		return "badge-warning"
+	case BadgeError:
+		return "badge-error"
+	default:
+		return "badge-info"
+	}
+}
+
+func (b Badge) setColor() string {
+	var color string
+	switch b.color.color {
+	case ColorPrimary:
+		color = "badge-primary"
+	case ColorSecondary:
+		color = "badge-secondary"
+	case ColorAccent:
+		color = "badge-accent"
+	case ColorNeutral:
+		color = "badge-neutral"
+	case ColorGhost:
+		color = "badge-ghost"
+	}
+
+	if b.color.outline && (b.color.color != ColorNeutral || b.color.color != ColorGhost) {
+		color = color + " badge-outline"
+	}
+
+	return color
+}
+
 // Show will render the Badge component.
 templ (b Badge) Show() {
-	<span class={ b.Class() }>{ b.desc }</span>
+	<span
+		class={ "badge",
+	templ.KV(b.setSize(),b.size > 0),
+	templ.KV(b.setState(),b.state > 0),
+	templ.KV(b.setColor(),b.color != nil) }
+	>
+		if b.desc != "" {
+			{ b.desc }
+		}
+	</span>
 }

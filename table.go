@@ -50,11 +50,3 @@ func WithRowHover() TableOption {
 		return t
 	}
 }
-
-// Set table size.
-func WithTableSize(size Size) TableOption {
-	return func(t Table) Table {
-		t.class = append(t.class, size.String())
-		return t
-	}
-}

@@ -49,7 +49,7 @@ func WithAttributes[T any](attr templ.Attributes) Option[T] {
 	return func(c T) T {
 		// Get a pointer to the underlying component.
 		component := &c
-		// If the component supports customising attributes, set the attributes
+		// If the component supports customizing attributes, set the attributes
 		// to the given value.
 		if settable, ok := any(component).(customisableAttributes); ok {
 			settable.AddAttributes(attr)

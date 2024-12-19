@@ -21,6 +21,7 @@ const (
 	ColorWarningContent                // bg-warning-content
 	ColorError                         // bg-error
 	ColorErrorContent                  // bg-error-content
+	ColorGhost                         // bg-ghost
 )
 
 // Color represents a DaisyUI color.
