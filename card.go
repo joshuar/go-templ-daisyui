@@ -26,16 +26,16 @@ type cardTitle struct {
 // Card represents a DaisyUI Card component.
 // https://daisyui.com/components/card/
 type Card struct {
-	Body      templ.Component
+	body      templ.Component
 	Image     *Image
 	border    bool
-	glass     bool
 	layout    CardLayout
 	fullImage bool
 	centered  bool
 	componentAttributes
 	componentID
 	componentShadow
+	modifierGlass
 	Actions []templ.Component
 	Badges  []Badge
 	title   *cardTitle
@@ -43,94 +43,86 @@ type Card struct {
 
 // WithBody sets the container for card content.
 func WithBody(t templ.Component) Option[Card] {
-	return func(c Card) Card {
-		c.Body = t
-		return c
+	return func(card Card) Card {
+		card.body = t
+		return card
 	}
 }
 
 // WithActions sets the container for card actions.
 func WithActions(actions ...templ.Component) Option[Card] {
-	return func(c Card) Card {
-		c.Actions = append(c.Actions, actions...)
-		return c
+	return func(card Card) Card {
+		card.Actions = append(card.Actions, actions...)
+		return card
 	}
 }
 
 // WithBadges adds the provided list of badges to the Card.
 func WithBadges(badges ...Badge) Option[Card] {
-	return func(c Card) Card {
-		c.Badges = append(c.Badges, badges...)
-		return c
+	return func(card Card) Card {
+		card.Badges = append(card.Badges, badges...)
+		return card
 	}
 }
 
 // WithTitle sets the title for card body.
 func WithTitle(title string, size HeaderSize) Option[Card] {
-	return func(c Card) Card {
-		c.title = &cardTitle{
+	return func(card Card) Card {
+		card.title = &cardTitle{
 			text: title,
 			size: size,
 		}
 
-		return c
+		return card
 	}
 }
 
 // WithImage sets the figure displayed in the card body.
 func WithImage(i Image) Option[Card] {
-	return func(c Card) Card {
-		c.Image = &i
-		return c
+	return func(card Card) Card {
+		card.Image = &i
+		return card
 	}
 }
 
 // WithFullImage sets the image as the card background.
 func WithFullImage() Option[Card] {
-	return func(c Card) Card {
-		c.fullImage = true
-		return c
+	return func(card Card) Card {
+		card.fullImage = true
+		return card
 	}
 }
 
 // WithCardLayout sets the card layout.
 func WithCardLayout(l CardLayout) Option[Card] {
-	return func(c Card) Card {
-		c.layout = l
-		return c
+	return func(card Card) Card {
+		card.layout = l
+		return card
 	}
 }
 
 // WithCenteredContent aligns any image and text content in the center of the
 // card with appropriate padding.
 func WithCenteredLayout() Option[Card] {
-	return func(c Card) Card {
-		c.centered = true
-		return c
-	}
-}
-
-// WithGlass makes the card glassy.
-func WithGlass() Option[Card] {
-	return func(c Card) Card {
-		c.glass = true
-		return c
+	return func(card Card) Card {
+		card.centered = true
+		return card
 	}
 }
 
 // WithBorder sets a border around the card.
 func WithBorder() Option[Card] {
-	return func(c Card) Card {
-		c.border = true
-		return c
+	return func(card Card) Card {
+		card.border = true
+		return card
 	}
 }
 
 // WithCardShadow adds a shadow to the card.
 func WithCardShadow(size Size) Option[Card] {
-	return func(c Card) Card {
-		c.shadowSize = size
-		return c
+	return func(card Card) Card {
+		card.shadowSize = size
+		return card
 	}
 }
 

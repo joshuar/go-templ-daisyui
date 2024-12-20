@@ -1,7 +1,6 @@
 // Copyright 2024 Joshua Rich <joshua.rich@gmail.com>.
 // SPDX-License-Identifier: 	AGPL-3.0-or-later
 
-//go:generate go run golang.org/x/tools/cmd/stringer -type=HeaderSize -linecomment -output header_generated.go
 package components
 
 const (
@@ -13,19 +12,20 @@ const (
 	H6                   // h6
 )
 
+// HeaderSize defines the header size (H1...H6).
 type HeaderSize int
 
+// Header represents a standard HTML header (e.g., <h1>Header</h1>).
 type Header struct {
-	Title string
-	componentClasses
-	Size HeaderSize
+	title string
+	size  HeaderSize
 }
 
 // WithHeaderSize sets the header size. If not added as an option, the header
 // defaults to h1.
 func WithHeaderSize(size HeaderSize) Option[Header] {
 	return func(h Header) Header {
-		h.Size = size
+		h.size = size
 		return h
 	}
 }
@@ -33,7 +33,7 @@ func WithHeaderSize(size HeaderSize) Option[Header] {
 // NewHeader creates a new header component with the given title and size.
 func NewHeader(title string, options ...Option[Header]) Header {
 	header := Header{
-		Title: title,
+		title: title,
 	}
 
 	for _, option := range options {

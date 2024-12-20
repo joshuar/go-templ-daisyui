@@ -8,13 +8,12 @@ import (
 	"log/slog"
 )
 
-// Size options.
 const (
-	XS Size = iota + 1 // xs
-	SM                 // sm
-	MD                 // md
-	LG                 // lg
-	XL                 // xl
+	XS Size = iota + 1 // Extra-small size. class: {component}-xs
+	SM                 // Small size. class: {component}-sm
+	MD                 // Medium size. class: {component}-md
+	LG                 // Large size. class: {component}-lg
+	XL                 // Extra-large size. class: {component}-xl
 )
 
 type Size int
@@ -30,13 +29,13 @@ func (m *modifierSize) SetSize(size Size) {
 	m.size = size
 }
 
-// customisableSize is an inheritable struct for components that can have a size
-// property.
 type customisableSize interface {
 	SetSize(size Size)
 }
 
 // WithSize adds the given size to the component.
+//
+//nolint:varnamelen // the var is copied into another with an appropriate name.
 func WithSize[T any](size Size) Option[T] {
 	return func(c T) T {
 		component := &c

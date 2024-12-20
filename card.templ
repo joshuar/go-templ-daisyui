@@ -15,44 +15,42 @@ func (c Card) setLayout() string {
 }
 
 // Show will render the Card component.
-// id={ c.ID }
 templ (c Card) Show() {
 	<div
 		class={ "card",
 		templ.KV("card-bordered",c.border),
-		templ.KV("glass",c.glass),
+		templ.KV("glass",c.UseGlass()),
 		templ.KV("image-full",c.fullImage),
 		templ.KV(c.setLayout(),c.layout > 0),
 		templ.KV(c.setShadow(),c.shadowSize > 0),
 		"bg-base-100" }
 		{ c.Attributes()... }
 	>
-		@c.showImage()
-		<div
-			class={
-				"card-body",
-				templ.KV("items-center text-center", c.centered),
-			}
-		>
-			@c.showTitle()
-			if c.Body != nil {
-				@c.Body
-			}
-			if c.Actions != nil {
-				<div class="card-actions">
-					for _, action := range c.Actions {
-						@action
-					}
-				</div>
-			}
-			if c.Badges != nil {
-				<div class="card-actions justify-right">
-					for _, badge := range c.Badges {
-						@badge.Show()
-					}
-				</div>
-			}
-		</div>
+		@c.showBody()
+	</div>
+}
+
+templ (c Card) showBody() {
+	@c.showImage()
+	<div class={ "card-body", templ.KV("items-center text-center", c.centered) }>
+		@c.showTitle()
+		if c.body != nil {
+			@c.body
+		}
+		if c.Actions != nil {
+			<div class="card-actions">
+				for _, action := range c.Actions {
+					@action
+				}
+			</div>
+		}
+		if c.Badges != nil {
+			<div class="card-actions justify-right">
+				for _, badge := range c.Badges {
+					@badge.Show()
+				}
+			</div>
+		}
 	</div>
 }
 

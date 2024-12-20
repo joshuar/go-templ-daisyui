@@ -3,6 +3,11 @@
 
 package components
 
+import (
+	"fmt"
+	"log/slog"
+)
+
 // Option represents a generic option that can be applied to a component.
 type Option[T any] func(T) T
 
@@ -25,12 +30,17 @@ type customisableID interface {
 }
 
 // WithID allows setting an id attribute on a component.
+//
+//nolint:varnamelen // the var is copied into another with an appropriate name.
 func WithID[T any](id string) Option[T] {
 	return func(c T) T {
 		component := &c
 
 		if settable, ok := any(component).(customisableID); ok {
 			settable.SetID(id)
+		} else {
+			slog.Warn("WithID passed as option to component, but component does not support setting ID.",
+				slog.String("component", fmt.Sprintf("%T", &c)))
 		}
 
 		return *component
@@ -57,12 +67,17 @@ type customisableValue interface {
 }
 
 // WithValue allows setting an value on a component.
+//
+//nolint:varnamelen // the var is copied into another with an appropriate name.
 func WithValue[T any](value string) Option[T] {
 	return func(c T) T {
 		component := &c
 
 		if settable, ok := any(component).(customisableValue); ok {
 			settable.SetValue(value)
+		} else {
+			slog.Warn("WithValue passed as option to component, but component does not support setting value.",
+				slog.String("component", fmt.Sprintf("%T", &c)))
 		}
 
 		return *component

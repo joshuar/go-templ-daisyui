@@ -28,7 +28,7 @@ templ (i Input) show(classes ...string) {
 		if i.Placeholder != "" {
 			placeholder={ i.Placeholder }
 		}
-		class={ i.Class(), classes }
+		class={ "input", classes }
 		if i.Value() != "" {
 			value={ i.Value() }
 		}
@@ -37,7 +37,7 @@ templ (i Input) show(classes ...string) {
 }
 
 templ (i Input) withTextLabel() {
-	<label class={ i.Class(), "flex items-center gap-2" }>
+	<label class={ "input", "flex items-center gap-2" }>
 		{ i.Label }
 		@i.show("grow")
 		{ children... }
@@ -45,7 +45,7 @@ templ (i Input) withTextLabel() {
 }
 
 templ (i Input) withIconLabel() {
-	<label class={ i.Class(), "flex items-center gap-2" }>
+	<label class={ "input", "flex items-center gap-2" }>
 		switch i.IconAlignment {
 			case AlignLeft:
 				@i.Icon.Show()
@@ -85,7 +85,7 @@ templ (i Input) asForm() {
 			if i.Error != "" {
 				<div class="label">
 					<span class="label-text-alt text-error">
-						@NewIcon("circle-exclamation", WithColor[Icon](ColorError)).Show()
+						@NewIcon("fa-circle-exclamation").Show()
 						{ i.Error }
 					</span>
 				</div>

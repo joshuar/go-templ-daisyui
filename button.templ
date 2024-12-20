@@ -3,9 +3,17 @@
 
 package components
 
-templ (b Button) buttonRegular() {
+templ (b Button) showButton() {
 	<button
-		class={ b.Class() }
+		class={ "btn",
+		templ.KV("btn-active", b.active),
+		templ.KV("btn-disabled", b.disabled),
+		templ.KV("glass",b.UseGlass()),
+		templ.KV(b.setColor(),b.color > 0),
+		templ.KV(b.setState(),b.state > 0),
+		templ.KV(b.setShape(),b.shape > 0),
+		templ.KV(b.setSize(), b.size > 0),
+		templ.KV(b.setContainerAlignment(),b.containerAlignment > 0) }
 		{ b.Attributes()... }
 	>
 		if icon := b.Icon; icon != nil {
@@ -29,18 +37,101 @@ templ (b Button) buttonRegular() {
 
 templ (b Button) Show() {
 	if tooltip := b.Tooltip; tooltip != nil {
-		@tooltip.AsDiv(b.buttonRegular())
+		@tooltip.AsDiv(b.showButton())
 	} else {
-		@b.buttonRegular()
+		@b.showButton()
 	}
 }
 
-templ (b Button) ShowAsLink() {
-	<a
-		role="button"
-		class={ b.Class() }
-		{ b.Attributes()... }
-	>
-		{ b.Label }
-	</a>
+// setState sets a state modifier of the Button.
+func (b Button) setState() string {
+	var state string
+
+	switch b.state {
+	case StateInfo:
+		state = "btn-info"
+	case StateSuccess:
+		state = "btn-success"
+	case StateWarning:
+		state = "btn-warning"
+	case StateError:
+		state = "btn-error"
+	}
+
+	if b.stateOutline {
+		state = state + " btn-outline"
+	}
+
+	return state
+}
+
+// setColor sets a color modifier of the Button.
+func (b Button) setColor() string {
+	color := "btn-neutral"
+
+	switch b.color {
+	case ColorPrimary:
+		color = "btn-primary"
+	case ColorSecondary:
+		color = "btn-secondary"
+	case ColorAccent:
+		color = "btn-accent"
+	case ColorNeutral:
+		color = "btn-neutral"
+	case ColorGhost:
+		color = "btn-ghost"
+	}
+
+	// Neutral and Ghost colors don't have an outline variant.
+	if b.colorOutline && (b.color != ColorNeutral || b.color != ColorGhost) {
+		color = color + " btn-outline"
+	}
+
+	return color
+}
+
+// setShape sets the shape modifier of the Button.
+func (b Button) setShape() string {
+	switch b.shape {
+	case ButtonCircle:
+		return "btn-circle"
+	case ButtonSquare:
+		return "btn-square"
+	case ButtonWide:
+		return "btn-wide"
+	case ButtonBlock:
+		return "btn-block"
+	default:
+		return "btn-regular"
+	}
+}
+
+// setSize sets the size modifier of the Badge.
+func (b Button) setSize() string {
+	switch b.size {
+	case XS:
+		return "btn-xs"
+	case SM:
+		return "btn-sm"
+	case MD:
+		return "btn-md"
+	case LG:
+		return "btn-lg"
+	case XL:
+		return "btn-xl"
+	default:
+		return "btn-md"
+	}
+}
+
+// setContainerAlignment aligns the Button within its container element.
+func (b Button) setContainerAlignment() string {
+	switch b.containerAlignment {
+	case TopLeft:
+		return "absolute left-2 top-2"
+	case TopRight:
+		return "absolute right-2 top-2"
+	default:
+		return ""
+	}
 }

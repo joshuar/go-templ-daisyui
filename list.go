@@ -25,6 +25,7 @@ func WithItems(elements ...templ.Component) Option[list] {
 	}
 }
 
+//nolint:varnamelen
 func NewOrderedList(options ...Option[list]) OrderedList {
 	ol := OrderedList{}
 
@@ -35,6 +36,7 @@ func NewOrderedList(options ...Option[list]) OrderedList {
 	return ol
 }
 
+//nolint:varnamelen
 func NewUnorderedList(options ...Option[list]) UnorderedList {
 	ul := UnorderedList{}
 

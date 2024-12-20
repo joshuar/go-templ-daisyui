@@ -48,10 +48,6 @@ type Input struct {
 	Optional      bool
 }
 
-func (i *Input) String() string {
-	return "input"
-}
-
 // WithInputType defines the type of input (i.e., text, password, search, etc.).
 func WithInputType(t InputType) Option[Input] {
 	return func(i Input) Input {
@@ -125,8 +121,6 @@ func AsFormControl() Option[Input] {
 // NewInput creates a new input with the given values.
 func NewInput(options ...Option[Input]) Input {
 	input := Input{}
-
-	input = WithClasses[Input](input.String())(input)
 
 	for _, option := range options {
 		input = option(input)

@@ -4,9 +4,23 @@
 package components
 
 templ (i Icon) Show() {
-	<i class={ i.style.String(), i.name, i.Class() }>
-		if i.Label != "" {
-			{ i.Label }
+	<i
+		class={ i.name, i.setStyle() }
+	>
+		if i.label != "" {
+			{ i.label }
 		}
 	</i>
+}
+
+func (i Icon) setStyle() string {
+	switch i.style {
+	case Regular:
+		return "fa-regular"
+	case Solid:
+		return "fa-solid"
+	default:
+		return "fa-solid"
+	}
+
 }

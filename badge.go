@@ -3,47 +3,13 @@
 
 package components
 
-const (
-	BadgeInfo BadgeState = iota + 1
-	BadgeSuccess
-	BadgeWarning
-	BadgeError
-)
-
-// BadgeState defines the badge state color.
-type BadgeState int
-
-type badgeColor struct {
-	color   Color
-	outline bool
-}
-
 // Badge represents a DaisyUI badge component.
 // https://daisyui.com/components/badge/
 type Badge struct {
 	desc string
 	modifierSize
-	state BadgeState
-	color *badgeColor
-}
-
-func WithBadgeColor(color Color, outline bool) Option[Badge] {
-	return func(b Badge) Badge {
-		b.color = &badgeColor{
-			color:   color,
-			outline: outline,
-		}
-
-		return b
-	}
-}
-
-// WithBadgeState sets a state color on the badge.
-func WithBadgeState(state BadgeState) Option[Badge] {
-	return func(b Badge) Badge {
-		b.state = state
-		return b
-	}
+	modifierColor
+	modifierState
 }
 
 // WithBadgeDescription sets the badge description.
