@@ -1,0 +1,27 @@
+package components
+
+// setZIndex returns the z-index class string.
+func (s modifierZIndex) setZIndex() string {
+	switch s.zindex {
+	case Z0:
+		return "z-0"
+	case Z10:
+		return "z-10"
+	case Z20:
+		return "z-20"
+	case Z30:
+		return "z-30"
+	case Z40:
+		return "z-40"
+	case Z50:
+		return "z-50"
+	case ZAuto:
+		return "z-auto"
+	default:
+		return ""
+	}
+}
+
+// noop function so that templ generation doesn't report errors.
+templ zindexNOOP() {
+}
