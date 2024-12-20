@@ -12,9 +12,11 @@ const (
 type FAStyle int
 
 type Icon struct {
-	name  string
-	label string
-	style FAStyle
+	name    string
+	label   string
+	style   FAStyle
+	swapon  bool
+	swapoff bool
 }
 
 // WithStyle assigns the given FontAwesome style to the Icon.
@@ -29,6 +31,26 @@ func WithStyle(s FAStyle) Option[Icon] {
 func WithLabel(l string) Option[Icon] {
 	return func(i Icon) Icon {
 		i.label = l
+		return i
+	}
+}
+
+// AsSwapOn allows this icon to be used as a Swap component to indicate the "on"
+// state.
+// https://daisyui.com/components/swap/
+func AsSwapOn() Option[Icon] {
+	return func(i Icon) Icon {
+		i.swapon = true
+		return i
+	}
+}
+
+// AsSwapOff allows this icon to be used as a Swap component to indicate the "off"
+// state.
+// https://daisyui.com/components/swap/
+func AsSwapOff() Option[Icon] {
+	return func(i Icon) Icon {
+		i.swapoff = true
 		return i
 	}
 }

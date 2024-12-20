@@ -5,7 +5,7 @@ package components
 
 templ (i Icon) Show() {
 	<i
-		class={ i.name, i.setStyle() }
+		class={ i.name, i.setStyle(), templ.KV("swap-on",i.swapon), templ.KV("swap-off",i.swapoff) }
 	>
 		if i.label != "" {
 			{ i.label }
