@@ -3,8 +3,9 @@
 
 package components
 
-func setLoadingSize(size Size) string {
-	switch size {
+// setSize sets the size of the loading element.
+func (l Loading) setSize() string {
+	switch l.size {
 	case XS:
 		return "loading-xs"
 	case SM:
@@ -20,32 +21,57 @@ func setLoadingSize(size Size) string {
 	}
 }
 
-templ LoadingTempl(class string, size Size) {
+// setColor sets a color modifier of the loading element.
+func (l Loading) setColor() string {
+	color := "loading-neutral"
+
+	switch l.color {
+	case ColorPrimary:
+		color = "loading-primary"
+	case ColorSecondary:
+		color = "loading-secondary"
+	case ColorAccent:
+		color = "loading-accent"
+	case ColorNeutral:
+		color = "loading-neutral"
+	case ColorGhost:
+		color = "loading-ghost"
+	}
+
+	return color
+}
+
+// setStyle sets the loading element style.
+func (l Loading) setStyle() string {
+	switch l.style {
+	case LoadingBall:
+		return "loading-ball"
+	case LoadingBars:
+		return "loading-bars"
+	case LoadingDots:
+		return "loading-dots"
+	case LoadingInfinity:
+		return "loading-infinity"
+	case LoadingRing:
+		return "loading-ring"
+	case LoadingSpinner:
+		return "loading-spinner"
+	default:
+		return "loading-spinner"
+	}
+}
+
+// Show will render the loading element.
+templ (l Loading) Show() {
 	<span
-		class={ "loading", class, setLoadingSize(size), "htmx-indicator" }
+		if l.id != "" {
+			id={ l.ID() }
+		}
+		class={ "loading",
+		"htmx-spinner",
+		l.setStyle(),
+	templ.KV(l.setSize(),l.size > 0),
+	templ.KV(l.setColor(),l.color > 0) }
+		{ l.Attributes()... }
 	></span>
-}
-
-templ LoadingSpinnerTempl(size Size) {
-	@LoadingTempl("loading-spinner", size)
-}
-
-templ LoadingDotsTempl(size Size) {
-	@LoadingTempl("loading-dots", size)
-}
-
-templ LoadingRingTempl(size Size) {
-	@LoadingTempl("loading-ring", size)
-}
-
-templ LoadingBallTempl(size Size) {
-	@LoadingTempl("loading-ball", size)
-}
-
-templ LoadingBarsTempl(size Size) {
-	@LoadingTempl("loading-bars", size)
-}
-
-templ LoadingInfinityTempl(size Size) {
-	@LoadingTempl("loading-infinity", size)
 }
