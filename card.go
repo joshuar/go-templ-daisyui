@@ -19,8 +19,9 @@ type CardLayout int
 
 // cardTitle defines a Card's title.
 type cardTitle struct {
-	text string
-	size HeaderSize
+	text   string
+	size   HeaderSize
+	badges []Badge
 }
 
 // Card represents a DaisyUI Card component.
@@ -66,11 +67,15 @@ func WithBadges(badges ...Badge) Option[Card] {
 }
 
 // WithTitle sets the title for card body.
-func WithTitle(title string, size HeaderSize) Option[Card] {
+func WithTitle(title string, size HeaderSize, badges ...Badge) Option[Card] {
 	return func(card Card) Card {
 		card.title = &cardTitle{
 			text: title,
 			size: size,
+		}
+
+		if len(badges) > 0 {
+			card.title.badges = badges
 		}
 
 		return card

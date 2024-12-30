@@ -32,8 +32,13 @@ templ (c Card) Show() {
 
 templ (c Card) showBody() {
 	@c.showImage()
-	<div class={ "card-body", templ.KV("items-center text-center", c.centered) }>
-		@c.showTitle()
+	<div
+		class={ "card-body",
+	templ.KV("items-center text-center", c.centered) }
+	>
+		if c.title != nil {
+			@c.title.show()
+		}
 		if c.body != nil {
 			@c.body
 		}
@@ -75,22 +80,57 @@ templ (c Card) showImage() {
 	}
 }
 
-// showTitle will render the card title, if available.
-templ (c Card) showTitle() {
-	if c.title != nil {
-		switch c.title.size {
-			case H1:
-				<h1 class="card-title">{ c.title.text }</h1>
-			case H2:
-				<h2 class="card-title">{ c.title.text }</h2>
-			case H3:
-				<h3 class="card-title">{ c.title.text }</h3>
-			case H4:
-				<h4 class="card-title">{ c.title.text }</h4>
-			case H5:
-				<h5 class="card-title">{ c.title.text }</h5>
-			case H6:
-				<h6 class="card-title">{ c.title.text }</h6>
-		}
+// show will render the card title.
+templ (t cardTitle) show() {
+	switch t.size {
+		case H1:
+			<h1 class="card-title">
+				{ t.text }
+				if len(t.badges) > 0 {
+					@t.showBadges()
+				}
+			</h1>
+		case H2:
+			<h2 class="card-title text-wrap">
+				{ t.text }
+				if len(t.badges) > 0 {
+					@t.showBadges()
+				}
+			</h2>
+		case H3:
+			<h3 class="card-title">
+				{ t.text }
+				if len(t.badges) > 0 {
+					@t.showBadges()
+				}
+			</h3>
+		case H4:
+			<h4 class="card-title">
+				{ t.text }
+				if len(t.badges) > 0 {
+					@t.showBadges()
+				}
+			</h4>
+		case H5:
+			<h5 class="card-title">
+				{ t.text }
+				if len(t.badges) > 0 {
+					@t.showBadges()
+				}
+			</h5>
+		case H6:
+			<h6 class="card-title">
+				{ t.text }
+				if len(t.badges) > 0 {
+					@t.showBadges()
+				}
+			</h6>
+	}
+}
+
+// showBadges will display a list of title badges.
+templ (t cardTitle) showBadges() {
+	for _, badge := range t.badges {
+		@badge.Show()
 	}
 }
