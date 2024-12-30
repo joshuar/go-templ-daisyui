@@ -6,17 +6,13 @@ package components
 const (
 	// Regular shaped button.
 	ButtonRegular ButtonShape = iota
-	// Square button with a 1:1 ratio.
-	// btn-square
+	// Square button with a 1:1 ratio (btn-square).
 	ButtonSquare
-	// Circle button with a 1:1 ratio.
-	// btn-circle
+	// Circle button with a 1:1 ratio (btn-circle).
 	ButtonCircle
-	// Wide button (more horizontal padding).
-	// btn-wide
+	// Wide button (more horizontal padding, btn-wide).
 	ButtonWide
-	// Full width button.
-	// btn-block
+	// Full width button (btn-block).
 	ButtonBlock
 )
 
@@ -25,10 +21,10 @@ type ButtonShape int
 
 const (
 	// Place the Button in the top left of the container.
-	// Adds classes: absolute left-2 top-2
+	// Adds classes: absolute left-2 top-2.
 	TopLeft ButtonContainerAlignment = iota + 1
 	// Place the Button in the top right of the container.
-	// Adds classes: absolute right-2 top-2
+	// Adds classes: absolute right-2 top-2.
 	TopRight
 )
 
@@ -109,6 +105,7 @@ func WithIcon(icon Icon, alignment Alignment) Option[Button] {
 	return func(b Button) Button {
 		b.Icon = &icon
 		b.IconAlignment = alignment
+
 		return b
 	}
 }

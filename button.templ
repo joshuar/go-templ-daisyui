@@ -83,7 +83,7 @@ func (b Button) setColor() string {
 	}
 
 	// Neutral and Ghost colors don't have an outline variant.
-	if b.colorOutline && (b.color != ColorNeutral || b.color != ColorGhost) {
+	if b.colorOutline && (b.color != ColorNeutral && b.color != ColorGhost) {
 		color = color + " btn-outline"
 	}
 
