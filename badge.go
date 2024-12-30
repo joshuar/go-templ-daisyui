@@ -10,6 +10,17 @@ type Badge struct {
 	modifierSize
 	modifierColor
 	modifierState
+	indicator bool
+	componentClasses
+}
+
+// AsBadgeIndicator will add the "indicator" class value, when set to true, to
+// allow the badge to be used as an indicator on another item.
+func AsBadgeIndicator(value bool) Option[Badge] {
+	return func(b Badge) Badge {
+		b.indicator = value
+		return b
+	}
 }
 
 // WithBadgeDescription sets the badge description.

@@ -61,7 +61,7 @@ func (b Badge) setColor() string {
 	}
 
 	// Neutral and Ghost colors don't have an outline variant.
-	if b.colorOutline && (b.color != ColorNeutral || b.color != ColorGhost) {
+	if b.colorOutline && (b.color != ColorNeutral && b.color != ColorGhost) {
 		color = color + " badge-outline"
 	}
 
@@ -72,9 +72,11 @@ func (b Badge) setColor() string {
 templ (b Badge) Show() {
 	<span
 		class={ "badge",
+	templ.KV("indicator-item",b.indicator),
 	templ.KV(b.setSize(),b.size > 0),
 	templ.KV(b.setState(),b.state > 0),
-	templ.KV(b.setColor(),b.color > 0) }
+	templ.KV(b.setColor(),b.color > 0),
+	templ.KV(b.Class(),len(b.classes) > 0) }
 	>
 		if b.desc != "" {
 			{ b.desc }
