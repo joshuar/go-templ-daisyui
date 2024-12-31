@@ -4,6 +4,7 @@
 package components
 
 import (
+	"maps"
 	"sync"
 
 	"github.com/a-h/templ"
@@ -20,8 +21,13 @@ func (c *componentAttributes) SetAttribute(key string, value any) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
-	if _, found := c.attributes[key]; found {
+	if c.attributes == nil {
+		c.attributes = make(templ.Attributes)
 		c.attributes[key] = value
+	} else {
+		if _, found := c.attributes[key]; found {
+			c.attributes[key] = value
+		}
 	}
 }
 
@@ -30,7 +36,11 @@ func (c *componentAttributes) AddAttributes(attrs templ.Attributes) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
-	c.attributes = attrs
+	if c.attributes != nil {
+		maps.Copy(c.attributes, attrs)
+	} else {
+		c.attributes = attrs
+	}
 }
 
 // Attributes can be used when rendering a component to render its attributes.
