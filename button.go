@@ -37,6 +37,7 @@ type ButtonContainerAlignment int
 type Button struct {
 	Icon *Icon
 	componentAttributes
+	componentClasses
 	Tooltip            *Tooltip
 	Label              string
 	ID                 string
