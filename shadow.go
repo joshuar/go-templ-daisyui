@@ -1,8 +1,8 @@
 // Copyright 2024 Joshua Rich <joshua.rich@gmail.com>.
-// SPDX-License-Identifier: 	AGPL-3.0-or-later
+// SPDX-License-Identifier: 	MIT
 
 package components
 
-type componentShadow struct {
+type modifierShadow struct {
 	shadowSize Size
 }
