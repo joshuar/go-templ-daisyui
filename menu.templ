@@ -3,21 +3,47 @@
 
 package components
 
-templ (m Menu) Show() {
-	<ul class={ m.Class() }>
-		if m.Title != "" {
-			<li class="menu-title">{ m.Title }</li>
-		}
-		{ children... }
-	</ul>
+// setLayout sets the layout of the Menu.
+func (m Menu) setLayout() string {
+	switch m.layout {
+	case HorizontalLayout:
+		return "menu-horizontal"
+	case VerticalLayout:
+		return "menu-vertical"
+	default:
+		return "menu-vertical"
+	}
 }
 
-templ (i MenuItem) Show(content templ.Component) {
-	<li>
-		if i.Tooltip != nil {
-			@i.Tooltip.AsRef(content)
-		} else {
-			@content
+// setSize sets the size modifier of the Menu.
+func (m Menu) setSize() string {
+	switch m.size {
+	case XS:
+		return "menu-xs"
+	case SM:
+		return "menu-sm"
+	case MD:
+		return "menu-md"
+	case LG:
+		return "menu-lg"
+	case XL:
+		return "menu-xl"
+	default:
+		return "menu-md"
+	}
+}
+
+templ (m Menu) Show() {
+	<ul
+		class={ "menu",
+		m.setLayout(),
+		templ.KV(m.setSize(),m.size > 0) }
+	>
+		if m.title != "" {
+			<li class="menu-title">{ m.title }</li>
 		}
-	</li>
+		for _, item := range m.items {
+			@item
+		}
+	</ul>
 }

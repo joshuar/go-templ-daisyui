@@ -3,31 +3,37 @@
 
 package components
 
+import "github.com/a-h/templ"
+
 type Menu struct {
-	Title string
+	title string
 	componentClasses
+	modifierSize
+	layout Layout
+	items  []templ.Component
 }
 
-func (m *Menu) String() string {
-	return "menu"
-}
-
-type MenuItem struct {
-	Tooltip *Tooltip
-}
-
-// MenuTitle sets the menu title.
-func MenuTitle(title string) Option[Menu] {
+// WithMenuTitle sets the menu title.
+func WithMenuTitle(title string) Option[Menu] {
 	return func(m Menu) Menu {
-		m.Title = title
+		m.title = title
 		return m
 	}
 }
 
-// MenuLayout sets how the menu items will be layed out.
-func MenuLayout(layout Layout) Option[Menu] {
+// WithMenuLayout sets how the menu items will be laid out (either horizontal
+// or vertical).
+func WithMenuLayout(layout Layout) Option[Menu] {
 	return func(m Menu) Menu {
-		m.AddClasses(layout.LayoutObject("menu"))
+		m.layout = layout
+		return m
+	}
+}
+
+// WithMenuItems adds the given components as menu items.
+func WithMenuItems(items ...templ.Component) Option[Menu] {
+	return func(m Menu) Menu {
+		m.items = append(m.items, items...)
 		return m
 	}
 }
@@ -35,30 +41,10 @@ func MenuLayout(layout Layout) Option[Menu] {
 // NewMenu creates a new menu with the given options.
 func NewMenu(options ...Option[Menu]) Menu {
 	menu := Menu{}
-	menu = WithClasses[Menu](menu.String())(menu)
 
 	for _, option := range options {
 		menu = option(menu)
 	}
 
 	return menu
-}
-
-// MenuItemTooltip will wrap the menu item with the given tooltip.
-func MenuItemTooltip(tip Tooltip) Option[MenuItem] {
-	return func(mi MenuItem) MenuItem {
-		mi.Tooltip = &tip
-		return mi
-	}
-}
-
-// NewMenuItem creates a new menu item with the given options.
-func NewMenuItem(options ...Option[MenuItem]) MenuItem {
-	item := MenuItem{}
-
-	for _, option := range options {
-		item = option(item)
-	}
-
-	return item
 }
