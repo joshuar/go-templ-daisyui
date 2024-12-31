@@ -8,6 +8,33 @@ type Tooltip struct {
 	componentClasses
 }
 
+type componentTooltip struct {
+	componentAttributes
+	componentClasses
+}
+
+// customisableAttributes is an interface to detect components whose attributes
+// can be customized.
+type customisableTooltip interface {
+	SetAttribute(key string, value any)
+	AddClasses(classes ...string)
+}
+
+func WithToolTip[T any](tip string) Option[T] {
+	return func(c T) T {
+		// Get a pointer to the underlying component.
+		component := &c
+		// If the component supports customizing attributes, set the attributes
+		// to the given value.
+		if settable, ok := any(component).(customisableTooltip); ok {
+			settable.SetAttribute("data-tip", tip)
+			settable.AddClasses("tooltip")
+		}
+		// Return the modified component.
+		return *component
+	}
+}
+
 func (t *Tooltip) String() string {
 	return "tooltip"
 }
