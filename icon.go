@@ -17,6 +17,7 @@ type Icon struct {
 	style   FAStyle
 	swapon  bool
 	swapoff bool
+	componentTooltip
 }
 
 // WithStyle assigns the given FontAwesome style to the Icon.
