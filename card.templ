@@ -36,21 +36,20 @@ templ (c Card) showBody() {
 		class={ "card-body",
 	templ.KV("items-center text-center", c.centered) }
 	>
+		if len(c.TopRightActions) >0 {
+			@showActions("justify-end", c.TopRightActions...)
+		}
 		if c.title != nil {
 			@c.title.show()
 		}
 		if c.body != nil {
 			@c.body
 		}
-		if c.Actions != nil {
-			<div class="card-actions">
-				for _, action := range c.Actions {
-					@action
-				}
-			</div>
+		if len(c.BottomRightActions) >0 {
+			@showActions("justify-end", c.BottomRightActions...)
 		}
 		if c.Badges != nil {
-			<div class="card-actions justify-right">
+			<div class="card-actions justify-end">
 				for _, badge := range c.Badges {
 					@badge.Show()
 				}
@@ -67,15 +66,7 @@ templ (c Card) showImage() {
 				class="px-10 pt-10"
 			}
 		>
-			<img
-				src={ c.Image.url }
-				if c.Image.alt != "" {
-					alt={ c.Image.alt }
-				}
-				if c.centered {
-					class="rounded-xl"
-				}
-			/>
+			@c.Image.Show()
 		</figure>
 	}
 }
@@ -133,4 +124,12 @@ templ (t cardTitle) showBadges() {
 	for _, badge := range t.badges {
 		@badge.Show()
 	}
+}
+
+templ showActions(align string, actions ...templ.Component) {
+	<div class={ "card-actions", align }>
+		for _, action := range actions {
+			@action
+		}
+	</div>
 }

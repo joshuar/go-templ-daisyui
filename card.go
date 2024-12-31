@@ -35,11 +35,12 @@ type Card struct {
 	centered  bool
 	componentAttributes
 	componentID
-	componentShadow
+	modifierShadow
 	modifierGlass
-	Actions []templ.Component
-	Badges  []Badge
-	title   *cardTitle
+	TopRightActions    []templ.Component
+	BottomRightActions []templ.Component
+	Badges             []Badge
+	title              *cardTitle
 }
 
 // WithBody sets the container for card content.
@@ -50,10 +51,18 @@ func WithBody(t templ.Component) Option[Card] {
 	}
 }
 
-// WithActions sets the container for card actions.
-func WithActions(actions ...templ.Component) Option[Card] {
+// WithTopActions defines the actions to be placed on the top-right of the card.
+func WithTopRightActions(actions ...templ.Component) Option[Card] {
 	return func(card Card) Card {
-		card.Actions = append(card.Actions, actions...)
+		card.TopRightActions = append(card.TopRightActions, actions...)
+		return card
+	}
+}
+
+// WithTopActions defines the actions to be placed on the top-right of the card.
+func WithBottomRightActions(actions ...templ.Component) Option[Card] {
+	return func(card Card) Card {
+		card.BottomRightActions = append(card.BottomRightActions, actions...)
 		return card
 	}
 }
