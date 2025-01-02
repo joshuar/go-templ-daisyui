@@ -7,7 +7,7 @@ templ (l UnorderedList) Show() {
 	<ul
 		{ l.Attributes()... }
 	>
-		for _, item := range l.Items {
+		for _, item := range l.items {
 			<li>
 				@item
 			</li>
@@ -19,7 +19,7 @@ templ (l OrderedList) Show() {
 	<ol
 		{ l.Attributes()... }
 	>
-		for _, item := range l.Items {
+		for _, item := range l.items {
 			<li>
 				@item
 			</li>

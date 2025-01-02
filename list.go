@@ -3,11 +3,9 @@
 
 package components
 
-import "github.com/a-h/templ"
-
 type list struct {
 	componentAttributes
-	Items []templ.Component
+	componentItems
 }
 
 type OrderedList struct {
@@ -16,13 +14,6 @@ type OrderedList struct {
 
 type UnorderedList struct {
 	list
-}
-
-func WithItems(elements ...templ.Component) Option[list] {
-	return func(l list) list {
-		l.Items = elements
-		return l
-	}
 }
 
 //nolint:varnamelen

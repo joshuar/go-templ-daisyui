@@ -1,7 +1,10 @@
 // Copyright 2024 Joshua Rich <joshua.rich@gmail.com>.
 // SPDX-License-Identifier: 	AGPL-3.0-or-later
 
+
 package components
+
+import "strconv"
 
 // setLayout sets the layout of the Menu.
 func (m Menu) setLayout() string {
@@ -35,15 +38,69 @@ func (m Menu) setSize() string {
 
 templ (m Menu) Show() {
 	<ul
-		class={ "menu",
-		m.setLayout(),
-		templ.KV(m.setSize(),m.size > 0) }
+		class={
+			"menu",
+			"hidden lg:flex",
+			m.setLayout(),
+			templ.KV(m.setSize(), m.SizeIsSet()),
+			templ.KV(m.setHiddenBreakpoint(), m.HiddenBreakpointIsSet()),
+			templ.KV(m.setRevealedBreakpoint(), m.RevealedBreakpointIsSet()),
+		}
 	>
 		if m.title != "" {
 			<li class="menu-title">{ m.title }</li>
 		}
-		for _, item := range m.items {
-			@item
-		}
+		@m.ShowItems()
 	</ul>
+}
+
+func (dm DropDownMenu) tabIndexStr() string {
+	return strconv.Itoa(dm.tabIndex)
+}
+
+// setLayout sets the layout of the Menu.
+func (dm DropDownMenu) setLayout() string {
+	switch dm.layout {
+	case HorizontalLayout:
+		return "menu-horizontal"
+	case VerticalLayout:
+		return "menu-vertical"
+	default:
+		return "menu-vertical"
+	}
+}
+
+templ (dm DropDownMenu) Show() {
+	<div class="dropdown">
+		<div
+			tabindex={ dm.tabIndexStr() }
+			role="button"
+			_="on click halt the event's bubbling end"
+			class={
+				"btn",
+				"btn-ghost",
+				"btn-circle",
+				templ.KV(dm.setHiddenBreakpoint(), dm.HiddenBreakpointIsSet()),
+				templ.KV(dm.setRevealedBreakpoint(), dm.RevealedBreakpointIsSet()),
+			}
+		>
+			@NewIcon("fa-ellipsis-vertical").Show()
+		</div>
+		<ul
+			tabindex={ dm.tabIndexStr() }
+			class={ "menu",
+		dm.setLayout(),
+		templ.KV(dm.setSize(),dm.SizeIsSet()),
+			 "dropdown-content",
+			  "bg-base-100",
+			  "rounded-box",
+			  "z-[1]",
+			   "mt-3",
+        "w-52",
+		"p-2",
+		"shadow" }
+		>
+			@dm.ShowItems()
+		</ul>
+	</div>
 }
