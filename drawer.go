@@ -5,12 +5,20 @@ package components
 
 import "github.com/a-h/templ"
 
+type drawerSide struct {
+	sideContent templ.Component
+}
+
+type drawerContent struct {
+	mainContent templ.Component
+}
+
 type Drawer struct {
 	componentID
-	visibility  Size
-	mainContent templ.Component
-	sideContent templ.Component
+	visibility Size
 	modifierZIndex
+	drawerSide
+	drawerContent
 }
 
 // WithDrawerVisibility sets the size at which the drawer will always be
