@@ -35,6 +35,7 @@ func NewMenu(options ...Option[Menu]) Menu {
 
 type DropDownMenu struct {
 	Menu
+	modifierBaseColor
 	tabIndex int
 }
 

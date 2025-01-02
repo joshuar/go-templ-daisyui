@@ -7,8 +7,8 @@ package components
 import "strconv"
 
 // setLayout sets the layout of the Menu.
-func (m Menu) setLayout() string {
-	switch m.layout {
+func setLayout(layout Layout) string {
+	switch layout {
 	case HorizontalLayout:
 		return "menu-horizontal"
 	case VerticalLayout:
@@ -40,8 +40,7 @@ templ (m Menu) Show() {
 	<ul
 		class={
 			"menu",
-			"hidden lg:flex",
-			m.setLayout(),
+			templ.KV(setLayout(m.layout), m.LayoutIsSet()),
 			templ.KV(m.setSize(), m.SizeIsSet()),
 			templ.KV(m.setHiddenBreakpoint(), m.HiddenBreakpointIsSet()),
 			templ.KV(m.setRevealedBreakpoint(), m.RevealedBreakpointIsSet()),
@@ -56,18 +55,6 @@ templ (m Menu) Show() {
 
 func (dm DropDownMenu) tabIndexStr() string {
 	return strconv.Itoa(dm.tabIndex)
-}
-
-// setLayout sets the layout of the Menu.
-func (dm DropDownMenu) setLayout() string {
-	switch dm.layout {
-	case HorizontalLayout:
-		return "menu-horizontal"
-	case VerticalLayout:
-		return "menu-vertical"
-	default:
-		return "menu-vertical"
-	}
 }
 
 templ (dm DropDownMenu) Show() {
@@ -89,14 +76,13 @@ templ (dm DropDownMenu) Show() {
 		<ul
 			tabindex={ dm.tabIndexStr() }
 			class={ "menu",
-		dm.setLayout(),
+			templ.KV(setLayout(dm.layout),dm.LayoutIsSet()),
 		templ.KV(dm.setSize(),dm.SizeIsSet()),
 			 "dropdown-content",
-			  "bg-base-100",
+			  dm.setBaseColor(),
 			  "rounded-box",
 			  "z-[1]",
-			   "mt-3",
-        "w-52",
+			   "m-2",
 		"p-2",
 		"shadow" }
 		>
