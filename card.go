@@ -11,7 +11,7 @@ const (
 	CardLayoutNormal         CardLayout = iota // card-normal
 	CardLayoutCompact                          // card-compact
 	CardLayoutSide                             // card-side
-	CardLayoytSideResponsive                   // lg:card-side
+	CardLayoutSideResponsive                   // lg:card-side
 )
 
 // CardLayout is used to define the card style.
@@ -37,6 +37,7 @@ type Card struct {
 	componentID
 	modifierShadow
 	modifierGlass
+	modifierBaseColor
 	TopRightActions    []templ.Component
 	BottomRightActions []templ.Component
 	Badges             []Badge

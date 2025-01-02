@@ -23,7 +23,7 @@ templ (c Card) Show() {
 		templ.KV("image-full",c.fullImage),
 		templ.KV(c.setLayout(),c.layout > 0),
 		templ.KV(c.setShadow(),c.shadowSize > 0),
-		"bg-base-100" }
+		c.setBaseColor() }
 		{ c.Attributes()... }
 	>
 		@c.showBody()
