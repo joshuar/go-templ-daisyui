@@ -1,5 +1,5 @@
 // Copyright 2024 Joshua Rich <joshua.rich@gmail.com>.
-// SPDX-License-Identifier: 	AGPL-3.0-or-later
+// SPDX-License-Identifier: 	MIT
 
 package components
 
@@ -17,6 +17,7 @@ type componentAttributes struct {
 	mu         sync.Mutex
 }
 
+// SetAttribute will set the attribute with the given key to the given value.
 func (c *componentAttributes) SetAttribute(key string, value any) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
@@ -31,7 +32,8 @@ func (c *componentAttributes) SetAttribute(key string, value any) {
 	}
 }
 
-// AddAttributes will ensure the component has the given attributes.
+// AddAttributes will ensure the component has the given attributes. Any
+// existing attributes are merged with the given set of attributes.
 func (c *componentAttributes) AddAttributes(attrs templ.Attributes) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
