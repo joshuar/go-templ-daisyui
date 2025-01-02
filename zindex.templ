@@ -1,7 +1,15 @@
+// Copyright 2025 Joshua Rich <joshua.rich@gmail.com>.
+// SPDX-License-Identifier: 	MIT
+
 package components
+
+import "log/slog"
 
 // setZIndex returns the z-index class string.
 func (s modifierZIndex) setZIndex() string {
+	if s.negative {
+		return s.setNegativeZIndex()
+	}
 	switch s.zindex {
 	case Z0:
 		return "z-0"
@@ -18,6 +26,31 @@ func (s modifierZIndex) setZIndex() string {
 	case ZAuto:
 		return "z-auto"
 	default:
+		slog.Warn("Unsupported z-index.",
+			slog.Any("value", s.zindex))
+		return ""
+	}
+}
+
+func (s modifierZIndex) setNegativeZIndex() string {
+	switch s.zindex {
+	case Z0:
+		return "-z-0"
+	case Z10:
+		return "-z-10"
+	case Z20:
+		return "-z-20"
+	case Z30:
+		return "-z-30"
+	case Z40:
+		return "-z-40"
+	case Z50:
+		return "-z-50"
+	case ZAuto:
+		return "-z-auto"
+	default:
+		slog.Warn("Unsupported z-index.",
+			slog.Any("value", s.zindex))
 		return ""
 	}
 }

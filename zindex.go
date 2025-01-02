@@ -24,26 +24,28 @@ type ZIndex int
 // on the component. The component will need to handle rendering with the
 // appropriate size itself.
 type modifierZIndex struct {
-	zindex ZIndex
+	zindex   ZIndex
+	negative bool
 }
 
-func (m *modifierZIndex) SetZIndex(index ZIndex) {
+func (m *modifierZIndex) SetZIndex(index ZIndex, negative bool) {
 	m.zindex = index
+	m.negative = negative
 }
 
 type customisableZIndex interface {
-	SetZIndex(index ZIndex)
+	SetZIndex(index ZIndex, negative bool)
 }
 
 // WithZIndex adds the given z-index to the component.
 //
 //nolint:varnamelen // the var is copied into another with an appropriate name.
-func WithZIndex[T any](index ZIndex) Option[T] {
+func WithZIndex[T any](index ZIndex, negative bool) Option[T] {
 	return func(c T) T {
 		component := &c
 
 		if settable, ok := any(component).(customisableZIndex); ok {
-			settable.SetZIndex(index)
+			settable.SetZIndex(index, negative)
 		} else {
 			slog.Warn("WithZIndex passed as option to component, but component does not support z-index modifier.",
 				slog.String("component", fmt.Sprintf("%T", &c)))
