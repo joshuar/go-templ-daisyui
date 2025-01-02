@@ -29,6 +29,11 @@ func (m *modifierSize) SetSize(size Size) {
 	m.size = size
 }
 
+// SizeIsSet will return true if the Component has a size.
+func (m *modifierSize) SizeIsSet() bool {
+	return m.size > 0
+}
+
 type customisableSize interface {
 	SetSize(size Size)
 }
