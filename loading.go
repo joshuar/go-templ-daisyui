@@ -18,7 +18,7 @@ type Loading struct {
 	style LoadingStyle
 	componentID
 	componentAttributes
-	modifierSize
+	modifierResponsiveSize
 	modifierColor
 }
 

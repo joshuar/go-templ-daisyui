@@ -4,5 +4,5 @@
 package components
 
 type modifierShadow struct {
-	shadowSize Size
+	shadowSize ResponsiveSize
 }

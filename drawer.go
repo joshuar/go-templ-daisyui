@@ -15,7 +15,7 @@ type drawerContent struct {
 
 type Drawer struct {
 	componentID
-	visibility Size
+	visibility ResponsiveSize
 	modifierZIndex
 	drawerSide
 	drawerContent
@@ -23,7 +23,7 @@ type Drawer struct {
 
 // WithDrawerVisibility sets the size at which the drawer will always be
 // visible. Below this value, the drawer will be hidden by default.
-func WithDrawerVisibility(size Size) Option[Drawer] {
+func WithDrawerVisibility(size ResponsiveSize) Option[Drawer] {
 	return func(d Drawer) Drawer {
 		d.visibility = size
 		return d

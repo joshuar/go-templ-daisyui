@@ -5,8 +5,9 @@ package components
 
 templ (i Image) Show() {
 	<img
-		class={ templ.KV(i.setMask(), i.mask > 0),
-			templ.KV(i.setFit(), i.fit > 0) }
+		class={ templ.KV(i.setSize(), i.SizeIsSet()),
+		templ.KV(i.setMask(), i.MaskIsSet()),
+			templ.KV(i.setFit(), i.ObjectFitIsSet()) }
 		src={ i.url }
 		if i.alt != "" {
 			alt={ i.alt }

@@ -26,6 +26,11 @@ func (m *modifierObjectFit) SetFit(fit ObjectFit) {
 	m.fit = fit
 }
 
+// ObjectFitIsSet will return true if the Component has an object-fit value.
+func (m *modifierObjectFit) ObjectFitIsSet() bool {
+	return m.fit > 0
+}
+
 type customisableObjectFit interface {
 	SetFit(fit ObjectFit)
 }

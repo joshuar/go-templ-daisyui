@@ -48,7 +48,7 @@ type Button struct {
 	disabled           bool
 	modifierColor
 	modifierGlass
-	modifierSize
+	modifierResponsiveSize
 	modifierState
 }
 

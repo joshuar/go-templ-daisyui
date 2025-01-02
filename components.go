@@ -122,10 +122,10 @@ func WithItems[T any](items ...templ.Component) Option[T] {
 // be hidden on screens equal to and above the set size. Use
 // componentRevealedBreakpoint to reveal a Component above certain sizes.
 type componentHiddenBreakpoint struct {
-	hiddenBreakpoint Size
+	hiddenBreakpoint ResponsiveSize
 }
 
-func (c *componentHiddenBreakpoint) SetHiddenBreakpoint(size Size) {
+func (c *componentHiddenBreakpoint) SetHiddenBreakpoint(size ResponsiveSize) {
 	c.hiddenBreakpoint = size
 }
 
@@ -135,7 +135,7 @@ func (c *componentHiddenBreakpoint) HiddenBreakpointIsSet() bool {
 }
 
 type customisableHiddenBreakpoint interface {
-	SetHiddenBreakpoint(size Size)
+	SetHiddenBreakpoint(size ResponsiveSize)
 }
 
 // WithHiddenBreakpoint allows hiding a Component on screens with the given size
@@ -144,7 +144,7 @@ type customisableHiddenBreakpoint interface {
 // https://tailwindcss.com/docs/display#hidden
 //
 //nolint:varnamelen // the var is copied into another with an appropriate name.
-func WithHiddenBreakpoint[T any](size Size) Option[T] {
+func WithHiddenBreakpoint[T any](size ResponsiveSize) Option[T] {
 	return func(c T) T {
 		component := &c
 
@@ -163,10 +163,10 @@ func WithHiddenBreakpoint[T any](size Size) Option[T] {
 // be revealed on screens equal to and above the set size. Use
 // componentHiddenBreakpoint to hide a Component above certain sizes.
 type componentRevealedBreakpoint struct {
-	revealedBreakpoint Size
+	revealedBreakpoint ResponsiveSize
 }
 
-func (c *componentRevealedBreakpoint) SetRevealedBreakpoint(size Size) {
+func (c *componentRevealedBreakpoint) SetRevealedBreakpoint(size ResponsiveSize) {
 	c.revealedBreakpoint = size
 }
 
@@ -176,7 +176,7 @@ func (c *componentRevealedBreakpoint) RevealedBreakpointIsSet() bool {
 }
 
 type customisableRevealedBreakpoint interface {
-	SetRevealedBreakpoint(size Size)
+	SetRevealedBreakpoint(size ResponsiveSize)
 }
 
 // WithRevealedBreakpoint allows revealing a Component on screens with the given size
@@ -185,7 +185,7 @@ type customisableRevealedBreakpoint interface {
 // https://tailwindcss.com/docs/display#hidden
 //
 //nolint:varnamelen // the var is copied into another with an appropriate name.
-func WithRevealedBreakpoint[T any](size Size) Option[T] {
+func WithRevealedBreakpoint[T any](size ResponsiveSize) Option[T] {
 	return func(c T) T {
 		component := &c
 

@@ -7,6 +7,7 @@ type Image struct {
 	url string
 	alt string
 	modifierMask
+	modifierSize
 	modifierObjectFit
 	componentClasses
 }

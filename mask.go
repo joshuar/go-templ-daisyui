@@ -42,6 +42,11 @@ func (m *modifierMask) SetMask(mask MaskStyle) {
 	m.mask = mask
 }
 
+// MaskIsSet will return true if a mask has been set on the component.
+func (m *modifierMask) MaskIsSet() bool {
+	return m.mask > 0
+}
+
 type customisableMask interface {
 	SetMask(mask MaskStyle)
 }

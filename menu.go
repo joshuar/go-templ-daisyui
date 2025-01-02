@@ -10,8 +10,9 @@ type Menu struct {
 	componentItems
 	componentHiddenBreakpoint
 	componentRevealedBreakpoint
-	modifierSize
+	modifierResponsiveSize
 	modifierLayout
+	modifierBaseColor
 }
 
 // WithMenuTitle sets the menu title.

@@ -3,7 +3,7 @@
 
 package components
 
-func setBottomNavSize(size Size) string {
+func setBottomNavSize(size ResponsiveSize) string {
 	switch size {
 	case XS:
 		return "btm-nav-xs"
@@ -20,7 +20,7 @@ func setBottomNavSize(size Size) string {
 	}
 }
 
-templ BottomNavTempl(size Size, justify JustifyContent, content templ.Component) {
+templ BottomNavTempl(size ResponsiveSize, justify JustifyContent, content templ.Component) {
 	<div class={ "btm-nav", setBottomNavSize(size), "flex", justify.String() }>
 		@content
 	</div>

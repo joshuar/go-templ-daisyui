@@ -134,7 +134,7 @@ func WithBorder() Option[Card] {
 }
 
 // WithCardShadow adds a shadow to the card.
-func WithCardShadow(size Size) Option[Card] {
+func WithCardShadow(size ResponsiveSize) Option[Card] {
 	return func(card Card) Card {
 		card.shadowSize = size
 		return card

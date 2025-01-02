@@ -7,7 +7,7 @@ package components
 // https://daisyui.com/components/badge/
 type Badge struct {
 	desc string
-	modifierSize
+	modifierResponsiveSize
 	modifierColor
 	modifierState
 	indicator bool
