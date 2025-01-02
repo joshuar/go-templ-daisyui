@@ -9,10 +9,10 @@ templ (b Button) showButton() {
 		templ.KV("btn-active", b.active),
 		templ.KV("btn-disabled", b.disabled),
 		templ.KV("glass",b.UseGlass()),
-		templ.KV(b.setColor(),b.color > 0),
+		templ.KV(b.setColor(),b.ColorIsSet()),
 		templ.KV(b.setState(),b.state > 0),
 		templ.KV(b.setShape(),b.shape > 0),
-		templ.KV(b.setSize(), b.size > 0),
+		templ.KV(b.setSize(), b.SizeIsSet()),
 		templ.KV(b.setContainerAlignment(),b.containerAlignment > 0) }
 		{ b.Attributes()... }
 	>

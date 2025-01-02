@@ -73,9 +73,9 @@ templ (b Badge) Show() {
 	<span
 		class={ "badge",
 	templ.KV("indicator-item",b.indicator),
-	templ.KV(b.setSize(),b.size > 0),
+	templ.KV(b.setSize(),b.SizeIsSet()),
 	templ.KV(b.setState(),b.state > 0),
-	templ.KV(b.setColor(),b.color > 0),
+	templ.KV(b.setColor(),b.ColorIsSet()),
 	templ.KV(b.Class(),len(b.classes) > 0) }
 	>
 		if b.desc != "" {
