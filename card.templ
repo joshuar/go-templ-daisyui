@@ -25,6 +25,9 @@ templ (c Card) Show() {
 		templ.KV(c.setShadow(),c.shadowSize > 0),
 		c.setBaseColor() }
 		{ c.Attributes()... }
+		if c.id != "" {
+			id={ c.id }
+		}
 	>
 		@c.showBody()
 	</div>
