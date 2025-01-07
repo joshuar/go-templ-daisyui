@@ -3,11 +3,12 @@
 
 package components
 
-templ (l UnorderedList) Show() {
+templ UnorderedList(options ...Option[list]) {
+	{{ list := buildUnorderedList(options...) }}
 	<ul
-		{ l.Attributes()... }
+		{ list.Attributes()... }
 	>
-		for _, item := range l.items {
+		for _, item := range list.items {
 			<li>
 				@item
 			</li>
@@ -15,11 +16,12 @@ templ (l UnorderedList) Show() {
 	</ul>
 }
 
-templ (l OrderedList) Show() {
+templ OrderedList(options ...Option[list]) {
+	{{ list := buildOrderedList(options...) }}
 	<ol
-		{ l.Attributes()... }
+		{ list.Attributes()... }
 	>
-		for _, item := range l.items {
+		for _, item := range list.items {
 			<li>
 				@item
 			</li>

@@ -10,7 +10,7 @@ templ ModalTempl(id string, content templ.Component) {
 			@NewButton("", "close",
 				WithButtonShape(ButtonCircle),
 				WithColor[Button](ColorGhost, false),
-				WithIcon(NewIcon("fa-xmark"), AlignMiddle),
+				WithIcon("fa-xmark", AlignMiddle),
 				WithContainerAlignment(TopRight),
 				WithAttributes[Button](templ.Attributes{
 					"_": "on click or keyup[key=='Esc'] take .modal-open from #" + id + " wait 200ms",

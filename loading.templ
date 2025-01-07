@@ -3,8 +3,8 @@
 
 package components
 
-// setSize sets the size of the loading element.
-func (l Loading) setSize() string {
+// sizeModifier returns the size modifier of the Loading component.
+func (l LoadingProps) sizeModifier() string {
 	switch l.size {
 	case XS:
 		return "loading-xs"
@@ -21,8 +21,8 @@ func (l Loading) setSize() string {
 	}
 }
 
-// setColor sets a color modifier of the loading element.
-func (l Loading) setColor() string {
+// colorModifier returns the color modifier of the Loading component.
+func (l LoadingProps) colorModifier() string {
 	color := "loading-neutral"
 
 	switch l.color {
@@ -41,8 +41,8 @@ func (l Loading) setColor() string {
 	return color
 }
 
-// setStyle sets the loading element style.
-func (l Loading) setStyle() string {
+// styleModifier returns the style of the Loading component.
+func (l LoadingProps) setStyle() string {
 	switch l.style {
 	case LoadingBall:
 		return "loading-ball"
@@ -61,17 +61,20 @@ func (l Loading) setStyle() string {
 	}
 }
 
-// Show will render the loading element.
-templ (l Loading) Show() {
+// Loading is a DaisyUI Loading component.
+//
+// https://daisyui.com/components/loading/
+templ Loading(style LoadingStyle, options ...Option[LoadingProps]) {
+	{{ loading := BuildLoading(style, options...) }}
 	<span
-		if l.id != "" {
-			id={ l.ID() }
+		if loading.id != "" {
+			id={ loading.ID() }
 		}
 		class={ "loading",
-		"htmx-spinner",
-		l.setStyle(),
-	templ.KV(l.setSize(),l.size > 0),
-	templ.KV(l.setColor(),l.color > 0) }
-		{ l.Attributes()... }
+		loading.setStyle(),
+		templ.KV("htmx-indicator",loading.htmxIndicator),
+	templ.KV(loading.sizeModifier(),loading.SizeIsSet()),
+	templ.KV(loading.colorModifier(),loading.ColorIsSet()) }
+		{ loading.Attributes()... }
 	></span>
 }

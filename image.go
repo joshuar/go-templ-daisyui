@@ -3,7 +3,8 @@
 
 package components
 
-type Image struct {
+// ImageProps represents the properties for an image.
+type ImageProps struct {
 	url string
 	alt string
 	modifierMask
@@ -13,17 +14,25 @@ type Image struct {
 }
 
 // WithAltText sets the alt text to be displayed for the image.
-func WithAltText(alt string) Option[Image] {
-	return func(i Image) Image {
+func WithAltText(alt string) Option[ImageProps] {
+	return func(i ImageProps) ImageProps {
 		i.alt = alt
 		return i
 	}
 }
 
-// NewImage creates a new image component with the given options. The created
-// image can be rendered by calling its Show method.
-func NewImage(url string, options ...Option[Image]) Image {
-	image := Image{
+// FromImageProps will set an existing ImageProps as the Image properties. If
+// you have previously built an Image with BuildImage, use this to pass the
+// ImageProps to Image to render it.
+func FromImageProps(props ImageProps) Option[ImageProps] {
+	return func(ip ImageProps) ImageProps {
+		return props
+	}
+}
+
+// BuildImage creates a new ImageProps.
+func BuildImage(url string, options ...Option[ImageProps]) ImageProps {
+	image := ImageProps{
 		url: url,
 	}
 

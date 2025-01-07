@@ -3,6 +3,8 @@
 
 package components
 
+import "github.com/a-h/templ"
+
 const (
 	// Regular shaped button.
 	ButtonRegular ButtonShape = iota
@@ -35,13 +37,13 @@ type ButtonContainerAlignment int
 // Button represents a DaisyUI Button component.
 // https://daisyui.com/components/button/
 type Button struct {
-	Icon *Icon
+	Icon          templ.Component
+	IconAlignment Alignment
 	componentAttributes
 	componentClasses
 	Tooltip            *Tooltip
 	Label              string
 	ID                 string
-	IconAlignment      Alignment
 	containerAlignment ButtonContainerAlignment
 	shape              ButtonShape
 	active             bool
@@ -102,9 +104,9 @@ func WithButtonShape(shape ButtonShape) Option[Button] {
 	}
 }
 
-func WithIcon(icon Icon, alignment Alignment) Option[Button] {
+func WithIcon(name string, alignment Alignment, options ...Option[IconProps]) Option[Button] {
 	return func(b Button) Button {
-		b.Icon = &icon
+		b.Icon = Icon(name, options...)
 		b.IconAlignment = alignment
 
 		return b

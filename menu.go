@@ -37,15 +37,6 @@ func NewMenu(options ...Option[Menu]) Menu {
 type DropDownMenu struct {
 	Menu
 	modifierBaseColor
-	tabIndex int
-}
-
-// WithTabIndex sets the tabindex attribute value.
-func WithTabIndex(idx int) Option[DropDownMenu] {
-	return func(ddm DropDownMenu) DropDownMenu {
-		ddm.tabIndex = idx
-		return ddm
-	}
 }
 
 // NewDropDownMenu creates a new menu wrapped in a dropdown with the given options.

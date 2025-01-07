@@ -3,8 +3,8 @@
 
 package components
 
-// setSize sets the size modifier of the Badge.
-func (b Badge) setSize() string {
+// size returns the size modifier for the Badge.
+func (b BadgeProps) sizeModifier() string {
 	switch b.size {
 	case XS:
 		return "badge-xs"
@@ -21,8 +21,8 @@ func (b Badge) setSize() string {
 	}
 }
 
-// setState sets a state modifier of the Badge.
-func (b Badge) setState() string {
+// state returns the state modifier for the Badge.
+func (b BadgeProps) stateModifier() string {
 	var state string
 
 	switch b.state {
@@ -43,8 +43,8 @@ func (b Badge) setState() string {
 	return state
 }
 
-// setColor sets a color modifier of the badge.
-func (b Badge) setColor() string {
+// color returns the color modifier for the Badge.
+func (b BadgeProps) colorModifier() string {
 	color := "badge-neutral"
 
 	switch b.color {
@@ -68,18 +68,20 @@ func (b Badge) setColor() string {
 	return color
 }
 
-// Show will render the Badge component.
-templ (b Badge) Show() {
+// Badge is a DaisyUI Badge component.
+//
+// https://daisyui.com/components/badge/
+templ Badge(options ...Option[BadgeProps]) {
+	{{ badge := BuildBadge(options...) }}
 	<span
 		class={ "badge",
-	templ.KV("indicator-item",b.indicator),
-	templ.KV(b.setSize(),b.SizeIsSet()),
-	templ.KV(b.setState(),b.state > 0),
-	templ.KV(b.setColor(),b.ColorIsSet()),
-	templ.KV(b.Class(),len(b.classes) > 0) }
+	templ.KV("indicator-item",badge.indicator),
+	templ.KV(badge.sizeModifier(),badge.SizeIsSet()),
+	templ.KV(badge.stateModifier(),badge.state > 0),
+	templ.KV(badge.colorModifier(),badge.ColorIsSet()) }
 	>
-		if b.desc != "" {
-			{ b.desc }
+		if badge.desc != "" {
+			{ badge.desc }
 		}
 	</span>
 }

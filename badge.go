@@ -3,38 +3,44 @@
 
 package components
 
-// Badge represents a DaisyUI badge component.
-// https://daisyui.com/components/badge/
-type Badge struct {
+// BadgeProps represents the properties for a Badge.
+type BadgeProps struct {
 	desc string
 	modifierResponsiveSize
 	modifierColor
 	modifierState
 	indicator bool
-	componentClasses
 }
 
 // AsBadgeIndicator will add the "indicator" class value, when set to true, to
-// allow the badge to be used as an indicator on another item.
-func AsBadgeIndicator(value bool) Option[Badge] {
-	return func(b Badge) Badge {
+// allow the Badge to be used as an indicator on another item.
+func AsBadgeIndicator(value bool) Option[BadgeProps] {
+	return func(b BadgeProps) BadgeProps {
 		b.indicator = value
 		return b
 	}
 }
 
-// WithBadgeDescription sets the badge description.
-func WithBadgeDescription(desc string) Option[Badge] {
-	return func(b Badge) Badge {
+// WithBadgeDescription sets the Badge description.
+func WithBadgeDescription(desc string) Option[BadgeProps] {
+	return func(b BadgeProps) BadgeProps {
 		b.desc = desc
 		return b
 	}
 }
 
-// NewBadge creates a new badge with the given options. The badge can be
-// rendered by calling the Show method.
-func NewBadge(options ...Option[Badge]) Badge {
-	badge := Badge{}
+// FromBadgeProps will set an existing BadgeProps as the Badge properties. If
+// you have previously built a Badge with BuildBadge, use this to pass the
+// BadgeProps to Badge to render it.
+func FromBadgeProps(props BadgeProps) Option[BadgeProps] {
+	return func(bp BadgeProps) BadgeProps {
+		return props
+	}
+}
+
+// BuildBadge creates a new BadgeProps with the given options.
+func BuildBadge(options ...Option[BadgeProps]) BadgeProps {
+	badge := BadgeProps{}
 
 	for _, option := range options {
 		badge = option(badge)

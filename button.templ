@@ -16,18 +16,18 @@ templ (b Button) showButton() {
 		templ.KV(b.setContainerAlignment(),b.containerAlignment > 0) }
 		{ b.Attributes()... }
 	>
-		if icon := b.Icon; icon != nil {
+		if b.Icon != nil {
 			if b.Label != "" {
 				switch b.IconAlignment {
 					case AlignLeft:
-						@icon.Show()
+						@b.Icon
 						{ b.Label }
 					case AlignRight:
 						{ b.Label }
-						@icon.Show()
+						@b.Icon
 				}
 			} else {
-				@icon.Show()
+				@b.Icon
 			}
 		} else {
 			{ b.Label }

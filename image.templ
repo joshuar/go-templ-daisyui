@@ -3,14 +3,17 @@
 
 package components
 
-templ (i Image) Show() {
+// Image will render an `<img/>` element pointing to the given URL and with the
+// given options.
+templ Image(url string, options ...Option[ImageProps]) {
+	{{ image := BuildImage(url, options...) }}
 	<img
-		class={ templ.KV(i.setSize(), i.SizeIsSet()),
-		templ.KV(i.setMask(), i.MaskIsSet()),
-			templ.KV(i.setFit(), i.ObjectFitIsSet()) }
-		src={ i.url }
-		if i.alt != "" {
-			alt={ i.alt }
+		class={ templ.KV(image.setSize(), image.SizeIsSet()),
+		templ.KV(image.setMask(), image.MaskIsSet()),
+			templ.KV(image.setFit(), image.ObjectFitIsSet()) }
+		src={ image.url }
+		if image.alt != "" {
+			alt={ image.alt }
 		}
 	/>
 }

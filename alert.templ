@@ -3,7 +3,7 @@
 
 package components
 
-func setAlertType(alertType Alert) string {
+func setAlertType(alertType AlertType) string {
 	switch alertType {
 	case AlertInfo:
 		return "alert-info"
@@ -19,7 +19,10 @@ func setAlertType(alertType Alert) string {
 
 }
 
-templ AlertTempl(alertType Alert, message, id string, oob bool) {
+// Alert is a DaisyUI Alert component.
+//
+// https://daisyui.com/components/alert/
+templ Alert(alertType AlertType, message, id string, oob bool) {
 	<div
 		if id != "" {
 			id={ id }
@@ -32,15 +35,15 @@ templ AlertTempl(alertType Alert, message, id string, oob bool) {
 	>
 		switch alertType {
 			case AlertInfo:
-				@NewIcon("circle-info").Show()
+				@Icon("circle-info")
 			case AlertSuccess:
-				@NewIcon("circle-check").Show()
+				@Icon("circle-check")
 			case AlertWarning:
-				@NewIcon("circle-exclamation").Show()
+				@Icon("circle-exclamation")
 			case AlertError:
-				@NewIcon("circle-xmark").Show()
+				@Icon("circle-xmark")
 			default:
-				@NewIcon("circle-info").Show()
+				@Icon("circle-info")
 		}
 		<span>{ message }</span>
 		{ children... }

@@ -3,22 +3,24 @@
 
 package components
 
-templ (i Icon) Show() {
+// Icon represents a FontAwesome icon.
+templ Icon(name string, options ...Option[IconProps]) {
+	{{ icon := BuildIcon(name, options...) }}
 	<i
-		class={ i.name,
-		i.setStyle(),
-		templ.KV("swap-on",i.swapon),
-		templ.KV("swap-off",i.swapoff),
-		templ.KV(i.Class(),len(i.classes) > 0) }
-		{ i.Attributes()... }
+		class={ icon.name,
+		icon.fontawesomeStyle(),
+		templ.KV("swap-on",icon.swapon),
+		templ.KV("swap-off",icon.swapoff) }
+		{ icon.Attributes()... }
 	>
-		if i.label != "" {
-			{ i.label }
+		if icon.label != "" {
+			{ icon.label }
 		}
 	</i>
 }
 
-func (i Icon) setStyle() string {
+// fontawesomeStyle returns an appropriate FontAwesome style for the icon.
+func (i IconProps) fontawesomeStyle() string {
 	switch i.style {
 	case Regular:
 		return "fa-regular"

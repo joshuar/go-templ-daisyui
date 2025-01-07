@@ -48,11 +48,11 @@ templ (i Input) withIconLabel() {
 	<label class={ "input", "flex items-center gap-2" }>
 		switch i.IconAlignment {
 			case AlignLeft:
-				@i.Icon.Show()
+				@i.Icon
 				@i.show("grow")
 			case AlignRight:
 				@i.show("grow")
-				@i.Icon.Show()
+				@i.Icon
 		}
 		{ children... }
 	</label>
@@ -85,7 +85,7 @@ templ (i Input) asForm() {
 			if i.Error != "" {
 				<div class="label">
 					<span class="label-text-alt text-error">
-						@NewIcon("fa-circle-exclamation").Show()
+						@Icon("fa-circle-exclamation")
 						{ i.Error }
 					</span>
 				</div>

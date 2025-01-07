@@ -8,17 +8,17 @@ type list struct {
 	componentItems
 }
 
-type OrderedList struct {
+type OrderedListProps struct {
 	list
 }
 
-type UnorderedList struct {
+type UnorderedListProps struct {
 	list
 }
 
 //nolint:varnamelen
-func NewOrderedList(options ...Option[list]) OrderedList {
-	ol := OrderedList{}
+func buildOrderedList(options ...Option[list]) OrderedListProps {
+	ol := OrderedListProps{}
 
 	for _, option := range options {
 		ol.list = option(ol.list)
@@ -28,8 +28,8 @@ func NewOrderedList(options ...Option[list]) OrderedList {
 }
 
 //nolint:varnamelen
-func NewUnorderedList(options ...Option[list]) UnorderedList {
-	ul := UnorderedList{}
+func buildUnorderedList(options ...Option[list]) UnorderedListProps {
+	ul := UnorderedListProps{}
 
 	for _, option := range options {
 		ul.list = option(ul.list)

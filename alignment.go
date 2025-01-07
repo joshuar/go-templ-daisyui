@@ -18,8 +18,10 @@ const (
 	AlignRight                   // right
 )
 
+// Alignment represents a component alignment modifier.
 type Alignment int
 
+// modifierAlignment can be inherited by a Component for setting alignment.
 type modifierAlignment struct {
 	alignment Alignment
 }

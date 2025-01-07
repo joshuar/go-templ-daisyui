@@ -4,10 +4,12 @@
 package components
 
 const (
-	AlertInfo    Alert = iota // alert-info
-	AlertSuccess              // alert-success
-	AlertWarning              // alert-warning
-	AlertError                // alert-error
+	AlertInfo    AlertType = iota // alert-info
+	AlertSuccess                  // alert-success
+	AlertWarning                  // alert-warning
+	AlertError                    // alert-error
 )
 
-type Alert int
+// AlertType represents the type of alert. These are the standard state values
+// (info, success, warning and error).
+type AlertType int

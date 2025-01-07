@@ -1,9 +1,10 @@
 // Copyright 2024 Joshua Rich <joshua.rich@gmail.com>.
-// SPDX-License-Identifier: 	AGPL-3.0-or-later
+// SPDX-License-Identifier: 	MIT
 
 package components
 
-func (c Card) setLayout() string {
+// layoutModifier returns the Card layout modifier value.
+func (c CardProps) layoutModifier() string {
 	switch c.layout {
 	case CardLayoutCompact:
 		return "card-compact"
@@ -14,123 +15,131 @@ func (c Card) setLayout() string {
 	}
 }
 
-// Show will render the Card component.
-templ (c Card) Show() {
+// Card is a DaisyUI Card component.
+//
+// https://daisyui.com/components/card/
+templ Card(options ...Option[CardProps]) {
+	{{ card := BuildCard(options...) }}
 	<div
 		class={ "card",
-		templ.KV("card-bordered",c.border),
-		templ.KV("glass",c.UseGlass()),
-		templ.KV("image-full",c.fullImage),
-		templ.KV(c.setLayout(),c.layout > 0),
-		templ.KV(c.setShadow(),c.shadowSize > 0),
-		c.setBaseColor() }
-		{ c.Attributes()... }
-		if c.id != "" {
-			id={ c.id }
+		templ.KV("card-bordered",card.border),
+		templ.KV("glass",card.UseGlass()),
+		templ.KV("image-full",card.fullImage),
+		templ.KV(card.layoutModifier(),card.layout > 0),
+		templ.KV(card.setShadow(),card.shadowSize > 0),
+		card.setBaseColor() }
+		{ card.Attributes()... }
+		if card.id != "" {
+			id={ card.id }
 		}
 	>
-		@c.showBody()
+		@cardBody(card)
 	</div>
 }
 
-templ (c Card) showBody() {
-	@c.showImage()
+templ cardBody(card CardProps) {
+	if card.Image != nil {
+		@cardImage(card.Image, card.centered)
+	}
 	<div
 		class={ "card-body",
-	templ.KV("items-center text-center", c.centered) }
+	templ.KV("items-center text-center", card.centered) }
+		if card.Body.attributes != nil {
+			{ card.Body.attributes... }
+		}
 	>
-		if len(c.TopRightActions) >0 {
-			@showActions("justify-end", c.TopRightActions...)
+		if len(card.TopRightActions) >0 {
+			@cardActions("justify-end", card.TopRightActions...)
 		}
-		if c.title != nil {
-			@c.title.show()
+		if card.Title != nil {
+			@cardTitle(*card.Title)
 		}
-		if c.body != nil {
-			@c.body
+		if card.Body.content != nil {
+			@card.Body.content
 		}
-		if len(c.BottomRightActions) >0 {
-			@showActions("justify-end", c.BottomRightActions...)
+		if len(card.BottomRightActions) >0 {
+			@cardActions("justify-end", card.BottomRightActions...)
 		}
-		if c.Badges != nil {
+		if card.Badges != nil {
 			<div class="card-actions justify-end">
-				for _, badge := range c.Badges {
-					@badge.Show()
+				for _, badge := range card.Badges {
+					@badge
 				}
 			</div>
 		}
 	</div>
 }
 
-// showImage will render the card image, if available.
-templ (c Card) showImage() {
-	if c.Image != nil {
-		<figure
-			if c.centered {
-				class="px-10 pt-10"
-			}
-		>
-			@c.Image.Show()
-		</figure>
-	}
+// cardImage will render the Card image, if available.
+templ cardImage(image templ.Component, centered bool) {
+	<figure
+		if centered {
+			class="px-10 pt-10"
+		}
+	>
+		@image
+	</figure>
 }
 
-// show will render the card title.
-templ (t cardTitle) show() {
-	switch t.size {
+// cardTitle will render the Card title.
+templ cardTitle(props cardTitleProps) {
+	switch props.size {
 		case H1:
 			<h1 class="card-title">
-				{ t.text }
-				if len(t.badges) > 0 {
-					@t.showBadges()
+				{ props.text }
+				if len(props.badges) > 0 {
+					@cardTitleBadges(props.badges...)
 				}
 			</h1>
 		case H2:
 			<h2 class="card-title text-wrap">
-				{ t.text }
-				if len(t.badges) > 0 {
-					@t.showBadges()
+				{ props.text }
+				if len(props.badges) > 0 {
+					@cardTitleBadges(props.badges...)
 				}
 			</h2>
 		case H3:
 			<h3 class="card-title">
-				{ t.text }
-				if len(t.badges) > 0 {
-					@t.showBadges()
+				{ props.text }
+				if len(props.badges) > 0 {
+					@cardTitleBadges(props.badges...)
 				}
 			</h3>
 		case H4:
 			<h4 class="card-title">
-				{ t.text }
-				if len(t.badges) > 0 {
-					@t.showBadges()
+				{ props.text }
+				if len(props.badges) > 0 {
+					@cardTitleBadges(props.badges...)
 				}
 			</h4>
 		case H5:
 			<h5 class="card-title">
-				{ t.text }
-				if len(t.badges) > 0 {
-					@t.showBadges()
+				{ props.text }
+				if len(props.badges) > 0 {
+					@cardTitleBadges(props.badges...)
 				}
 			</h5>
 		case H6:
 			<h6 class="card-title">
-				{ t.text }
-				if len(t.badges) > 0 {
-					@t.showBadges()
+				{ props.text }
+				if len(props.badges) > 0 {
+					@cardTitleBadges(props.badges...)
 				}
 			</h6>
 	}
 }
 
-// showBadges will display a list of title badges.
-templ (t cardTitle) showBadges() {
-	for _, badge := range t.badges {
-		@badge.Show()
+// cardTitleBadges will render a list of badges after the Card title.
+templ cardTitleBadges(badges ...templ.Component) {
+	for _, badge := range badges {
+		@badge
 	}
 }
 
-templ showActions(align string, actions ...templ.Component) {
-	<div class={ "card-actions", align }>
+// cardActions will render a list of actions, justified with the provided justify
+// value.
+templ cardActions(justify string, actions ...templ.Component) {
+	<div class={ "card-actions", justify }>
 		for _, action := range actions {
 			@action
 		}

@@ -4,8 +4,6 @@
 
 package components
 
-import "strconv"
-
 // setLayout sets the layout of the Menu.
 func setLayout(layout Layout) string {
 	switch layout {
@@ -53,28 +51,20 @@ templ (m Menu) Show() {
 	</ul>
 }
 
-func (dm DropDownMenu) tabIndexStr() string {
-	return strconv.Itoa(dm.tabIndex)
-}
-
 templ (dm DropDownMenu) Show() {
-	<div class="dropdown">
-		<div
-			tabindex={ dm.tabIndexStr() }
-			role="button"
+	<details class="dropdown">
+		<summary
 			_="on click halt the event's bubbling end"
-			class={
-				"btn",
+			class={ "btn",
 				"btn-ghost",
 				"btn-circle",
 				templ.KV(dm.setHiddenBreakpoint(), dm.HiddenBreakpointIsSet()),
-				templ.KV(dm.setRevealedBreakpoint(), dm.RevealedBreakpointIsSet()),
-			}
+				templ.KV(dm.setRevealedBreakpoint(),
+				dm.RevealedBreakpointIsSet()) }
 		>
-			@NewIcon("fa-ellipsis-vertical").Show()
-		</div>
+			@Icon("fa-ellipsis-vertical")
+		</summary>
 		<ul
-			tabindex={ dm.tabIndexStr() }
 			class={ "menu",
 			templ.KV(setLayout(dm.layout),dm.LayoutIsSet()),
 		templ.KV(dm.setSize(),dm.SizeIsSet()),
@@ -88,5 +78,5 @@ templ (dm DropDownMenu) Show() {
 		>
 			@dm.ShowItems()
 		</ul>
-	</div>
+	</details>
 }

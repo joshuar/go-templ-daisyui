@@ -33,7 +33,7 @@ const (
 type InputModifier int
 
 type Input struct {
-	Icon        *Icon
+	Icon        templ.Component
 	Placeholder string
 	componentID
 	componentValue
@@ -91,9 +91,9 @@ func WithInputLabel(s string) Option[Input] {
 
 // WithInputIcon assigns an icon to the input. The icon can be aligned either
 // Left or Right.
-func WithInputIcon(icon Icon, alignment Alignment) Option[Input] {
+func WithInputIcon(name string, alignment Alignment, options ...Option[IconProps]) Option[Input] {
 	return func(i Input) Input {
-		i.Icon = &icon
+		i.Icon = Icon(name, options...)
 		i.IconAlignment = alignment
 
 		return i
