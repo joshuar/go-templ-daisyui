@@ -1,0 +1,162 @@
+// Copyright 2024 Joshua Rich <joshua.rich@gmail.com>.
+// SPDX-License-Identifier: MIT
+
+package components
+
+// size returns the size modifier for the TextInput.
+func (i TextInputProps) sizeModifier() string {
+	switch i.size {
+	case XS:
+		return "input-xs"
+	case SM:
+		return "input-sm"
+	case MD:
+		return "input-md"
+	case LG:
+		return "input-lg"
+	case XL:
+		return "input-xl"
+	default:
+		return "input-md"
+	}
+}
+
+// state returns the state modifier for the Text Input.
+func (i TextInputProps) stateModifier() string {
+	var state string
+
+	switch i.state {
+	case StateInfo:
+		state = "input-info"
+	case StateSuccess:
+		state = "input-success"
+	case StateWarning:
+		state = "input-warning"
+	case StateError:
+		state = "input-error"
+	}
+
+	return state
+}
+
+// color returns the color modifier for the Text Input.
+func (i TextInputProps) colorModifier() string {
+	color := "input-neutral"
+
+	switch i.color {
+	case ColorPrimary:
+		color = "input-primary"
+	case ColorSecondary:
+		color = "input-secondary"
+	case ColorAccent:
+		color = "input-accent"
+	case ColorNeutral:
+		color = "input-neutral"
+	case ColorGhost:
+		color = "input-ghost"
+	}
+
+	return color
+}
+
+// typeModifier returns the type of Text Input.
+func (i TextInputProps) typeModifier() string {
+	switch i.inputType {
+	case TextInputPassword:
+		return "password"
+	case TextInputEmail:
+		return "email"
+	default:
+		return "text"
+	}
+}
+
+// TextInput represents a DaisyUI Text Input component.
+//
+// https://daisyui.com/components/input/
+templ TextInput(options ...Option[TextInputProps]) {
+	{{ input := BuildTextInput(options...) }}
+	@input.formControlLayer()
+}
+
+// input will render the Text Input "<input>".
+templ (input TextInputProps) input() {
+	<input
+		type={ input.typeModifier() }
+		if input.PlaceholderIsSet() {
+			placeholder={ input.placeholderText }
+		}
+		if input.ID() != "" {
+			id={ input.ID() }
+			name={ input.ID() }
+		}
+		if input.Value() != "" {
+			value={ input.Value() }
+		}
+		required?={ input.required }
+		class={ "input",
+		templ.KV("input-bordered"+" "+input.colorModifier(), input.ColorIsSet()),
+		templ.KV("input-bordered"+" "+input.stateModifier(),input.StateIsSet()),
+			templ.KV(input.sizeModifier(),input.SizeIsSet()),
+			templ.KV("input-ghost", input.GhostIsSet() ),
+		 "w-full max-w-xs grow" }
+		{ input.attributes... }
+	/>
+}
+
+// insideLabelsLayer will add inside labels to the Text Input, if set. It then
+// passes rendering responsibility to the Text Input itself.
+templ (input TextInputProps) insideLabelsLayer() {
+	{{ labels := input.InsideLabels }}
+	if labels != nil {
+		<label
+			class={ "input",
+	templ.KV("input-bordered",input.bordered),
+	"flex items-center gap-2" }
+		>
+			if labels.labelLeft != nil {
+				@labels.labelLeft
+			}
+			@input.input()
+			if labels.labelRight != nil {
+				@labels.labelRight
+			}
+		</label>
+	} else {
+		@input.input()
+	}
+}
+
+// outsideLabelsLayer will add labels around the Text Input, if set. It then
+// passes rendering responsibility to the insideLabelsLayer.
+templ (input TextInputProps) outsideLabelsLayer() {
+	if input.OutsideLabelsSet() {
+		if input.labelTopLeft != "" || input.labelTopRight != "" {
+			<div class="label">
+				<span class="label-text">{ input.labelTopLeft }</span>
+				<span class="label-text-alt">{ input.labelTopRight }</span>
+			</div>
+		}
+		@input.insideLabelsLayer()
+		if input.labelBottomLeft != "" || input.labelBottomRight != "" {
+			<div class="label">
+				<span class="label-text-alt">{ input.labelBottomLeft }</span>
+				<span class="label-text-alt error">{ input.labelBottomRight }</span>
+			</div>
+		}
+	} else {
+		@input.insideLabelsLayer()
+	}
+}
+
+// formControlLayer wrap the Input Text with a "form-control" class, if set. It
+// then passes rendering responsibility to the outsideLabelsLayer.
+templ (input TextInputProps) formControlLayer() {
+	if input.formcontrol {
+		<label class="form-control w-full max-w-xs">
+			@input.outsideLabelsLayer()
+		</label>
+	} else {
+		@input.outsideLabelsLayer()
+	}
+}

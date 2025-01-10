@@ -30,6 +30,11 @@ func (m *modifierState) SetState(state State, outline bool) {
 	m.stateOutline = outline
 }
 
+// StateIsSet will return true if the Component has a size.
+func (m *modifierState) StateIsSet() bool {
+	return m.state > 0
+}
+
 type customisableState interface {
 	SetState(state State, outline bool)
 }

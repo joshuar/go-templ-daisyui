@@ -1,163 +1,134 @@
 // Copyright 2024 Joshua Rich <joshua.rich@gmail.com>.
 // SPDX-License-Identifier: MIT
 
-//go:generate go run golang.org/x/tools/cmd/stringer -type=InputType,InputModifier -linecomment -output input_generated.go
 package components
 
 import (
-	"github.com/a-h/templ"
+	"fmt"
+	"log/slog"
 )
 
-const (
-	InputTypeText     InputType = iota // text
-	InputTypePassword                  // password
-	InputTypeSearch                    // search
-	InputTypeHidden                    // hidden
-)
-
-type InputType int
-
-const (
-	InputNoModifier InputModifier = iota //
-	InputBordered                        // input-bordered
-	InputGhost                           // input-ghost
-	InputPrimary                         // input-primary
-	InputSecondary                       // input-secondary
-	InputAccent                          // input-accent
-	InputInfo                            // input-info
-	InputSuccess                         // input-success
-	InputWarning                         // input-warning
-	InputError                           // input-error
-)
-
-type InputModifier int
-
-type Input struct {
-	Icon        templ.Component
-	Placeholder string
+type BaseInputProps struct {
+	modifierResponsiveSize
+	componentAttributes
 	componentID
 	componentValue
-	Name string
-	componentAttributes
-	Label string
-	Error string
-	componentClasses
-	IconAlignment Alignment
-	Type          InputType
-	FormControl   bool
-	Optional      bool
 }
 
-// WithInputType defines the type of input (i.e., text, password, search, etc.).
-func WithInputType(t InputType) Option[Input] {
-	return func(i Input) Input {
-		i.Type = t
-		return i
+type modifierBordered struct {
+	modifierColor
+	modifierState
+	bordered bool
+}
+
+func (m *modifierBordered) SetBordered(value bool) {
+	m.bordered = value
+}
+
+// Bordered will return true if the Component should have a bordered class.
+func (m *modifierBordered) Bordered() bool {
+	return m.bordered
+}
+
+type customBordered interface {
+	SetBordered(value bool)
+}
+
+// Bordered will set whether the input should have a border.
+func Bordered[T any](value bool) Option[T] {
+	return func(c T) T {
+		component := &c
+
+		if settable, ok := any(component).(customBordered); ok {
+			settable.SetBordered(value)
+		}
+
+		slog.Warn("Bordered passed as option to component, but component does not support bordered modifier.",
+			slog.String("component", fmt.Sprintf("%T", &c)))
+
+		return *component
 	}
 }
 
-// WithInputModifier applies the given DaisyUI modifier to the input.
-func WithInputModifier(m InputModifier) Option[Input] {
-	return func(i Input) Input {
-		i.AddClasses(m.String())
-		return i
+type modifierPlaceholder struct {
+	placeholderText string
+}
+
+func (m *modifierPlaceholder) SetPlaceholder(text string) {
+	m.placeholderText = text
+}
+
+// PlaceholderIsSet will return true if the Component has placeholder text.
+func (m modifierPlaceholder) PlaceholderIsSet() bool {
+	return m.placeholderText != ""
+}
+
+type customPlaceholder interface {
+	SetPlaceholder(text string)
+}
+
+// WithPlaceholder will set the placeholder text.
+func WithPlaceholder[T any](text string) Option[T] {
+	return func(c T) T {
+		component := &c
+
+		if settable, ok := any(component).(customPlaceholder); ok {
+			settable.SetPlaceholder(text)
+		} else {
+			slog.Warn("WithState passed as option to component, but component does not support state modifier.",
+				slog.String("component", fmt.Sprintf("%T", &c)))
+		}
+
+		return *component
 	}
 }
 
-// WithPlaceholder assigns placeholder text for when the input has no current
-// value.
-func WithPlaceholder(s string) Option[Input] {
-	return func(i Input) Input {
-		i.Placeholder = s
-		return i
+type modifierTextValidation struct {
+	required bool
+	min      int
+	max      int
+	pattern  string
+}
+
+func (m modifierTextValidation) IsRequired() bool {
+	return m.required
+}
+
+func (m *modifierTextValidation) SetValidation() {
+	m.required = true
+}
+
+type customValidation interface {
+	IsRequired() bool
+	SetValidation()
+}
+
+// func (m *modifierPlaceholder) SetPlaceholder(text string) {
+// 	m.placeholderText = text
+// }
+
+// // PlaceholderIsSet will return true if the Component has placeholder text.
+// func (m modifierPlaceholder) PlaceholderIsSet() bool {
+// 	return m.placeholderText != ""
+// }
+
+// WithPlaceholder will set the placeholder text.
+func WithValidationRequired[T any]() Option[T] {
+	return func(c T) T {
+		component := &c
+
+		slog.Warn("Types.",
+			slog.String("pointer", fmt.Sprintf("%T", &c)),
+			slog.String("value", fmt.Sprintf("%T", c)),
+		)
+
+		if settable, ok := any(component).(customValidation); ok {
+			settable.SetValidation()
+		} else {
+			slog.Warn("WithValidationRequired passed as option to component, but component does not support validation.",
+				slog.String("component", fmt.Sprintf("%T", &c)))
+		}
+
+		return *component
 	}
-}
-
-// WithInputLabel assigns a label to the input.
-func WithInputName(name string) Option[Input] {
-	return func(i Input) Input {
-		i.Name = name
-		return i
-	}
-}
-
-// WithInputLabel assigns a label to the input.
-func WithInputLabel(s string) Option[Input] {
-	return func(i Input) Input {
-		i.Label = s
-		return i
-	}
-}
-
-// WithInputIcon assigns an icon to the input. The icon can be aligned either
-// Left or Right.
-func WithInputIcon(name string, alignment Alignment, options ...Option[IconProps]) Option[Input] {
-	return func(i Input) Input {
-		i.Icon = Icon(name, options...)
-		i.IconAlignment = alignment
-
-		return i
-	}
-}
-
-// OptionalInput if set, will mark the input with a badge indicating it is
-// optional.
-func OptionalInput() Option[Input] {
-	return func(i Input) Input {
-		i.Optional = true
-		return i
-	}
-}
-
-// AsFormControl adds necessary attributes to the input to allow it to be used
-// within form elements.
-func AsFormControl() Option[Input] {
-	return func(i Input) Input {
-		i.FormControl = true
-		return i
-	}
-}
-
-// NewInput creates a new input with the given values.
-func NewInput(options ...Option[Input]) Input {
-	input := Input{}
-
-	for _, option := range options {
-		input = option(input)
-	}
-
-	return input
-}
-
-// NewHiddenInput is a convienience function for creating a hidden input with
-// the given id, name and value.
-func NewHiddenInput(id, name, value string) Input {
-	return NewInput(
-		WithInputType(InputTypeHidden),
-		WithID[Input](id),
-		WithInputName(name),
-		WithValue[Input](value),
-	)
-}
-
-type SearchInput struct {
-	Validator   string
-	Value       string
-	LoadingText string
-	Input
-}
-
-func (si *SearchInput) GenerateInput() Input {
-	input := si.Input
-	input.attributes = templ.Attributes{
-		"name":         "Terms",
-		"value":        si.Value,
-		"tabindex":     0,
-		"hx-post":      si.Validator,
-		"hx-trigger":   "input changed delay:500ms, SearchRequest",
-		"hx-target":    "#search-results",
-		"hx-indicator": ".htmx-indicator",
-	}
-
-	return input
 }
