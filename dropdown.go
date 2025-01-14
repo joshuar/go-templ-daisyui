@@ -1,93 +1,42 @@
 // Copyright 2024 Joshua Rich <joshua.rich@gmail.com>.
 // SPDX-License-Identifier: MIT
 
-//go:generate go run golang.org/x/tools/cmd/stringer -type=DropDownOpen,DropDownStyle -linecomment -output dropdown_generated.go
 package components
 
-import "strings"
-
-const (
-	DropDownTop    DropDownOpen = iota // dropdown-top
-	DropDownBottom                     // dropdown-bottom
-	DropDownLeft                       // dropdown-left
-	DropDownRight                      // dropdown-right
-)
-
-type DropDownOpen int
-
-const (
-	DropDownButton DropDownStyle = iota
-	DropDownCard
-	DropDownCustom
-)
-
-type DropDownStyle int
-
-type DropDown struct {
-	Label string
-	class []string
-	Style DropDownStyle
+type DropdownProps struct {
+	ModifierOpenFrom
+	openOnHover bool
+	alignToEnd  bool
 }
 
-func (d DropDown) Class() string {
-	return strings.Join(d.class, " ")
-}
-
-type DropDownOption func(DropDown) DropDown
-
-func WithOpen(o DropDownOpen) DropDownOption {
-	return func(d DropDown) DropDown {
-		d.class = append(d.class, o.String())
-		return d
+// WithOpenOnHover option will ensure the Dropdown will open on hover.
+func WithOpenOnHover() Option[DropdownProps] {
+	return func(dd DropdownProps) DropdownProps {
+		dd.openOnHover = true
+		return dd
 	}
 }
 
-func WithAlignEnd() DropDownOption {
-	return func(d DropDown) DropDown {
-		d.class = append(d.class, "dropdown-end")
-		return d
+// WithAlignToEnd option aligns the dropdown content to the end of the container.
+func WithAlignToEnd() Option[DropdownProps] {
+	return func(dd DropdownProps) DropdownProps {
+		dd.alignToEnd = true
+		return dd
 	}
 }
 
-func WithHoverOpen() DropDownOption {
-	return func(d DropDown) DropDown {
-		d.class = append(d.class, "dropdown-hover")
-		return d
+// FromDropdownProps option can be used to pass a pre-build DropdownProps to the
+// Dropdown Component to render.
+func FromDropdownProps(props DropdownProps) Option[DropdownProps] {
+	return func(_ DropdownProps) DropdownProps {
+		return props
 	}
 }
 
-func WithForceOpen() DropDownOption {
-	return func(d DropDown) DropDown {
-		d.class = append(d.class, "dropdown-open")
-		return d
-	}
-}
-
-func AsButton(label string) DropDownOption {
-	return func(d DropDown) DropDown {
-		d.Style = DropDownButton
-		d.Label = label
-
-		return d
-	}
-}
-
-func AsCard() DropDownOption {
-	return func(d DropDown) DropDown {
-		d.Style = DropDownCard
-		return d
-	}
-}
-
-func AsCustom() DropDownOption {
-	return func(d DropDown) DropDown {
-		d.Style = DropDownCustom
-		return d
-	}
-}
-
-func NewDropDown(options ...DropDownOption) DropDown {
-	dropdown := DropDown{}
+// BuildDropdown builds a DropdownProps from the given options. Use this to
+// pre-build a Dropdown Component before rendering.
+func BuildDropdown(options ...Option[DropdownProps]) DropdownProps {
+	dropdown := DropdownProps{}
 
 	for _, option := range options {
 		dropdown = option(dropdown)
