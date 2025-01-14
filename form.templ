@@ -1,0 +1,19 @@
+// Copyright 2025 Joshua Rich <joshua.rich@gmail.com>.
+// SPDX-License-Identifier: 	AGPL-3.0-or-later
+
+package components
+
+// Form represents a HTML form element.
+templ Form(options ...Option[FormProps]) {
+	{{ form := BuildForm(options...) }}
+	<form
+		if form.ID() != "" {
+			id={ form.ID() }
+		}
+		{ form.Attributes()... }
+	>
+		for _, component := range form.components {
+			@component
+		}
+	</form>
+}
