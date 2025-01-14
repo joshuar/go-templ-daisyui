@@ -66,6 +66,8 @@ func (i TextInputProps) typeModifier() string {
 		return "password"
 	case TextInputEmail:
 		return "email"
+	case TextInputURL:
+		return "url"
 	default:
 		return "text"
 	}

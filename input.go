@@ -117,11 +117,6 @@ func WithValidationRequired[T any]() Option[T] {
 	return func(c T) T {
 		component := &c
 
-		slog.Warn("Types.",
-			slog.String("pointer", fmt.Sprintf("%T", &c)),
-			slog.String("value", fmt.Sprintf("%T", c)),
-		)
-
 		if settable, ok := any(component).(customValidation); ok {
 			settable.SetValidation()
 		} else {

@@ -11,6 +11,7 @@ const (
 	TextInputText TextInputType = iota
 	TextInputPassword
 	TextInputEmail
+	TextInputURL
 )
 
 type TextInputType int
@@ -61,6 +62,7 @@ type TextInputProps struct {
 	InsideLabels *textInputInsideLabels
 	textInputOutsideLabels
 	formcontrol bool
+	indicator   string
 }
 
 // WithFormControl will ensure the Input Text Component is wrapped with a
@@ -134,11 +136,20 @@ func AsEmail() Option[TextInputProps] {
 	}
 }
 
+// AsEmail indicates that this TextInput component should be treated as a
+// URL.
+func AsURL() Option[TextInputProps] {
+	return func(input TextInputProps) TextInputProps {
+		input.inputType = TextInputURL
+		return input
+	}
+}
+
 // FromTextInputProps will set an existing TextInputProps as the TextInput properties. If
 // you have previously built a TextInput with BuildTextInput, use this to pass the
 // TextInputProps to TextInput to render it.
 func FromTextInputProps(props TextInputProps) Option[TextInputProps] {
-	return func(input TextInputProps) TextInputProps {
+	return func(_ TextInputProps) TextInputProps {
 		return props
 	}
 }
