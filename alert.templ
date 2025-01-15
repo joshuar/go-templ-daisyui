@@ -3,22 +3,6 @@
 
 package components
 
-func setAlertType(alertType AlertType) string {
-	switch alertType {
-	case AlertInfo:
-		return "alert-info"
-	case AlertSuccess:
-		return "alert-success"
-	case AlertError:
-		return "alert-error"
-	case AlertWarning:
-		return "alert-warning"
-	default:
-		return "alert-info"
-	}
-
-}
-
 // Alert is a DaisyUI Alert component.
 //
 // https://daisyui.com/components/alert/
@@ -35,17 +19,34 @@ templ Alert(alertType AlertType, message, id string, oob bool) {
 	>
 		switch alertType {
 			case AlertInfo:
-				@Icon("circle-info")
+				@Icon("fa-circle-info")
 			case AlertSuccess:
-				@Icon("circle-check")
+				@Icon("fa-circle-check")
 			case AlertWarning:
-				@Icon("circle-exclamation")
+				@Icon("fa-circle-exclamation")
 			case AlertError:
-				@Icon("circle-xmark")
+				@Icon("fa-circle-xmark")
 			default:
-				@Icon("circle-info")
+				@Icon("fa-circle-info")
 		}
 		<span>{ message }</span>
 		{ children... }
 	</div>
+}
+
+// setAlterType returns the type of alert.
+func setAlertType(alertType AlertType) string {
+	switch alertType {
+	case AlertInfo:
+		return "alert-info"
+	case AlertSuccess:
+		return "alert-success"
+	case AlertError:
+		return "alert-error"
+	case AlertWarning:
+		return "alert-warning"
+	default:
+		return "alert-info"
+	}
+
 }
