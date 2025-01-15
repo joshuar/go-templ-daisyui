@@ -1,53 +1,35 @@
-// Copyright 2024 Joshua Rich <joshua.rich@gmail.com>.
-// SPDX-License-Identifier: MIT
+// Copyright 2025 Joshua Rich <joshua.rich@gmail.com>.
+// SPDX-License-Identifier: 	AGPL-3.0-or-later
 
 package components
 
-templ (b Button) showButton() {
+templ Button(options ...Option[ButtonProps]) {
+	{{ btn := BuildButton(options...) }}
 	<button
-		class={ "btn",
-		templ.KV("btn-active", b.active),
-		templ.KV("btn-disabled", b.disabled),
-		templ.KV("glass",b.UseGlass()),
-		templ.KV(b.setColor(),b.ColorIsSet()),
-		templ.KV(b.setState(),b.state > 0),
-		templ.KV(b.setShape(),b.shape > 0),
-		templ.KV(b.setSize(), b.SizeIsSet()),
-		templ.KV(b.setContainerAlignment(),b.containerAlignment > 0) }
-		{ b.Attributes()... }
-	>
-		if b.Icon != nil {
-			if b.Label != "" {
-				switch b.IconAlignment {
-					case AlignLeft:
-						@b.Icon
-						{ b.Label }
-					case AlignRight:
-						{ b.Label }
-						@b.Icon
-				}
-			} else {
-				@b.Icon
-			}
-		} else {
-			{ b.Label }
+		class={
+			"btn",
+			templ.KV("no-animation", btn.disableAnimation),
+			templ.KV("btn-active", btn.IsActive()),
+			templ.KV("btn-disabled", btn.IsDisabled()),
+			templ.KV("glass", btn.UseGlass()),
+			templ.KV("btn-ghost", btn.GhostIsSet()),
+			templ.KV(btn.setColor(), btn.ColorIsSet()),
+			templ.KV(btn.setStateColor(), btn.StateColorIsSet()),
+			templ.KV(btn.setShape(), btn.HasShape()),
+			templ.KV(btn.setSize(), btn.SizeIsSet()),
 		}
+		{ btn.Attributes()... }
+		autofocus?={ btn.HasAutofocus() }
+	>
+		@btn.content.value
 	</button>
 }
 
-templ (b Button) Show() {
-	if tooltip := b.Tooltip; tooltip != nil {
-		@tooltip.AsDiv(b.showButton())
-	} else {
-		@b.showButton()
-	}
-}
-
 // setState sets a state modifier of the Button.
-func (b Button) setState() string {
+func (b ButtonProps) setStateColor() string {
 	var state string
 
-	switch b.state {
+	switch b.stateColor {
 	case StateInfo:
 		state = "btn-info"
 	case StateSuccess:
@@ -58,7 +40,7 @@ func (b Button) setState() string {
 		state = "btn-error"
 	}
 
-	if b.stateOutline {
+	if b.stateColorOutline {
 		state = state + " btn-outline"
 	}
 
@@ -66,7 +48,7 @@ func (b Button) setState() string {
 }
 
 // setColor sets a color modifier of the Button.
-func (b Button) setColor() string {
+func (b ButtonProps) setColor() string {
 	color := "btn-neutral"
 
 	switch b.color {
@@ -91,23 +73,28 @@ func (b Button) setColor() string {
 }
 
 // setShape sets the shape modifier of the Button.
-func (b Button) setShape() string {
+func (b ButtonProps) setShape() string {
+	shape := ""
 	switch b.shape {
 	case ButtonCircle:
-		return "btn-circle"
+		shape = "btn-circle"
 	case ButtonSquare:
-		return "btn-square"
+		shape = "btn-square"
 	case ButtonWide:
-		return "btn-wide"
+		shape = "btn-wide"
 	case ButtonBlock:
-		return "btn-block"
-	default:
-		return "btn-regular"
+		shape = "btn-block"
 	}
+
+	if b.shapeOutline {
+		shape = shape + " btn-outline"
+	}
+
+	return shape
 }
 
 // setSize sets the size modifier of the Badge.
-func (b Button) setSize() string {
+func (b ButtonProps) setSize() string {
 	switch b.size {
 	case XS:
 		return "btn-xs"
@@ -121,17 +108,5 @@ func (b Button) setSize() string {
 		return "btn-xl"
 	default:
 		return "btn-md"
-	}
-}
-
-// setContainerAlignment aligns the Button within its container element.
-func (b Button) setContainerAlignment() string {
-	switch b.containerAlignment {
-	case TopLeft:
-		return "absolute left-2 top-2"
-	case TopRight:
-		return "absolute right-2 top-2"
-	default:
-		return ""
 	}
 }
