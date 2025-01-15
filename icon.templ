@@ -6,17 +6,19 @@ package components
 // Icon represents a FontAwesome icon.
 templ Icon(name string, options ...Option[IconProps]) {
 	{{ icon := BuildIcon(name, options...) }}
+	if icon.label != "" && icon.labelAlignment == AlignLeft {
+		{ icon.label }
+	}
 	<i
 		class={ icon.name,
 		icon.fontawesomeStyle(),
 		templ.KV("swap-on",icon.swapon),
 		templ.KV("swap-off",icon.swapoff) }
 		{ icon.Attributes()... }
-	>
-		if icon.label != "" {
-			{ icon.label }
-		}
-	</i>
+	></i>
+	if icon.label != "" && icon.labelAlignment == AlignRight {
+		{ icon.label }
+	}
 }
 
 // fontawesomeStyle returns an appropriate FontAwesome style for the icon.

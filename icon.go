@@ -11,29 +11,35 @@ const (
 // FontAwesomeStyle is a valid FontAwesome Icon style.
 type FontAwesomeStyle int
 
+type iconLabel struct {
+	label          string
+	labelAlignment Alignment
+}
+
 // IconProps are the properties that can be set on an icon.
 type IconProps struct {
 	name    string
-	label   string
 	style   FontAwesomeStyle
 	swapon  bool
 	swapoff bool
 	componentTooltip
+	iconLabel
 }
 
 // WithStyle assigns the given FontAwesome style to the Icon.
-func WithStyle(s FontAwesomeStyle) Option[IconProps] {
-	return func(i IconProps) IconProps {
-		i.style = s
-		return i
+func WithStyle(style FontAwesomeStyle) Option[IconProps] {
+	return func(icon IconProps) IconProps {
+		icon.style = style
+		return icon
 	}
 }
 
 // WithLabel ensures the Icon has the given label.
-func WithLabel(l string) Option[IconProps] {
-	return func(i IconProps) IconProps {
-		i.label = l
-		return i
+func WithLabel(label string, alignment Alignment) Option[IconProps] {
+	return func(icon IconProps) IconProps {
+		icon.label = label
+		icon.labelAlignment = alignment
+		return icon
 	}
 }
 
@@ -42,9 +48,9 @@ func WithLabel(l string) Option[IconProps] {
 //
 // https://daisyui.com/components/swap/
 func AsSwapOn() Option[IconProps] {
-	return func(i IconProps) IconProps {
-		i.swapon = true
-		return i
+	return func(icon IconProps) IconProps {
+		icon.swapon = true
+		return icon
 	}
 }
 
@@ -53,9 +59,9 @@ func AsSwapOn() Option[IconProps] {
 //
 // https://daisyui.com/components/swap/
 func AsSwapOff() Option[IconProps] {
-	return func(i IconProps) IconProps {
-		i.swapoff = true
-		return i
+	return func(icon IconProps) IconProps {
+		icon.swapoff = true
+		return icon
 	}
 }
 
@@ -63,7 +69,7 @@ func AsSwapOff() Option[IconProps] {
 // you have previously built an Icon with BuildIcon, use this to pass the
 // IconProps to Icon to render it.
 func FromIconProps(props IconProps) Option[IconProps] {
-	return func(ip IconProps) IconProps {
+	return func(_ IconProps) IconProps {
 		return props
 	}
 }
