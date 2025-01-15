@@ -51,11 +51,13 @@ templ cardBody(card CardProps) {
 		if len(card.TopRightActions) >0 {
 			@cardActions("justify-end", card.TopRightActions...)
 		}
-		if card.Title != nil {
-			@cardTitle(*card.Title)
-		}
-		if card.Body.content != nil {
-			@card.Body.content
+		@Article() {
+			if card.Title != nil {
+				@cardTitle(*card.Title)
+			}
+			if card.Body.content != nil {
+				@card.Body.content
+			}
 		}
 		if len(card.BottomRightActions) >0 {
 			@cardActions("justify-end", card.BottomRightActions...)
