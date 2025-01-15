@@ -22,10 +22,10 @@ func (i TextInputProps) sizeModifier() string {
 }
 
 // state returns the state modifier for the Text Input.
-func (i TextInputProps) stateModifier() string {
+func (i TextInputProps) stateColorModifier() string {
 	var state string
 
-	switch i.state {
+	switch i.stateColor {
 	case StateInfo:
 		state = "input-info"
 	case StateSuccess:
@@ -98,7 +98,7 @@ templ (input TextInputProps) input() {
 		required?={ input.required }
 		class={ "input",
 		templ.KV("input-bordered"+" "+input.colorModifier(), input.ColorIsSet()),
-		templ.KV("input-bordered"+" "+input.stateModifier(),input.StateIsSet()),
+		templ.KV("input-bordered"+" "+input.stateColorModifier(),input.StateColorIsSet()),
 			templ.KV(input.sizeModifier(),input.SizeIsSet()),
 			templ.KV("input-ghost", input.GhostIsSet() ),
 		 "w-full max-w-xs grow" }

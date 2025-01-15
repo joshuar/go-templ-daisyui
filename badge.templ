@@ -25,7 +25,7 @@ func (b BadgeProps) sizeModifier() string {
 func (b BadgeProps) stateModifier() string {
 	var state string
 
-	switch b.state {
+	switch b.stateColor {
 	case StateInfo:
 		state = "badge-info"
 	case StateSuccess:
@@ -36,7 +36,7 @@ func (b BadgeProps) stateModifier() string {
 		state = "badge-error"
 	}
 
-	if b.stateOutline {
+	if b.stateColorOutline {
 		state = state + " badge-outline"
 	}
 
@@ -77,7 +77,7 @@ templ Badge(options ...Option[BadgeProps]) {
 		class={ "badge",
 	templ.KV("indicator-item",badge.indicator),
 	templ.KV(badge.sizeModifier(),badge.SizeIsSet()),
-	templ.KV(badge.stateModifier(),badge.state > 0),
+	templ.KV(badge.stateModifier(),badge.StateColorIsSet()),
 	templ.KV(badge.colorModifier(),badge.ColorIsSet()) }
 	>
 		if badge.desc != "" {

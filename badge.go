@@ -8,7 +8,7 @@ type BadgeProps struct {
 	desc string
 	modifierResponsiveSize
 	modifierColor
-	modifierState
+	modifierStateColor
 	indicator bool
 }
 

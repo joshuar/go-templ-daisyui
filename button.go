@@ -34,9 +34,10 @@ type ButtonProps struct {
 	componentID
 	componentAttributes
 	modifierColor
-	ModifierStateColor
+	modifierStateColor
 	modifierResponsiveSize
-	ModifierDisabled
+	modifierDisabled
+	modifierActive
 	modifierGlass
 	modifierGhost
 	modifierButtonShape
