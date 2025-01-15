@@ -27,8 +27,9 @@ type modifierResponsiveSize struct {
 	size ResponsiveSize
 }
 
-func (m *modifierResponsiveSize) SetSize(size ResponsiveSize) {
+func (m modifierResponsiveSize) SetSize(size ResponsiveSize) modifierResponsiveSize {
 	m.size = size
+	return m
 }
 
 // SizeIsSet will return true if the Component has a size.
@@ -36,8 +37,8 @@ func (m *modifierResponsiveSize) SizeIsSet() bool {
 	return m.size > 0
 }
 
-type customisableResponsiveSize interface {
-	SetSize(size ResponsiveSize)
+type hasResponsiveSizeModifier[T any] interface {
+	SetSize(size ResponsiveSize) T
 }
 
 // WithSize adds the given size to the component.
@@ -45,16 +46,13 @@ type customisableResponsiveSize interface {
 //nolint:varnamelen // the var is copied into another with an appropriate name.
 func WithResponsiveSize[T any](size ResponsiveSize) Option[T] {
 	return func(c T) T {
-		component := &c
-
-		if settable, ok := any(component).(customisableResponsiveSize); ok {
-			settable.SetSize(size)
-		} else {
-			slog.Warn("WithResponsiveSize passed as option to component, but component does not support responsive size modifier.",
-				slog.String("component", fmt.Sprintf("%T", &c)))
+		if settable, ok := any(c).(hasResponsiveSizeModifier[T]); ok {
+			return settable.SetSize(size)
 		}
+		slog.Warn("WithResponsiveSize passed as option to component, but component does not support responsive size modifier.",
+			slog.String("component", fmt.Sprintf("%T", &c)))
 
-		return *component
+		return c
 	}
 }
 
