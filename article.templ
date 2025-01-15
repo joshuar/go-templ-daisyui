@@ -4,7 +4,7 @@
 
 package components
 
-func (a Article) setGrayscale() string {
+func (a ArticleProps) setGrayscale() string {
 	switch a.grayscale {
 	case Gray:
 		return "prose-gray"
@@ -19,12 +19,17 @@ func (a Article) setGrayscale() string {
 	}
 }
 
-// Show will display the article as a templ.Component.
-templ (a Article) Show() {
-	<article class={ "prose", templ.KV(a.setGrayscale(),a.grayscale > 0) }>
-		if a.title != "" {
-			<h1>{ a.title }</h1>
-		}
-		@templ.Raw(a.content)
+// Article represents an article component, using Tailwind's typography plugin
+// and "prose" class.
+//
+// https://daisyui.com/docs/layout-and-typography/#-1
+templ Article(options ...Option[ArticleProps]) {
+	{{ article := BuildArticle(options...) }}
+	<article
+		class={ "prose",
+	"dark:prose-invert",
+	templ.KV(article.setGrayscale(),article.grayscale > 0) }
+	>
+		{ children... }
 	</article>
 }

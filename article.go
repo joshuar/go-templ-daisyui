@@ -13,32 +13,24 @@ const (
 
 type ProseGrayScale int
 
-// Article represents an article component, using Tailwind's typography plugin
-// and "prose" class.
-// https://daisyui.com/docs/layout-and-typography/#-1
-type Article struct {
+type ArticleProps struct {
 	componentClasses
 	grayscale ProseGrayScale
-	title     string
-	content   string
 }
 
 // WithGrayScale adds optional gray scale scheme to the prose.
 // https://github.com/tailwindlabs/tailwindcss-typography/blob/main/README.md#choosing-a-gray-scale
-func WithGrayScale(scale ProseGrayScale) Option[Article] {
-	return func(a Article) Article {
+func WithGrayScale(scale ProseGrayScale) Option[ArticleProps] {
+	return func(a ArticleProps) ArticleProps {
 		a.grayscale = scale
 		return a
 	}
 }
 
-// NewArticle creates a new article component with the given title, content and
+// BuildArticle creates a new article component with the given title, content and
 // options. Title is optional.
-func NewArticle(title, content string, options ...Option[Article]) Article {
-	article := Article{
-		title:   title,
-		content: content,
-	}
+func BuildArticle(options ...Option[ArticleProps]) ArticleProps {
+	article := ArticleProps{}
 
 	for _, option := range options {
 		article = option(article)
