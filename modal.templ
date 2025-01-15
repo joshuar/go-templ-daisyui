@@ -3,19 +3,34 @@
 
 package components
 
-templ ModalTempl(id string, content templ.Component) {
-	<div class="modal-box">
-		@content
-		<form method="dialog">
-			@NewButton("", "close",
-				WithButtonShape(ButtonCircle),
-				WithColor[Button](ColorGhost, false),
-				WithIcon("fa-xmark", AlignMiddle),
-				WithContainerAlignment(TopRight),
-				WithAttributes[Button](templ.Attributes{
-					"_": "on click or keyup[key=='Esc'] take .modal-open from #" + id + " wait 200ms",
-				}),
-			).Show()
-		</form>
-	</div>
+// Modal represents a DaisyUI Modal Component.
+templ Modal(options ...Option[ModalProps]) {
+	{{ modal := BuildModal(options...) }}
+	<dialog
+		if modal.ID() != "" {
+			id={ modal.ID() }
+		}
+		class={
+			"modal",
+			templ.KV("modal-open", modal.openInitially),
+		}
+	>
+		<div class="modal-box">
+			<div class="absolute right-2 top-2 p-2">
+				if modal.closeButton != nil {
+					@modal.closeButton
+				}
+			</div>
+			{ children... }
+		</div>
+		if modal.closeOutside {
+			<form
+				method="dialog"
+				class="modal-backdrop"
+				_={ "on click or keyup[key=='Esc'] take .modal-open from #" + modal.id + " wait 200ms then remove #" + modal.id }
+			>
+				<button>close</button>
+			</form>
+		}
+	</dialog>
 }
