@@ -5,33 +5,25 @@ package components
 
 type Tooltip struct {
 	Tip string
-	componentClasses
 }
 
 type componentTooltip struct {
 	componentAttributes
-	componentClasses
 }
 
 // customisableAttributes is an interface to detect components whose attributes
 // can be customized.
-type customisableTooltip interface {
+type customTooltip[T any] interface {
 	SetAttribute(key string, value any)
 	AddClasses(classes ...string)
 }
 
-func WithToolTip[T any](tip string) Option[T] {
+func WithToolTip[T customTooltip[T]](tip string) Option[T] {
 	return func(c T) T {
-		// Get a pointer to the underlying component.
-		component := &c
-		// If the component supports customizing attributes, set the attributes
-		// to the given value.
-		if settable, ok := any(component).(customisableTooltip); ok {
-			settable.SetAttribute("data-tip", tip)
-			settable.AddClasses("tooltip")
-		}
-		// Return the modified component.
-		return *component
+		c.SetAttribute("data-tip", tip)
+		c.AddClasses("tooltip")
+
+		return c
 	}
 }
 
@@ -40,18 +32,16 @@ func (t *Tooltip) String() string {
 }
 
 // Tip sets the text to display in the tooltip.
-func Tip(tip string) Option[Tooltip] {
-	return func(t Tooltip) Tooltip {
+func Tip(tip string) Option[*Tooltip] {
+	return func(t *Tooltip) *Tooltip {
 		t.Tip = tip
 		return t
 	}
 }
 
 // NewTooltip creates a new Tooltip component with the specified options.
-func NewTooltip(options ...Option[Tooltip]) Tooltip {
-	tooltip := Tooltip{}
-
-	tooltip = WithClasses[Tooltip](tooltip.String())(tooltip)
+func NewTooltip(options ...Option[*Tooltip]) *Tooltip {
+	tooltip := &Tooltip{}
 
 	for _, option := range options {
 		tooltip = option(tooltip)

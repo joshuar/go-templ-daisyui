@@ -3,11 +3,6 @@
 
 package components
 
-import (
-	"fmt"
-	"log/slog"
-)
-
 type binaryState struct {
 	state bool
 }
@@ -44,25 +39,15 @@ func (m *modifierStateColor) StateColorIsSet() bool {
 	return m.stateColor > 0
 }
 
-type hasModifierStateColor interface {
+type hasModifierStateColor[T any] interface {
 	SetStateColor(state StateColor, outline bool)
 }
 
 // WithStateColor styles the component with the given color state and optionally outlined.
-//
-//nolint:varnamelen // the var is copied into another with an appropriate name.
-func WithStateColor[T any](state StateColor, outline bool) Option[T] {
+func WithStateColor[T hasModifierStateColor[T]](state StateColor, outline bool) Option[T] {
 	return func(c T) T {
-		component := &c
-
-		if settable, ok := any(component).(hasModifierStateColor); ok {
-			settable.SetStateColor(state, outline)
-		} else {
-			slog.Warn("WithState passed as option to component, but component does not support state modifier.",
-				slog.String("component", fmt.Sprintf("%T", &c)))
-		}
-
-		return *component
+		c.SetStateColor(state, outline)
+		return c
 	}
 }
 
@@ -79,25 +64,15 @@ func (m *modifierDisabled) IsDisabled() bool {
 	return m.state
 }
 
-type hasModifierDisabled interface {
+type hasModifierDisabled[T any] interface {
 	Disable()
 }
 
 // WithStateColor styles the component with the given color state and optionally outlined.
-//
-//nolint:varnamelen // the var is copied into another with an appropriate name.
-func AsDisabled[T any]() Option[T] {
+func AsDisabled[T hasModifierDisabled[T]]() Option[T] {
 	return func(c T) T {
-		component := &c
-
-		if settable, ok := any(component).(hasModifierDisabled); ok {
-			settable.Disable()
-		} else {
-			slog.Warn("AsDisabled passed as option to component, but component does not support disabled modifier.",
-				slog.String("component", fmt.Sprintf("%T", &c)))
-		}
-
-		return *component
+		c.Disable()
+		return c
 	}
 }
 
@@ -114,24 +89,14 @@ func (m *modifierActive) IsActive() bool {
 	return m.state
 }
 
-type hasModifierActive interface {
+type hasModifierActive[T any] interface {
 	Activate()
 }
 
 // WithStateColor styles the component with the given color state and optionally outlined.
-//
-//nolint:varnamelen // the var is copied into another with an appropriate name.
-func AsActive[T any]() Option[T] {
+func AsActive[T hasModifierActive[T]]() Option[T] {
 	return func(c T) T {
-		component := &c
-
-		if settable, ok := any(component).(hasModifierActive); ok {
-			settable.Activate()
-		} else {
-			slog.Warn("AsActive passed as option to component, but component does not support active modifier.",
-				slog.String("component", fmt.Sprintf("%T", &c)))
-		}
-
-		return *component
+		c.Activate()
+		return c
 	}
 }

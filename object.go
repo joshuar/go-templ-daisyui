@@ -3,11 +3,6 @@
 
 package components
 
-import (
-	"fmt"
-	"log/slog"
-)
-
 const (
 	ObjectNone      ObjectFit = iota + 1 // object-none
 	ObjectContain                        // object-contain
@@ -31,24 +26,14 @@ func (m *modifierObjectFit) ObjectFitIsSet() bool {
 	return m.fit > 0
 }
 
-type customisableObjectFit interface {
+type customObjectFit[T any] interface {
 	SetFit(fit ObjectFit)
 }
 
 // WithObjectFit will add an object fit to the component class.
-//
-//nolint:varnamelen // the var is copied into another with an appropriate name.
-func WithObjectFit[T any](fit ObjectFit) Option[T] {
+func WithObjectFit[T customObjectFit[T]](fit ObjectFit) Option[T] {
 	return func(c T) T {
-		component := &c
-
-		if settable, ok := any(component).(customisableObjectFit); ok {
-			settable.SetFit(fit)
-		} else {
-			slog.Warn("WithObjectFit passed as option to component, but component does not support object fit modifier.",
-				slog.String("component", fmt.Sprintf("%T", &c)))
-		}
-
-		return *component
+		c.SetFit(fit)
+		return c
 	}
 }

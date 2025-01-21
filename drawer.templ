@@ -1,7 +1,7 @@
 package components
 
 // Show will render the Drawer with its options.
-templ (d Drawer) Show() {
+templ (d *DrawerProps) Show() {
 	<div class={ "drawer", templ.KV(d.setVisibility(), d.visibility > 0) }>
 		<input id={ d.id } type="checkbox" class="drawer-toggle"/>
 		<div class="drawer-content">
@@ -19,7 +19,7 @@ templ (d Drawer) Show() {
 }
 
 // setVisibility sets the visibility of the drawer.
-func (d Drawer) setVisibility() string {
+func (d *DrawerProps) setVisibility() string {
 	switch d.visibility {
 	case XS:
 		return "xs:drawer-open"

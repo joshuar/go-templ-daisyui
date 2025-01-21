@@ -3,11 +3,6 @@
 
 package components
 
-import (
-	"fmt"
-	"log/slog"
-)
-
 const (
 	XS ResponsiveSize = iota + 1 // Extra-small size. class: {component}-xs
 	SM                           // Small size. class: {component}-sm
@@ -27,9 +22,8 @@ type modifierResponsiveSize struct {
 	size ResponsiveSize
 }
 
-func (m modifierResponsiveSize) SetSize(size ResponsiveSize) modifierResponsiveSize {
+func (m *modifierResponsiveSize) SetSize(size ResponsiveSize) {
 	m.size = size
-	return m
 }
 
 // SizeIsSet will return true if the Component has a size.
@@ -38,20 +32,13 @@ func (m *modifierResponsiveSize) SizeIsSet() bool {
 }
 
 type hasResponsiveSizeModifier[T any] interface {
-	SetSize(size ResponsiveSize) T
+	SetSize(size ResponsiveSize)
 }
 
 // WithSize adds the given size to the component.
-//
-//nolint:varnamelen // the var is copied into another with an appropriate name.
-func WithResponsiveSize[T any](size ResponsiveSize) Option[T] {
+func WithResponsiveSize[T hasResponsiveSizeModifier[T]](size ResponsiveSize) Option[T] {
 	return func(c T) T {
-		if settable, ok := any(c).(hasResponsiveSizeModifier[T]); ok {
-			return settable.SetSize(size)
-		}
-		slog.Warn("WithResponsiveSize passed as option to component, but component does not support responsive size modifier.",
-			slog.String("component", fmt.Sprintf("%T", &c)))
-
+		c.SetSize(size)
 		return c
 	}
 }
@@ -129,78 +116,38 @@ func (m *modifierSize) SizeIsSet() bool {
 	return m.size > 0
 }
 
-type customisableSize interface {
+type customSize[T any] interface {
 	SetSize(size Size)
 }
 
 // WithSize adds the given size to the component.
-//
-//nolint:varnamelen // the var is copied into another with an appropriate name.
-func WithSize[T any](size Size) Option[T] {
+func WithSize[T customSize[T]](size Size) Option[T] {
 	return func(c T) T {
-		component := &c
-
-		if settable, ok := any(component).(customisableSize); ok {
-			settable.SetSize(size)
-		} else {
-			slog.Warn("WithSize passed as option to component, but component does not support size modifier.",
-				slog.String("component", fmt.Sprintf("%T", &c)))
-		}
-
-		return *component
+		c.SetSize(size)
+		return c
 	}
 }
 
 // WithSizeAuto sets `size-auto` on the component.
-//
-//nolint:varnamelen // the var is copied into another with an appropriate name.
-func WithSizeAuto[T any]() Option[T] {
+func WithSizeAuto[T customSize[T]]() Option[T] {
 	return func(c T) T {
-		component := &c
-
-		if settable, ok := any(component).(customisableSize); ok {
-			settable.SetSize(SizeAuto)
-		} else {
-			slog.Warn("WithSize passed as option to component, but component does not support size modifier.",
-				slog.String("component", fmt.Sprintf("%T", &c)))
-		}
-
-		return *component
+		c.SetSize(SizeAuto)
+		return c
 	}
 }
 
 // WithSizeMin sets `size-min` on the component.
-//
-//nolint:varnamelen // the var is copied into another with an appropriate name.
-func WithSizeMin[T any]() Option[T] {
+func WithSizeMin[T customSize[T]]() Option[T] {
 	return func(c T) T {
-		component := &c
-
-		if settable, ok := any(component).(customisableSize); ok {
-			settable.SetSize(SizeMin)
-		} else {
-			slog.Warn("WithSize passed as option to component, but component does not support size modifier.",
-				slog.String("component", fmt.Sprintf("%T", &c)))
-		}
-
-		return *component
+		c.SetSize(SizeMin)
+		return c
 	}
 }
 
 // WithSizeMax sets `size-max` on the component.
-//
-//nolint:varnamelen // the var is copied into another with an appropriate name.
-func WithSizeMax[T any]() Option[T] {
+func WithSizeMax[T customSize[T]]() Option[T] {
 	return func(c T) T {
-		component := &c
-
-		if settable, ok := any(component).(customisableSize); ok {
-			settable.SetSize(SizeMax)
-		} else {
-			slog.Warn("WithSize passed as option to component, but component does not support size modifier.",
-				slog.String("component", fmt.Sprintf("%T", &c)))
-		}
-
-		return *component
+		c.SetSize(SizeMax)
+		return c
 	}
 }

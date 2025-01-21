@@ -4,9 +4,6 @@
 package components
 
 import (
-	"fmt"
-	"log/slog"
-
 	"github.com/a-h/templ"
 )
 
@@ -27,25 +24,15 @@ func (c *componentID) ID() string {
 	return c.id
 }
 
-type customisableID interface {
+type customID[T any] interface {
 	SetID(id string)
 }
 
 // WithID allows setting an id attribute on a component.
-//
-//nolint:varnamelen // the var is copied into another with an appropriate name.
-func WithID[T any](id string) Option[T] {
+func WithID[T customID[T]](id string) Option[T] {
 	return func(c T) T {
-		component := &c
-
-		if settable, ok := any(component).(customisableID); ok {
-			settable.SetID(id)
-		} else {
-			slog.Warn("WithID passed as option to component, but component does not support setting ID.",
-				slog.String("component", fmt.Sprintf("%T", &c)))
-		}
-
-		return *component
+		c.SetID(id)
+		return c
 	}
 }
 
@@ -63,26 +50,16 @@ func (c *componentValue) Value() string {
 	return c.value
 }
 
-type customisableValue interface {
+type customValue[T any] interface {
 	SetValue(value string)
 	Value() string
 }
 
 // WithValue allows setting an value on a component.
-//
-//nolint:varnamelen // the var is copied into another with an appropriate name.
-func WithValue[T any](value string) Option[T] {
+func WithValue[T customValue[T]](value string) Option[T] {
 	return func(c T) T {
-		component := &c
-
-		if settable, ok := any(component).(customisableValue); ok {
-			settable.SetValue(value)
-		} else {
-			slog.Warn("WithValue passed as option to component, but component does not support setting value.",
-				slog.String("component", fmt.Sprintf("%T", &c)))
-		}
-
-		return *component
+		c.SetValue(value)
+		return c
 	}
 }
 
@@ -96,106 +73,14 @@ func (c *componentItems) SetItems(items ...templ.Component) {
 	c.items = append(c.items, items...)
 }
 
-type customisableItems interface {
+type customItems[T any] interface {
 	SetItems(items ...templ.Component)
 }
 
 // WithValue allows setting an value on a component.
-//
-//nolint:varnamelen // the var is copied into another with an appropriate name.
-func WithItems[T any](items ...templ.Component) Option[T] {
+func WithItems[T customItems[T]](items ...templ.Component) Option[T] {
 	return func(c T) T {
-		component := &c
-
-		if settable, ok := any(component).(customisableItems); ok {
-			settable.SetItems(items...)
-		} else {
-			slog.Warn("WithItems passed as option to component, but component does not support setting items.",
-				slog.String("component", fmt.Sprintf("%T", &c)))
-		}
-
-		return *component
-	}
-}
-
-// componentHiddenBreakpoint is an inheritable struct that allows a Component to
-// be hidden on screens equal to and above the set size. Use
-// componentRevealedBreakpoint to reveal a Component above certain sizes.
-type componentHiddenBreakpoint struct {
-	hiddenBreakpoint ResponsiveSize
-}
-
-func (c *componentHiddenBreakpoint) SetHiddenBreakpoint(size ResponsiveSize) {
-	c.hiddenBreakpoint = size
-}
-
-// HiddenBreakpointIsSet will return true if the Component has a hidden breakpoint.
-func (c *componentHiddenBreakpoint) HiddenBreakpointIsSet() bool {
-	return c.hiddenBreakpoint > 0
-}
-
-type customisableHiddenBreakpoint interface {
-	SetHiddenBreakpoint(size ResponsiveSize)
-}
-
-// WithHiddenBreakpoint allows hiding a Component on screens with the given size
-// or above. On smaller screens, the Component will be revealed.
-//
-// https://tailwindcss.com/docs/display#hidden
-//
-//nolint:varnamelen // the var is copied into another with an appropriate name.
-func WithHiddenBreakpoint[T any](size ResponsiveSize) Option[T] {
-	return func(c T) T {
-		component := &c
-
-		if settable, ok := any(component).(customisableHiddenBreakpoint); ok {
-			settable.SetHiddenBreakpoint(size)
-		} else {
-			slog.Warn("WithVisibility passed as option to component, but component does not support setting visibility.",
-				slog.String("component", fmt.Sprintf("%T", &c)))
-		}
-
-		return *component
-	}
-}
-
-// componentRevealedBreakpoint is an inheritable struct that allows a Component to
-// be revealed on screens equal to and above the set size. Use
-// componentHiddenBreakpoint to hide a Component above certain sizes.
-type componentRevealedBreakpoint struct {
-	revealedBreakpoint ResponsiveSize
-}
-
-func (c *componentRevealedBreakpoint) SetRevealedBreakpoint(size ResponsiveSize) {
-	c.revealedBreakpoint = size
-}
-
-// RevealedBreakpointIsSet will return true if the Component has a revealed breakpoint.
-func (c *componentRevealedBreakpoint) RevealedBreakpointIsSet() bool {
-	return c.revealedBreakpoint > 0
-}
-
-type customisableRevealedBreakpoint interface {
-	SetRevealedBreakpoint(size ResponsiveSize)
-}
-
-// WithRevealedBreakpoint allows revealing a Component on screens with the given size
-// or above. On smaller screens, the Component will be hidden.
-//
-// https://tailwindcss.com/docs/display#hidden
-//
-//nolint:varnamelen // the var is copied into another with an appropriate name.
-func WithRevealedBreakpoint[T any](size ResponsiveSize) Option[T] {
-	return func(c T) T {
-		component := &c
-
-		if settable, ok := any(component).(customisableRevealedBreakpoint); ok {
-			settable.SetRevealedBreakpoint(size)
-		} else {
-			slog.Warn("WithVisibility passed as option to component, but component does not support setting visibility.",
-				slog.String("component", fmt.Sprintf("%T", &c)))
-		}
-
-		return *component
+		c.SetItems(items...)
+		return c
 	}
 }

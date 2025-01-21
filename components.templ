@@ -3,54 +3,10 @@
 
 package components
 
-import "log/slog"
-
 // ShowItems will loop through the item components and render them.
 templ (c componentItems) ShowItems() {
 	for _, item := range c.items {
 		@item
-	}
-}
-
-// setHiddenBreakpoint returns class values for setting the component as hidden
-// equal to and above a size.
-func (c componentHiddenBreakpoint) setHiddenBreakpoint() string {
-	switch c.hiddenBreakpoint {
-	case XS:
-		return "xs:hidden"
-	case SM:
-		return "sm:hidden"
-	case MD:
-		return "md:hidden"
-	case LG:
-		return "lg:hidden"
-	case XL:
-		return "xl:hidden"
-	default:
-		slog.Warn("Unsupported hidden breakpoint.",
-			slog.Any("value", c.hiddenBreakpoint))
-		return ""
-	}
-}
-
-// setRevealedBreakpoint returns class values for setting the component as revealed
-// equal to and above a size
-func (c componentRevealedBreakpoint) setRevealedBreakpoint() string {
-	switch c.revealedBreakpoint {
-	case XS:
-		return "hidden xs:flex"
-	case SM:
-		return "hidden sm:flex"
-	case MD:
-		return "hidden md:flex"
-	case LG:
-		return "hidden lg:flex"
-	case XL:
-		return "hidden xl:flex"
-	default:
-		slog.Warn("Unsupported revealed breakpoint.",
-			slog.Any("value", c.revealedBreakpoint))
-		return ""
 	}
 }
 

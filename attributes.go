@@ -50,23 +50,16 @@ func (c *componentAttributes) Attributes() templ.Attributes {
 	return c.attributes
 }
 
-// customisableAttributes is an interface to detect components whose attributes
+// customAttributes is an interface to detect components whose attributes
 // can be customized.
-type customisableAttributes interface {
+type customAttributes[T any] interface {
 	AddAttributes(attrs templ.Attributes)
 }
 
 // WithAttributes adds the given attributes to the component.
-func WithAttributes[T any](attr templ.Attributes) Option[T] {
+func WithAttributes[T customAttributes[T]](attr templ.Attributes) Option[T] {
 	return func(c T) T {
-		// Get a pointer to the underlying component.
-		component := &c
-		// If the component supports customizing attributes, set the attributes
-		// to the given value.
-		if settable, ok := any(component).(customisableAttributes); ok {
-			settable.AddAttributes(attr)
-		}
-		// Return the modified component.
-		return *component
+		c.AddAttributes(attr)
+		return c
 	}
 }

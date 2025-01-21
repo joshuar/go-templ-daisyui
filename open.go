@@ -3,11 +3,6 @@
 
 package components
 
-import (
-	"fmt"
-	"log/slog"
-)
-
 const (
 	OpenLeft OpenFrom = iota
 	OpenRight
@@ -36,44 +31,24 @@ func (m *ModifierOpenFrom) SetForceOpen(value bool) {
 }
 
 // HasOpenModifier indicates that a Component has the OpenFrom Modifier.
-type HasOpenFromModifier interface {
+type hasOpenFromModifier[T any] interface {
 	SetOpenFrom(from OpenFrom)
 	SetForceOpen(value bool)
 }
 
 // WithOpenFrom option specifies how the Component will show its
 // content on opening.
-//
-//nolint:varnamelen // the var is copied into another with an appropriate name.
-func WithOpenFrom[T any](from OpenFrom) Option[T] {
+func WithOpenFrom[T hasOpenFromModifier[T]](from OpenFrom) Option[T] {
 	return func(c T) T {
-		component := &c
-
-		if settable, ok := any(component).(HasOpenFromModifier); ok {
-			settable.SetOpenFrom(from)
-		} else {
-			slog.Warn("WithOpenFrom passed as option to component, but component does not support opening.",
-				slog.String("component", fmt.Sprintf("%T", c)))
-		}
-
-		return *component
+		c.SetOpenFrom(from)
+		return c
 	}
 }
 
 // WithForceOpen option specifies that the component should be open by default.
-//
-//nolint:varnamelen // the var is copied into another with an appropriate name.
-func WithForceOpen[T any]() Option[T] {
+func WithForceOpen[T hasOpenFromModifier[T]]() Option[T] {
 	return func(c T) T {
-		component := &c
-
-		if settable, ok := any(component).(HasOpenFromModifier); ok {
-			settable.SetForceOpen(true)
-		} else {
-			slog.Warn("WithForceOpen passed as option to component, but component does not support opening.",
-				slog.String("component", fmt.Sprintf("%T", &c)))
-		}
-
-		return *component
+		c.SetForceOpen(true)
+		return c
 	}
 }

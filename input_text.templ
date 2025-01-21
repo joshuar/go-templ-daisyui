@@ -4,7 +4,7 @@
 package components
 
 // size returns the size modifier for the TextInput.
-func (i TextInputProps) sizeModifier() string {
+func (i *TextInputProps) sizeModifier() string {
 	switch i.size {
 	case XS:
 		return "input-xs"
@@ -22,7 +22,7 @@ func (i TextInputProps) sizeModifier() string {
 }
 
 // state returns the state modifier for the Text Input.
-func (i TextInputProps) stateColorModifier() string {
+func (i *TextInputProps) stateColorModifier() string {
 	var state string
 
 	switch i.stateColor {
@@ -40,7 +40,7 @@ func (i TextInputProps) stateColorModifier() string {
 }
 
 // color returns the color modifier for the Text Input.
-func (i TextInputProps) colorModifier() string {
+func (i *TextInputProps) colorModifier() string {
 	color := "input-neutral"
 
 	switch i.color {
@@ -60,7 +60,7 @@ func (i TextInputProps) colorModifier() string {
 }
 
 // typeModifier returns the type of Text Input.
-func (i TextInputProps) typeModifier() string {
+func (i *TextInputProps) typeModifier() string {
 	switch i.inputType {
 	case TextInputPassword:
 		return "password"
@@ -76,7 +76,7 @@ func (i TextInputProps) typeModifier() string {
 // TextInput represents a DaisyUI Text Input component.
 //
 // https://daisyui.com/components/input/
-templ TextInput(options ...Option[TextInputProps]) {
+templ TextInput(options ...Option[*TextInputProps]) {
 	{{ input := BuildTextInput(options...) }}
 	@input.formControlLayer()
 }
@@ -108,7 +108,7 @@ templ (input TextInputProps) input() {
 
 // insideLabelsLayer will add inside labels to the Text Input, if set. It then
 // passes rendering responsibility to the Text Input itself.
-templ (input TextInputProps) insideLabelsLayer() {
+templ (input *TextInputProps) insideLabelsLayer() {
 	{{ labels := input.InsideLabels }}
 	if labels != nil {
 		<label
@@ -131,7 +131,7 @@ templ (input TextInputProps) insideLabelsLayer() {
 
 // outsideLabelsLayer will add labels around the Text Input, if set. It then
 // passes rendering responsibility to the insideLabelsLayer.
-templ (input TextInputProps) outsideLabelsLayer() {
+templ (input *TextInputProps) outsideLabelsLayer() {
 	if input.OutsideLabelsSet() {
 		if input.labelTopLeft != "" || input.labelTopRight != "" {
 			<div class="label">
@@ -153,7 +153,7 @@ templ (input TextInputProps) outsideLabelsLayer() {
 
 // formControlLayer wrap the Input Text with a "form-control" class, if set. It
 // then passes rendering responsibility to the outsideLabelsLayer.
-templ (input TextInputProps) formControlLayer() {
+templ (input *TextInputProps) formControlLayer() {
 	if input.formcontrol {
 		<label class="form-control w-full max-w-xs">
 			@input.outsideLabelsLayer()

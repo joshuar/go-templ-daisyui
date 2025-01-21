@@ -1,5 +1,5 @@
 // Copyright 2025 Joshua Rich <joshua.rich@gmail.com>.
-// SPDX-License-Identifier: 	AGPL-3.0-or-later
+// SPDX-License-Identifier: 	MIT
 
 package components
 
@@ -46,14 +46,14 @@ type ButtonProps struct {
 	content          buttonContent
 }
 
-func (b ButtonProps) HasShape() bool {
+func (b *ButtonProps) HasShape() bool {
 	return b.shape > 0
 }
 
 // WithButtonShape sets the shape of the Button (square, circle, wide, block). If this
 // option is not used, it will be a regular shaped Button.
-func WithButtonShape(shape ButtonShape, outline bool) Option[ButtonProps] {
-	return func(btn ButtonProps) ButtonProps {
+func WithButtonShape(shape ButtonShape, outline bool) Option[*ButtonProps] {
+	return func(btn *ButtonProps) *ButtonProps {
 		if shape != ButtonRegular {
 			btn.shape = shape
 			btn.shapeOutline = outline
@@ -64,8 +64,8 @@ func WithButtonShape(shape ButtonShape, outline bool) Option[ButtonProps] {
 }
 
 // WithButtonContent defines the content of the button.
-func WithButtonContent(option Option[buttonContent]) Option[ButtonProps] {
-	return func(btn ButtonProps) ButtonProps {
+func WithButtonContent(option Option[buttonContent]) Option[*ButtonProps] {
+	return func(btn *ButtonProps) *ButtonProps {
 		btn.content = option(btn.content)
 
 		return btn
@@ -81,7 +81,7 @@ func AsTextContent(text string) Option[buttonContent] {
 }
 
 // AsIconContent will render an icon with the given options as the button content.
-func AsIconContent(name string, options ...Option[IconProps]) Option[buttonContent] {
+func AsIconContent(name string, options ...Option[*IconProps]) Option[buttonContent] {
 	return func(content buttonContent) buttonContent {
 		content.value = Icon(name, options...)
 		return content
@@ -89,15 +89,15 @@ func AsIconContent(name string, options ...Option[IconProps]) Option[buttonConte
 }
 
 // DisableButtonAnimation disables the click animation on the button.
-func DisableButtonAnimation() Option[ButtonProps] {
-	return func(btn ButtonProps) ButtonProps {
+func DisableButtonAnimation() Option[*ButtonProps] {
+	return func(btn *ButtonProps) *ButtonProps {
 		btn.disableAnimation = true
 		return btn
 	}
 }
 
-func BuildButton(options ...Option[ButtonProps]) ButtonProps {
-	btn := ButtonProps{}
+func BuildButton(options ...Option[*ButtonProps]) *ButtonProps {
+	btn := &ButtonProps{}
 
 	for _, option := range options {
 		btn = option(btn)

@@ -18,7 +18,7 @@ func (c CardProps) layoutModifier() string {
 // Card is a DaisyUI Card component.
 //
 // https://daisyui.com/components/card/
-templ Card(options ...Option[CardProps]) {
+templ Card(options ...Option[*CardProps]) {
 	{{ card := BuildCard(options...) }}
 	<div
 		class={ "card",
@@ -37,7 +37,7 @@ templ Card(options ...Option[CardProps]) {
 	</div>
 }
 
-templ cardBody(card CardProps) {
+templ cardBody(card *CardProps) {
 	if card.Image != nil {
 		@cardImage(card.Image, card.centered)
 	}
@@ -53,7 +53,7 @@ templ cardBody(card CardProps) {
 		}
 		@Article() {
 			if card.Title != nil {
-				@cardTitle(*card.Title)
+				@cardTitle(card.Title)
 			}
 			if card.Body.content != nil {
 				@card.Body.content
@@ -84,7 +84,7 @@ templ cardImage(image templ.Component, centered bool) {
 }
 
 // cardTitle will render the Card title.
-templ cardTitle(props cardTitleProps) {
+templ cardTitle(props *cardTitleProps) {
 	switch props.size {
 		case H1:
 			<h1 class="card-title">

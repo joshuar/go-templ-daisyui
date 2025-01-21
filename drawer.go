@@ -13,7 +13,7 @@ type drawerContent struct {
 	mainContent templ.Component
 }
 
-type Drawer struct {
+type DrawerProps struct {
 	componentID
 	visibility ResponsiveSize
 	modifierZIndex
@@ -23,8 +23,8 @@ type Drawer struct {
 
 // WithDrawerVisibility sets the size at which the drawer will always be
 // visible. Below this value, the drawer will be hidden by default.
-func WithDrawerVisibility(size ResponsiveSize) Option[Drawer] {
-	return func(d Drawer) Drawer {
+func WithDrawerVisibility(size ResponsiveSize) Option[*DrawerProps] {
+	return func(d *DrawerProps) *DrawerProps {
 		d.visibility = size
 		return d
 	}
@@ -32,8 +32,8 @@ func WithDrawerVisibility(size ResponsiveSize) Option[Drawer] {
 
 // WithMainContent sets the given templ.Component as the main content of the
 // drawer.
-func WithMainContent(content templ.Component) Option[Drawer] {
-	return func(d Drawer) Drawer {
+func WithMainContent(content templ.Component) Option[*DrawerProps] {
+	return func(d *DrawerProps) *DrawerProps {
 		d.mainContent = content
 		return d
 	}
@@ -41,8 +41,8 @@ func WithMainContent(content templ.Component) Option[Drawer] {
 
 // WithSideContent sets the given templ.Component as the side content of the
 // drawer.
-func WithSideContent(content templ.Component) Option[Drawer] {
-	return func(d Drawer) Drawer {
+func WithSideContent(content templ.Component) Option[*DrawerProps] {
+	return func(d *DrawerProps) *DrawerProps {
 		d.sideContent = content
 		return d
 	}
@@ -50,8 +50,8 @@ func WithSideContent(content templ.Component) Option[Drawer] {
 
 // NewCard creates a new card component with the given options. The card can be
 // rendered by calling the Show method.
-func NewDrawer(id string, options ...Option[Drawer]) Drawer {
-	drawer := Drawer{}
+func NewDrawer(id string, options ...Option[*DrawerProps]) *DrawerProps {
+	drawer := &DrawerProps{}
 
 	drawer.id = id
 

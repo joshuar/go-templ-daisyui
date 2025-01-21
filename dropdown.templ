@@ -6,7 +6,7 @@ package components
 // HelperDropdown is a DaisyUI Dropdown rendered for helper text.
 //
 // https://daisyui.com/components/dropdown/#helper-dropdown
-templ HelperDropdown(helpText string, options ...Option[DropdownProps]) {
+templ HelperDropdown(helpText string, options ...Option[*DropdownProps]) {
 	{{ dropdown := BuildDropdown(options...) }}
 	<div
 		class={ "dropdown",

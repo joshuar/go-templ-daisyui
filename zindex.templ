@@ -6,7 +6,7 @@ package components
 import "log/slog"
 
 // setZIndex returns the z-index class string.
-func (s modifierZIndex) setZIndex() string {
+func (s *modifierZIndex) setZIndex() string {
 	if s.negative {
 		return s.setNegativeZIndex()
 	}
@@ -32,7 +32,7 @@ func (s modifierZIndex) setZIndex() string {
 	}
 }
 
-func (s modifierZIndex) setNegativeZIndex() string {
+func (s *modifierZIndex) setNegativeZIndex() string {
 	switch s.zindex {
 	case Z0:
 		return "-z-0"

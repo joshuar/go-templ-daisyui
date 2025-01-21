@@ -3,7 +3,7 @@
 
 package components
 
-templ UnorderedList(options ...Option[list]) {
+templ UnorderedList(options ...Option[*list]) {
 	{{ list := buildUnorderedList(options...) }}
 	<ul
 		{ list.Attributes()... }
@@ -16,7 +16,7 @@ templ UnorderedList(options ...Option[list]) {
 	</ul>
 }
 
-templ OrderedList(options ...Option[list]) {
+templ OrderedList(options ...Option[*list]) {
 	{{ list := buildOrderedList(options...) }}
 	<ol
 		{ list.Attributes()... }

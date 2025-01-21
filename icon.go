@@ -27,18 +27,19 @@ type IconProps struct {
 }
 
 // WithStyle assigns the given FontAwesome style to the Icon.
-func WithStyle(style FontAwesomeStyle) Option[IconProps] {
-	return func(icon IconProps) IconProps {
+func WithStyle(style FontAwesomeStyle) Option[*IconProps] {
+	return func(icon *IconProps) *IconProps {
 		icon.style = style
 		return icon
 	}
 }
 
 // WithLabel ensures the Icon has the given label.
-func WithLabel(label string, alignment Alignment) Option[IconProps] {
-	return func(icon IconProps) IconProps {
+func WithLabel(label string, alignment Alignment) Option[*IconProps] {
+	return func(icon *IconProps) *IconProps {
 		icon.label = label
 		icon.labelAlignment = alignment
+
 		return icon
 	}
 }
@@ -47,8 +48,8 @@ func WithLabel(label string, alignment Alignment) Option[IconProps] {
 // state.
 //
 // https://daisyui.com/components/swap/
-func AsSwapOn() Option[IconProps] {
-	return func(icon IconProps) IconProps {
+func AsSwapOn() Option[*IconProps] {
+	return func(icon *IconProps) *IconProps {
 		icon.swapon = true
 		return icon
 	}
@@ -58,8 +59,8 @@ func AsSwapOn() Option[IconProps] {
 // "off" state.
 //
 // https://daisyui.com/components/swap/
-func AsSwapOff() Option[IconProps] {
-	return func(icon IconProps) IconProps {
+func AsSwapOff() Option[*IconProps] {
+	return func(icon *IconProps) *IconProps {
 		icon.swapoff = true
 		return icon
 	}
@@ -68,15 +69,15 @@ func AsSwapOff() Option[IconProps] {
 // FromIconProps will set an existing IconProps as the Icon properties. If
 // you have previously built an Icon with BuildIcon, use this to pass the
 // IconProps to Icon to render it.
-func FromIconProps(props IconProps) Option[IconProps] {
-	return func(_ IconProps) IconProps {
+func FromIconProps(props *IconProps) Option[*IconProps] {
+	return func(_ *IconProps) *IconProps {
 		return props
 	}
 }
 
 // BuildIcon creates iconProps with the given options.
-func BuildIcon(name string, options ...Option[IconProps]) IconProps {
-	icon := IconProps{
+func BuildIcon(name string, options ...Option[*IconProps]) *IconProps {
+	icon := &IconProps{
 		name: name,
 	}
 

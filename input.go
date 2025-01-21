@@ -3,11 +3,6 @@
 
 package components
 
-import (
-	"fmt"
-	"log/slog"
-)
-
 type BaseInputProps struct {
 	modifierResponsiveSize
 	componentAttributes
@@ -30,23 +25,15 @@ func (m *modifierBordered) Bordered() bool {
 	return m.bordered
 }
 
-type customBordered interface {
+type customBordered[T any] interface {
 	SetBordered(value bool)
 }
 
 // Bordered will set whether the input should have a border.
-func Bordered[T any](value bool) Option[T] {
+func Bordered[T customBordered[T]](value bool) Option[T] {
 	return func(c T) T {
-		component := &c
-
-		if settable, ok := any(component).(customBordered); ok {
-			settable.SetBordered(value)
-		}
-
-		slog.Warn("Bordered passed as option to component, but component does not support bordered modifier.",
-			slog.String("component", fmt.Sprintf("%T", &c)))
-
-		return *component
+		c.SetBordered(value)
+		return c
 	}
 }
 
@@ -63,23 +50,15 @@ func (m modifierPlaceholder) PlaceholderIsSet() bool {
 	return m.placeholderText != ""
 }
 
-type customPlaceholder interface {
+type customPlaceholder[T any] interface {
 	SetPlaceholder(text string)
 }
 
 // WithPlaceholder will set the placeholder text.
-func WithPlaceholder[T any](text string) Option[T] {
+func WithPlaceholder[T customPlaceholder[T]](text string) Option[T] {
 	return func(c T) T {
-		component := &c
-
-		if settable, ok := any(component).(customPlaceholder); ok {
-			settable.SetPlaceholder(text)
-		} else {
-			slog.Warn("WithState passed as option to component, but component does not support state modifier.",
-				slog.String("component", fmt.Sprintf("%T", &c)))
-		}
-
-		return *component
+		c.SetPlaceholder(text)
+		return c
 	}
 }
 
@@ -98,32 +77,15 @@ func (m *modifierTextValidation) SetValidation() {
 	m.required = true
 }
 
-type customValidation interface {
+type customValidation[T any] interface {
 	IsRequired() bool
 	SetValidation()
 }
 
-// func (m *modifierPlaceholder) SetPlaceholder(text string) {
-// 	m.placeholderText = text
-// }
-
-// // PlaceholderIsSet will return true if the Component has placeholder text.
-// func (m modifierPlaceholder) PlaceholderIsSet() bool {
-// 	return m.placeholderText != ""
-// }
-
 // WithPlaceholder will set the placeholder text.
-func WithValidationRequired[T any]() Option[T] {
+func WithValidationRequired[T customValidation[T]]() Option[T] {
 	return func(c T) T {
-		component := &c
-
-		if settable, ok := any(component).(customValidation); ok {
-			settable.SetValidation()
-		} else {
-			slog.Warn("WithValidationRequired passed as option to component, but component does not support validation.",
-				slog.String("component", fmt.Sprintf("%T", &c)))
-		}
-
-		return *component
+		c.SetValidation()
+		return c
 	}
 }

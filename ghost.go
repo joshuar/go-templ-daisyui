@@ -3,11 +3,6 @@
 
 package components
 
-import (
-	"fmt"
-	"log/slog"
-)
-
 // modifierGhost is an inheritable struct for Components that can have an ghost
 // modifier.
 type modifierGhost struct {
@@ -24,24 +19,14 @@ func (m *modifierGhost) GhostIsSet() bool {
 	return m.ghost
 }
 
-type customGhost interface {
+type customGhost[T any] interface {
 	SetGhost(value bool)
 }
 
 // WithGhost allows setting the ghost modifier on an attribute.
-//
-//nolint:varnamelen // the var is copied into another with an appropriate name.
-func AsGhost[T any](value bool) Option[T] {
+func AsGhost[T customGhost[T]](value bool) Option[T] {
 	return func(c T) T {
-		component := &c
-
-		if settable, ok := any(component).(customGhost); ok {
-			settable.SetGhost(value)
-		} else {
-			slog.Warn("WithGhost passed as option to component, but component does not support setting ghost modifier.",
-				slog.String("component", fmt.Sprintf("%T", &c)))
-		}
-
-		return *component
+		c.SetGhost(value)
+		return c
 	}
 }

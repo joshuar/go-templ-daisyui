@@ -3,7 +3,7 @@ package components
 import "log/slog"
 
 // setSize will set the fixed/percentage size of a Component.
-func (s modifierSize) setSize() string {
+func (s *modifierSize) setSize() string {
 	switch s.size {
 	case Size0:
 		return "size-0"

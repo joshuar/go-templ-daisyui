@@ -4,7 +4,7 @@
 package components
 
 // Modal represents a DaisyUI Modal Component.
-templ Modal(options ...Option[ModalProps]) {
+templ Modal(options ...Option[*ModalProps]) {
 	{{ modal := BuildModal(options...) }}
 	<dialog
 		if modal.ID() != "" {

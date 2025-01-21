@@ -14,33 +14,33 @@ type BadgeProps struct {
 
 // AsBadgeIndicator will add the "indicator" class value, when set to true, to
 // allow the Badge to be used as an indicator on another item.
-func AsBadgeIndicator(value bool) Option[BadgeProps] {
-	return func(b BadgeProps) BadgeProps {
-		b.indicator = value
-		return b
+func AsBadgeIndicator(value bool) Option[*BadgeProps] {
+	return func(badge *BadgeProps) *BadgeProps {
+		badge.indicator = value
+		return badge
 	}
 }
 
 // WithBadgeDescription sets the Badge description.
-func WithBadgeDescription(desc string) Option[BadgeProps] {
-	return func(b BadgeProps) BadgeProps {
-		b.desc = desc
-		return b
+func WithBadgeDescription(desc string) Option[*BadgeProps] {
+	return func(badge *BadgeProps) *BadgeProps {
+		badge.desc = desc
+		return badge
 	}
 }
 
 // FromBadgeProps will set an existing BadgeProps as the Badge properties. If
 // you have previously built a Badge with BuildBadge, use this to pass the
 // BadgeProps to Badge to render it.
-func FromBadgeProps(props BadgeProps) Option[BadgeProps] {
-	return func(bp BadgeProps) BadgeProps {
+func FromBadgeProps(props *BadgeProps) Option[*BadgeProps] {
+	return func(_ *BadgeProps) *BadgeProps {
 		return props
 	}
 }
 
 // BuildBadge creates a new BadgeProps with the given options.
-func BuildBadge(options ...Option[BadgeProps]) BadgeProps {
-	badge := BadgeProps{}
+func BuildBadge(options ...Option[*BadgeProps]) *BadgeProps {
+	badge := &BadgeProps{}
 
 	for _, option := range options {
 		badge = option(badge)

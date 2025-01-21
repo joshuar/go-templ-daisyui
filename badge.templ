@@ -71,7 +71,7 @@ func (b BadgeProps) colorModifier() string {
 // Badge is a DaisyUI Badge component.
 //
 // https://daisyui.com/components/badge/
-templ Badge(options ...Option[BadgeProps]) {
+templ Badge(options ...Option[*BadgeProps]) {
 	{{ badge := BuildBadge(options...) }}
 	<span
 		class={ "badge",

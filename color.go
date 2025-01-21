@@ -3,11 +3,6 @@
 
 package components
 
-import (
-	"fmt"
-	"log/slog"
-)
-
 const (
 	ColorNeutral Color = iota + 1
 	ColorPrimary
@@ -46,25 +41,15 @@ func (m *modifierColor) ColorIsSet() bool {
 	return m.color > 0
 }
 
-type customisableColor interface {
+type customColor[T any] interface {
 	SetColor(color Color, outline bool)
 }
 
 // WithColor styles the component with the given Color and optionally outlined.
-//
-//nolint:varnamelen // the var is copied into another with an appropriate name.
-func WithColor[T any](color Color, outline bool) Option[T] {
+func WithColor[T customColor[T]](color Color, outline bool) Option[T] {
 	return func(c T) T {
-		component := &c
-
-		if settable, ok := any(component).(customisableColor); ok {
-			settable.SetColor(color, outline)
-		} else {
-			slog.Warn("WithColor passed as option to component, but component does not support color modifier.",
-				slog.String("component", fmt.Sprintf("%T", &c)))
-		}
-
-		return *component
+		c.SetColor(color, outline)
+		return c
 	}
 }
 
@@ -79,24 +64,14 @@ func (m *modifierBaseColor) SetBaseColor(color BaseColor) {
 	m.baseColor = color
 }
 
-type customisableBaseColor interface {
+type customBaseColor[T any] interface {
 	SetBaseColor(color BaseColor)
 }
 
 // WithBaseColor styles the component with the given base color (`bg-base-*`).
-//
-//nolint:varnamelen // the var is copied into another with an appropriate name.
-func WithBaseColor[T any](color BaseColor) Option[T] {
+func WithBaseColor[T customBaseColor[T]](color BaseColor) Option[T] {
 	return func(c T) T {
-		component := &c
-
-		if settable, ok := any(component).(customisableBaseColor); ok {
-			settable.SetBaseColor(color)
-		} else {
-			slog.Warn("WithBaseColor passed as option to component, but component does not support base color modifier.",
-				slog.String("component", fmt.Sprintf("%T", &c)))
-		}
-
-		return *component
+		c.SetBaseColor(color)
+		return c
 	}
 }

@@ -1,12 +1,7 @@
 // Copyright 2024 Joshua Rich <joshua.rich@gmail.com>.
-// SPDX-License-Identifier: 	AGPL-3.0-or-later
+// SPDX-License-Identifier: 	MIT
 
 package components
-
-import (
-	"fmt"
-	"log/slog"
-)
 
 const (
 	MaskSquircle          MaskStyle = iota + 1 // mask-squircle
@@ -47,24 +42,14 @@ func (m *modifierMask) MaskIsSet() bool {
 	return m.mask > 0
 }
 
-type customisableMask interface {
+type customMask[T any] interface {
 	SetMask(mask MaskStyle)
 }
 
 // WithMask will add the given mask to the component.
-//
-//nolint:varnamelen // the var is copied into another with an appropriate name.
-func WithMask[T any](mask MaskStyle) Option[T] {
+func WithMask[T customMask[T]](mask MaskStyle) Option[T] {
 	return func(c T) T {
-		component := &c
-
-		if settable, ok := any(component).(customisableMask); ok {
-			settable.SetMask(mask)
-		} else {
-			slog.Warn("WithMask passed as option to component, but component does not support mask modifier.",
-				slog.String("component", fmt.Sprintf("%T", &c)))
-		}
-
-		return *component
+		c.SetMask(mask)
+		return c
 	}
 }

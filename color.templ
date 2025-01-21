@@ -3,7 +3,7 @@
 
 package components
 
-func (c modifierBaseColor) setBaseColor() string {
+func (c *modifierBaseColor) setBaseColor() string {
 	switch c.baseColor {
 	case ColorBgBase100:
 		return "bg-base-100"

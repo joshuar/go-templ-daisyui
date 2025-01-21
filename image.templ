@@ -5,7 +5,7 @@ package components
 
 // Image will render an `<img/>` element pointing to the given URL and with the
 // given options.
-templ Image(url string, options ...Option[ImageProps]) {
+templ Image(url string, options ...Option[*ImageProps]) {
 	{{ image := BuildImage(url, options...) }}
 	<img
 		class={ templ.KV(image.setSize(), image.SizeIsSet()),

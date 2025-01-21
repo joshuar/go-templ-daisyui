@@ -4,7 +4,7 @@
 package components
 
 // Icon represents a FontAwesome icon.
-templ Icon(name string, options ...Option[IconProps]) {
+templ Icon(name string, options ...Option[*IconProps]) {
 	{{ icon := BuildIcon(name, options...) }}
 	if icon.label != "" && icon.labelAlignment == AlignLeft {
 		{ icon.label }
@@ -22,7 +22,7 @@ templ Icon(name string, options ...Option[IconProps]) {
 }
 
 // fontawesomeStyle returns an appropriate FontAwesome style for the icon.
-func (i IconProps) fontawesomeStyle() string {
+func (i *IconProps) fontawesomeStyle() string {
 	switch i.style {
 	case Regular:
 		return "fa-regular"

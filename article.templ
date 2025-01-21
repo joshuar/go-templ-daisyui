@@ -23,7 +23,7 @@ func (a ArticleProps) setGrayscale() string {
 // and "prose" class.
 //
 // https://daisyui.com/docs/layout-and-typography/#-1
-templ Article(options ...Option[ArticleProps]) {
+templ Article(options ...Option[*ArticleProps]) {
 	{{ article := BuildArticle(options...) }}
 	<article
 		class={ "prose",

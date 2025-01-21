@@ -3,7 +3,7 @@
 
 package components
 
-func (s modifierMask) setMask() string {
+func (s *modifierMask) setMask() string {
 	switch s.mask {
 	case MaskSquircle:
 		return "mask mask-squircle"

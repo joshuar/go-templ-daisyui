@@ -1,5 +1,5 @@
 // Copyright 2024 Joshua Rich <joshua.rich@gmail.com>.
-// SPDX-License-Identifier: 	AGPL-3.0-or-later
+// SPDX-License-Identifier: 	MIT
 
 
 package components
@@ -17,7 +17,7 @@ func setLayout(layout Layout) string {
 }
 
 // setSize sets the size modifier of the Menu.
-func (m Menu) setSize() string {
+func (m *Menu) setSize() string {
 	switch m.size {
 	case XS:
 		return "menu-xs"
@@ -34,7 +34,7 @@ func (m Menu) setSize() string {
 	}
 }
 
-templ (m Menu) Show() {
+templ (m *Menu) Show() {
 	<ul
 		class={
 			"menu",
@@ -51,7 +51,7 @@ templ (m Menu) Show() {
 	</ul>
 }
 
-templ (dm DropDownMenu) Show() {
+templ (dm *DropDownMenu) Show() {
 	<details class="dropdown dropdown-bottom dropdown-end">
 		<summary
 			_="on click halt the event's bubbling end"
