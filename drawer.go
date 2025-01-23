@@ -14,9 +14,8 @@ type drawerContent struct {
 }
 
 type DrawerProps struct {
-	componentID
+	htmlAttrID
 	visibility ResponsiveSize
-	modifierZIndex
 	drawerSide
 	drawerContent
 }

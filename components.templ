@@ -10,6 +10,8 @@ templ (c componentItems) ShowItems() {
 	}
 }
 
-templ PlainText(text string) {
-	{ text }
+templ ComponentArray(items ...templ.Component) {
+	for _, action := range items {
+		@action
+	}
 }

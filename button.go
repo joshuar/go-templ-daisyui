@@ -31,7 +31,7 @@ type buttonContent struct {
 }
 
 type ButtonProps struct {
-	componentID
+	htmlAttrID
 	componentAttributes
 	modifierColor
 	modifierStateColor
@@ -75,7 +75,7 @@ func WithButtonContent(option Option[buttonContent]) Option[*ButtonProps] {
 // AsTextContent will render the given text as the button content.
 func AsTextContent(text string) Option[buttonContent] {
 	return func(content buttonContent) buttonContent {
-		content.value = PlainText(text)
+		content.value = Text(text)
 		return content
 	}
 }

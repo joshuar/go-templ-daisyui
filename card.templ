@@ -6,8 +6,6 @@ package components
 // layoutModifier returns the Card layout modifier value.
 func (c CardProps) layoutModifier() string {
 	switch c.layout {
-	case CardLayoutCompact:
-		return "card-compact"
 	case CardLayoutSide:
 		return "card-side"
 	default:
@@ -24,9 +22,10 @@ templ Card(options ...Option[*CardProps]) {
 		class={ "card",
 		templ.KV("card-bordered",card.border),
 		templ.KV("glass",card.UseGlass()),
-		templ.KV("image-full",card.fullImage),
+		templ.KV("image-full",card.image != nil && card.image.layout == ImageOverlay),
 		templ.KV(card.layoutModifier(),card.layout > 0),
 		templ.KV(card.setShadow(),card.shadowSize > 0),
+		templ.KV("card-compact",card.compact),
 		card.setBaseColor() }
 		{ card.Attributes()... }
 		if card.id != "" {
@@ -38,48 +37,57 @@ templ Card(options ...Option[*CardProps]) {
 }
 
 templ cardBody(card *CardProps) {
-	if card.Image != nil {
-		@cardImage(card.Image, card.centered)
+	{{ body := card.Body }}
+	if card.image != nil && card.image.layout == ImageTop {
+		@cardImage(*card.image, card.centered)
 	}
 	<div
 		class={ "card-body",
 	templ.KV("items-center text-center", card.centered) }
-		if card.Body.attributes != nil {
-			{ card.Body.attributes... }
+		if body.attributes != nil {
+			{ body.attributes... }
 		}
 	>
-		if len(card.TopRightActions) >0 {
-			@cardActions("justify-end", card.TopRightActions...)
+		if body.TopLeft != nil {
+			<div class={ "card-actions", "justify-start" }>
+				@body.TopLeft
+			</div>
 		}
-		@Article() {
-			if card.Title != nil {
-				@cardTitle(card.Title)
-			}
-			if card.Body.content != nil {
-				@card.Body.content
-			}
+		if body.TopRight != nil {
+			<div class={ "card-actions", "justify-end" }>
+				@body.TopRight
+			</div>
 		}
-		if len(card.BottomRightActions) >0 {
-			@cardActions("justify-end", card.BottomRightActions...)
+		if card.Title != nil {
+			@cardTitle(card.Title)
 		}
-		if card.Badges != nil {
-			<div class="card-actions justify-end">
-				for _, badge := range card.Badges {
-					@badge
-				}
+		if body.Content != nil {
+			@body.Content
+		}
+		if body.BottomLeft != nil {
+			<div class={ "card-actions", "justify-start" }>
+				@body.BottomLeft
+			</div>
+		}
+		if body.BottomRight != nil {
+			<div class={ "card-actions", "justify-end" }>
+				@body.BottomRight
 			</div>
 		}
 	</div>
+	if card.image != nil && card.image.layout == ImageBottom {
+		@cardImage(*card.image, card.centered)
+	}
 }
 
 // cardImage will render the Card image, if available.
-templ cardImage(image templ.Component, centered bool) {
+templ cardImage(image cardImageProps, centered bool) {
 	<figure
 		if centered {
 			class="px-10 pt-10"
 		}
 	>
-		@image
+		@image.image
 	</figure>
 }
 

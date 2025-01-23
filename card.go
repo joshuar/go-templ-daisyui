@@ -9,13 +9,21 @@ import (
 
 const (
 	CardLayoutNormal         CardLayout = iota // card-normal
-	CardLayoutCompact                          // card-compact
 	CardLayoutSide                             // card-side
 	CardLayoutSideResponsive                   // lg:card-side
 )
 
+const (
+	ImageTop ImageLayout = iota
+	ImageBottom
+	ImageOverlay
+)
+
 // CardLayout is used to define the card style.
-type CardLayout int
+type (
+	CardLayout  int
+	ImageLayout int
+)
 
 // cardTitleProps defines the properties for a Card title.
 type cardTitleProps struct {
@@ -24,64 +32,80 @@ type cardTitleProps struct {
 	badges []templ.Component
 }
 
-type cardBodyProps struct {
-	content templ.Component
+type cardImageProps struct {
+	image  templ.Component
+	layout ImageLayout
+}
+
+type CardBodyProps struct {
+	Content templ.Component
+	borderContent
 	componentAttributes
+}
+
+// WithTopRightActions defines the actions to position at the top-right of the
+// Card body.
+func WithTopRightActions(actions ...templ.Component) Option[*CardBodyProps] {
+	return func(cardBody *CardBodyProps) *CardBodyProps {
+		cardBody.SetBorderContent(TopRight, ComponentArray(actions...))
+		return cardBody
+	}
+}
+
+// WithBottomRightActions defines the actions to position at the bottom-right of the
+// Card body.
+func WithBottomRightActions(actions ...templ.Component) Option[*CardBodyProps] {
+	return func(cardBody *CardBodyProps) *CardBodyProps {
+		cardBody.SetBorderContent(BottomRight, ComponentArray(actions...))
+		return cardBody
+	}
+}
+
+// WithTopLeftActions defines the actions to position at the top-left of the
+// Card body.
+func WithTopLeftActions(actions ...templ.Component) Option[*CardBodyProps] {
+	return func(cardBody *CardBodyProps) *CardBodyProps {
+		cardBody.SetBorderContent(TopLeft, ComponentArray(actions...))
+		return cardBody
+	}
+}
+
+// WithBottomLeftActions defines the actions to position at the bottom-left of the
+// Card body.
+func WithBottomLeftActions(actions ...templ.Component) Option[*CardBodyProps] {
+	return func(cardBody *CardBodyProps) *CardBodyProps {
+		cardBody.SetBorderContent(BottomLeft, ComponentArray(actions...))
+		return cardBody
+	}
 }
 
 // CardProps represents the properties for a Card.
 type CardProps struct {
-	Image     templ.Component
-	border    bool
-	layout    CardLayout
-	fullImage bool
-	centered  bool
+	border   bool
+	layout   CardLayout
+	image    *cardImageProps
+	centered bool
+	compact  bool
 	componentAttributes
-	componentID
+	htmlAttrID
 	modifierShadow
 	modifierGlass
 	modifierBaseColor
-	TopRightActions    []templ.Component
-	BottomRightActions []templ.Component
-	Badges             []templ.Component
-	Title              *cardTitleProps
-	Body               cardBodyProps
+	Title *cardTitleProps
+	Body  *CardBodyProps
 }
 
-// WithBody sets the container for card content.
-func WithBody(content templ.Component, attributes templ.Attributes) Option[*CardProps] {
+// WithBody defines the content and options for the Card body.
+func WithBody(content templ.Component, bodyOptions ...Option[*CardBodyProps]) Option[*CardProps] {
 	return func(card *CardProps) *CardProps {
-		if content != nil {
-			card.Body = cardBodyProps{
-				content: content,
-			}
-			card.Body.AddAttributes(attributes)
+		card.Body = &CardBodyProps{
+			Content: content,
 		}
 
-		return card
-	}
-}
+		for _, option := range bodyOptions {
+			card.Body = option(card.Body)
+		}
 
-// WithTopActions defines the actions to be placed on the top-right of the card.
-func WithTopRightActions(actions ...templ.Component) Option[*CardProps] {
-	return func(card *CardProps) *CardProps {
-		card.TopRightActions = append(card.TopRightActions, actions...)
-		return card
-	}
-}
-
-// WithTopActions defines the actions to be placed on the top-right of the card.
-func WithBottomRightActions(actions ...templ.Component) Option[*CardProps] {
-	return func(card *CardProps) *CardProps {
-		card.BottomRightActions = append(card.BottomRightActions, actions...)
-		return card
-	}
-}
-
-// WithBadges adds the provided list of badges to the Card.
-func WithBadges(badges ...templ.Component) Option[*CardProps] {
-	return func(card *CardProps) *CardProps {
-		card.Badges = append(card.Badges, badges...)
 		return card
 	}
 }
@@ -103,17 +127,13 @@ func WithTitle(title string, size HeaderSize, badges ...templ.Component) Option[
 }
 
 // WithImage sets the figure displayed in the card body.
-func WithImage(url string, options ...Option[*ImageProps]) Option[*CardProps] {
+func WithImage(url string, layout ImageLayout, options ...Option[*ImageProps]) Option[*CardProps] {
 	return func(card *CardProps) *CardProps {
-		card.Image = Image(url, options...)
-		return card
-	}
-}
+		card.image = &cardImageProps{
+			image:  Image(url, options...),
+			layout: layout,
+		}
 
-// WithFullImage sets the image as the card background.
-func WithFullImage() Option[*CardProps] {
-	return func(card *CardProps) *CardProps {
-		card.fullImage = true
 		return card
 	}
 }
@@ -151,6 +171,14 @@ func WithCardShadow(size ResponsiveSize) Option[*CardProps] {
 	}
 }
 
+// WithCompactCardBody reduces padding in the card body.
+func WithCompactCardBody() Option[*CardProps] {
+	return func(card *CardProps) *CardProps {
+		card.compact = true
+		return card
+	}
+}
+
 // FromCardProps will set an existing CardProps as the Card properties. This is
 // useful when you have built a reusable card with BuildCard and want to render
 // it. Pass this option to Card with the CardProps to render.
@@ -162,7 +190,9 @@ func FromCardProps(props *CardProps) Option[*CardProps] {
 
 // BuildCard creates a CardProps with the given options.
 func BuildCard(options ...Option[*CardProps]) *CardProps {
-	card := &CardProps{}
+	card := &CardProps{
+		Body: &CardBodyProps{},
+	}
 
 	for _, option := range options {
 		card = option(card)

@@ -7,7 +7,7 @@ import "github.com/a-h/templ"
 
 // ModalProps represents the properties for a DaisyUI Modal component.
 type ModalProps struct {
-	componentID
+	htmlAttrID
 	closeButton   templ.Component
 	closeOutside  bool
 	openInitially bool

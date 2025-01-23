@@ -4,64 +4,13 @@
 package components
 
 import (
+	"log/slog"
+
 	"github.com/a-h/templ"
 )
 
 // Option represents a generic option that can be applied to a component.
 type Option[T any] func(T) T
-
-// componentID is an inheritable struct for components that can have an id
-// attribute.
-type componentID struct {
-	id string
-}
-
-func (c *componentID) SetID(id string) {
-	c.id = id
-}
-
-func (c *componentID) ID() string {
-	return c.id
-}
-
-type customID[T any] interface {
-	SetID(id string)
-}
-
-// WithID allows setting an id attribute on a component.
-func WithID[T customID[T]](id string) Option[T] {
-	return func(c T) T {
-		c.SetID(id)
-		return c
-	}
-}
-
-// componentID is an inheritable struct for components that can have an id
-// attribute.
-type componentValue struct {
-	value string
-}
-
-func (c *componentValue) SetValue(value string) {
-	c.value = value
-}
-
-func (c *componentValue) Value() string {
-	return c.value
-}
-
-type customValue[T any] interface {
-	SetValue(value string)
-	Value() string
-}
-
-// WithValue allows setting an value on a component.
-func WithValue[T customValue[T]](value string) Option[T] {
-	return func(c T) T {
-		c.SetValue(value)
-		return c
-	}
-}
 
 // componentItems is an inheritable struct for components that have "children"
 // items, that could be any other component.
@@ -81,6 +30,50 @@ type customItems[T any] interface {
 func WithItems[T customItems[T]](items ...templ.Component) Option[T] {
 	return func(c T) T {
 		c.SetItems(items...)
+		return c
+	}
+}
+
+const (
+	TopLeft ContentLocation = iota
+	TopRight
+	BottomLeft
+	BottomRight
+)
+
+type ContentLocation int
+
+type borderContent struct {
+	TopRight    templ.Component
+	BottomRight templ.Component
+	TopLeft     templ.Component
+	BottomLeft  templ.Component
+}
+
+func (c *borderContent) SetBorderContent(location ContentLocation, content templ.Component) {
+	switch location {
+	case TopRight:
+		c.TopRight = content
+	case TopLeft:
+		c.TopLeft = content
+	case BottomRight:
+		c.BottomRight = content
+	case BottomLeft:
+		c.BottomLeft = content
+	default:
+		slog.Debug("Unsupported location for border content.",
+			slog.Any("location", location))
+	}
+}
+
+type hasBorderContent[T any] interface {
+	SetBorderContent(location ContentLocation, content templ.Component)
+}
+
+// WithValue allows setting an value on a component.
+func WithBorderContent[T hasBorderContent[T]](location ContentLocation, content templ.Component) Option[T] {
+	return func(c T) T {
+		c.SetBorderContent(location, content)
 		return c
 	}
 }

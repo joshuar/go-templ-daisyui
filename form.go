@@ -7,7 +7,7 @@ import "github.com/a-h/templ"
 
 type FormProps struct {
 	componentAttributes
-	componentID
+	htmlAttrID
 	components []templ.Component
 }
 

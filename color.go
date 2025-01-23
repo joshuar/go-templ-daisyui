@@ -12,8 +12,11 @@ const (
 )
 
 const (
+	// bg-base-100.
 	ColorBgBase100 BaseColor = iota
+	// bg-base-200.
 	ColorBgBase200
+	// bg-base-300.
 	ColorBgBase300
 )
 
