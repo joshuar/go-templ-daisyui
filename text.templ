@@ -1,0 +1,95 @@
+// Copyright 2025 Joshua Rich <joshua.rich@gmail.com>.
+// SPDX-License-Identifier: 	MIT
+
+package components
+
+// Text renders text enclosed in <p></p> tags, with the specified Tailwind text
+// classes applied.
+templ Text(text string, options ...Option[*TextProps]) {
+	{{ textprops := BuildText(options...) }}
+	<p
+		class={ textSizeClass(textprops.size),
+	textWeightClass(textprops.weight),
+	templ.KV("italic",textprops.italic),
+	templ.KV(textStateClass(textprops.stateColor),textprops.StateColorIsSet()),
+		templ.KV(textColorClass(textprops.color),textprops.ColorIsSet()) }
+	>
+		{ text }
+	</p>
+}
+
+// textSizeClass returns the class name for the text size.
+func textSizeClass(size TextSize) string {
+	switch size {
+	case TextSM:
+		return "text-sm"
+	case TextLG:
+		return "text-lg"
+	case TextXL:
+		return "text-xl"
+	case Text2XL:
+		return "text-2xl"
+	case TextBase:
+		fallthrough
+	default:
+		return "text-base"
+	}
+}
+
+// textWeightClass returns the class name for the text weight
+func textWeightClass(weight TextWeight) string {
+	switch weight {
+	case TextThin:
+		return "font-thin"
+	case TextExtralight:
+		return "font-extralight"
+	case TextLight:
+		return "font-light"
+	case TextMedium:
+		return "font-medium"
+	case TextSemibold:
+		return "font-semibold"
+	case TextBold:
+		return "font-bold"
+	case TextBlack:
+		return "font-black"
+	case TextNormal:
+		fallthrough
+	default:
+		return "font-normal"
+	}
+}
+
+// state returns the state modifier for the Text.
+func textStateClass(state StateColor) string {
+	switch state {
+	case StateInfo:
+		return "text-info"
+	case StateSuccess:
+		return "text-success"
+	case StateWarning:
+		return "text-warning"
+	case StateError:
+		return "text-error"
+	default:
+		return "text-neutral"
+	}
+}
+
+// color returns the color modifier for the Badge.
+func textColorClass(color Color) string {
+	switch color {
+	case ColorPrimary:
+		return "text-primary"
+	case ColorSecondary:
+		return "text-secondary"
+	case ColorAccent:
+		return "text-accent"
+	case ColorGhost:
+		return "text-ghost"
+	case ColorNeutral:
+		fallthrough
+	default:
+		return "text-neutral"
+	}
+}
