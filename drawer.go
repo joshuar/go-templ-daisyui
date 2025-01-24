@@ -49,7 +49,7 @@ func WithSideContent(content templ.Component) Option[*DrawerProps] {
 
 // NewCard creates a new card component with the given options. The card can be
 // rendered by calling the Show method.
-func NewDrawer(id string, options ...Option[*DrawerProps]) *DrawerProps {
+func BuildDrawer(id string, options ...Option[*DrawerProps]) *DrawerProps {
 	drawer := &DrawerProps{}
 
 	drawer.id = id

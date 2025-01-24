@@ -1,18 +1,19 @@
 package components
 
 // Show will render the Drawer with its options.
-templ (d *DrawerProps) Show() {
+templ Drawer(id string, options ...Option[*DrawerProps]) {
+	{{ drawer := BuildDrawer(id, options...) }}
 	<div
-		id={ d.id }
-		class={ "drawer", templ.KV(d.setVisibility(), d.visibility > 0), "max-w-full" }
+		id={ drawer.ID() }
+		class={ "drawer", templ.KV(drawer.setVisibility(), drawer.visibility > 0), "max-w-full" }
 	>
-		<input id={ d.id + "_toggle" } type="checkbox" class="drawer-toggle"/>
-		<div id={ d.id + "_content" } class="drawer-content flex flex-col max-w-full">
-			@d.mainContent
+		<input id={ drawer.ID() + "_toggle" } type="checkbox" class="drawer-toggle"/>
+		<div id={ drawer.ID() + "_content" } class="drawer-content flex flex-col max-w-full">
+			@drawer.mainContent
 		</div>
-		<div id={ d.id + "_side" } class="drawer-side">
-			<label for={ d.id + "_toggle" } aria-label="close sidebar" class="drawer-overlay"></label>
-			@d.sideContent
+		<div id={ drawer.ID() + "_side" } class="drawer-side">
+			<label for={ drawer.ID() + "_toggle" } aria-label="close sidebar" class="drawer-overlay"></label>
+			@drawer.sideContent
 		</div>
 	</div>
 }
