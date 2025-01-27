@@ -28,6 +28,10 @@ func (m *modifierZIndex) SetZIndex(index ZIndex, negative bool) {
 	m.negative = negative
 }
 
+func (m *modifierZIndex) ZIndexIsSet() bool {
+	return m.zindex > 0
+}
+
 type customZIndex[T any] interface {
 	SetZIndex(index ZIndex, negative bool)
 }
