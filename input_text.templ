@@ -78,9 +78,9 @@ templ (input TextInputProps) input() {
 		if input.PlaceholderIsSet() {
 			placeholder={ input.placeholderText }
 		}
-		if input.ID() != "" {
-			id={ input.ID() }
-			name={ input.ID() }
+		if input.GetID() != "" {
+			id={ input.GetID() }
+			name={ input.GetID() }
 		}
 		if input.Value() != "" {
 			value={ input.Value() }

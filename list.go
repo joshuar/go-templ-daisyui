@@ -3,36 +3,36 @@
 
 package components
 
-type list struct {
+type List struct {
 	componentAttributes
 	componentItems
 }
 
 type OrderedListProps struct {
-	*list
+	*List
 }
 
 type UnorderedListProps struct {
-	*list
+	*List
 }
 
 //nolint:varnamelen
-func buildOrderedList(options ...Option[*list]) *OrderedListProps {
+func buildOrderedList(options ...Option[*List]) *OrderedListProps {
 	ol := &OrderedListProps{}
 
 	for _, option := range options {
-		ol.list = option(ol.list)
+		ol.List = option(ol.List)
 	}
 
 	return ol
 }
 
 //nolint:varnamelen
-func buildUnorderedList(options ...Option[*list]) *UnorderedListProps {
+func buildUnorderedList(options ...Option[*List]) *UnorderedListProps {
 	ul := &UnorderedListProps{}
 
 	for _, option := range options {
-		ul.list = option(ul.list)
+		ul.List = option(ul.List)
 	}
 
 	return ul

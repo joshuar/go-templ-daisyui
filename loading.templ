@@ -68,7 +68,7 @@ templ Loading(style LoadingStyle, options ...Option[*LoadingProps]) {
 	{{ loading := BuildLoading(style, options...) }}
 	<span
 		if loading.id != "" {
-			id={ loading.ID() }
+			id={ loading.GetID() }
 		}
 		class={ "loading",
 		loading.setStyle(),

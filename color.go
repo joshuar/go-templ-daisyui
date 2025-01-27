@@ -29,7 +29,7 @@ type (
 	//
 	// https://daisyui.com/docs/colors/
 	Color int
-	// BaseColor represents a `bg-base-*` value
+	// BaseColor represents a `bg-base-*` value.
 	BaseColor int
 )
 

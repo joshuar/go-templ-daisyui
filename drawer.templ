@@ -4,15 +4,15 @@ package components
 templ Drawer(id string, options ...Option[*DrawerProps]) {
 	{{ drawer := BuildDrawer(id, options...) }}
 	<div
-		id={ drawer.ID() }
+		id={ drawer.GetID() }
 		class={ "drawer", templ.KV(drawer.setVisibility(), drawer.visibility > 0), "max-w-full" }
 	>
-		<input id={ drawer.ID() + "_toggle" } type="checkbox" class="drawer-toggle"/>
-		<div id={ drawer.ID() + "_content" } class="drawer-content flex flex-col max-w-full">
+		<input id={ drawer.GetID() + "_toggle" } type="checkbox" class="drawer-toggle"/>
+		<div id={ drawer.GetID() + "_content" } class="drawer-content flex flex-col max-w-full">
 			@drawer.mainContent
 		</div>
-		<div id={ drawer.ID() + "_side" } class="drawer-side">
-			<label for={ drawer.ID() + "_toggle" } aria-label="close sidebar" class="drawer-overlay"></label>
+		<div id={ drawer.GetID() + "_side" } class="drawer-side">
+			<label for={ drawer.GetID() + "_toggle" } aria-label="close sidebar" class="drawer-overlay"></label>
 			@drawer.sideContent
 		</div>
 	</div>

@@ -61,3 +61,37 @@ func AsActive[T hasModifierActive[T]]() Option[T] {
 		return c
 	}
 }
+
+// modifierChecked can be inherited by Components that can have a checked state
+// (i.e., toggles, checkboxes...)
+type modifierChecked struct {
+	binaryState
+}
+
+// Check toggles the `checked` modifier of the Component to true (checked).
+func (m *modifierChecked) Check() {
+	m.state = true
+}
+
+// Check toggles the `checked` modifier of the Component to false.
+func (m *modifierChecked) UnCheck() {
+	m.state = false
+}
+
+// IsChecked returns whether the Component is checked (true) or not (false).
+func (m *modifierChecked) IsChecked() bool {
+	return m.state
+}
+
+type hasModifierChecked[T any] interface {
+	Check()
+	UnCheck()
+}
+
+// AsChecked will apply the checked modifier to the Component.
+func AsChecked[T hasModifierChecked[T]]() Option[T] {
+	return func(c T) T {
+		c.Check()
+		return c
+	}
+}
