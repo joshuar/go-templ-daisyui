@@ -1,0 +1,60 @@
+// Copyright 2025 Joshua Rich <joshua.rich@gmail.com>.
+// SPDX-License-Identifier: 	MIT
+
+package components
+
+// Toggle represents a DaisyUI Toggle Component.
+//
+// https://daisyui.com/components/toggle/
+templ Toggle(options ...Option[*ToggleProps]) {
+	{{ toggle := BuildToggle(options...) }}
+	<input
+		type="checkbox"
+		class={ "toggle",
+		templ.KV(toggle.colorClass(), toggle.ColorIsSet()),
+			templ.KV(toggle.sizeClass(),toggle.SizeIsSet()) }
+		disabled?={ toggle.IsDisabled() }
+		{ toggle.ID()... }
+		{ toggle.attributes... }
+	/>
+}
+
+func (t *ToggleProps) sizeClass() string {
+	switch t.size {
+	case XS:
+		return "toggle-xs"
+	case SM:
+		return "toggle-sm"
+	case MD:
+		return "toggle-md"
+	case LG:
+		return "toggle-lg"
+	case XL:
+		return "toggle-xl"
+	default:
+		return "toggle-md"
+	}
+}
+
+func (t *ToggleProps) colorClass() string {
+	color := "toggle-primary"
+
+	switch t.color {
+	case ColorPrimary:
+		color = "toggle-primary"
+	case ColorSecondary:
+		color = "toggle-secondary"
+	case ColorAccent:
+		color = "toggle-accent"
+	case ColorStateInfo:
+		color = "toggle-info"
+	case ColorStateSuccess:
+		color = "toggle-success"
+	case ColorStateWarning:
+		color = "toggle-warning"
+	case ColorStateError:
+		color = "toggle-error"
+	}
+
+	return color
+}
