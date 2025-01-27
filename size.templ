@@ -1,7 +1,5 @@
 package components
 
-import "log/slog"
-
 // setSize will set the fixed/percentage size of a Component.
 func (s *modifierSize) setSize() string {
 	switch s.size {
@@ -106,7 +104,6 @@ func (s *modifierSize) setSize() string {
 	case SizeMax:
 		return "size-max"
 	default:
-		slog.Warn("Unsupported size specified.", slog.Any("size", s.size))
 		return ""
 	}
 }

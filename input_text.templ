@@ -21,24 +21,6 @@ func (i *TextInputProps) sizeModifier() string {
 	}
 }
 
-// state returns the state modifier for the Text Input.
-func (i *TextInputProps) stateColorModifier() string {
-	var state string
-
-	switch i.stateColor {
-	case StateInfo:
-		state = "input-info"
-	case StateSuccess:
-		state = "input-success"
-	case StateWarning:
-		state = "input-warning"
-	case StateError:
-		state = "input-error"
-	}
-
-	return state
-}
-
 // color returns the color modifier for the Text Input.
 func (i *TextInputProps) colorModifier() string {
 	color := "input-neutral"
@@ -54,6 +36,14 @@ func (i *TextInputProps) colorModifier() string {
 		color = "input-neutral"
 	case ColorGhost:
 		color = "input-ghost"
+	case ColorStateInfo:
+		color = "input-info"
+	case ColorStateSuccess:
+		color = "input-success"
+	case ColorStateWarning:
+		color = "input-warning"
+	case ColorStateError:
+		color = "input-error"
 	}
 
 	return color
@@ -98,7 +88,6 @@ templ (input TextInputProps) input() {
 		required?={ input.required }
 		class={ "input",
 		templ.KV("input-bordered"+" "+input.colorModifier(), input.ColorIsSet()),
-		templ.KV("input-bordered"+" "+input.stateColorModifier(),input.StateColorIsSet()),
 			templ.KV(input.sizeModifier(),input.SizeIsSet()),
 			templ.KV("input-ghost", input.GhostIsSet() ),
 		 "w-full max-w-xs grow" }

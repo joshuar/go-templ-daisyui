@@ -11,7 +11,6 @@ templ Text(text string, options ...Option[*TextProps]) {
 		class={ textSizeClass(textprops.size),
 	textWeightClass(textprops.weight),
 	templ.KV("italic",textprops.italic),
-	templ.KV(textStateClass(textprops.stateColor),textprops.StateColorIsSet()),
 		templ.KV(textColorClass(textprops.color),textprops.ColorIsSet()) }
 	>
 		{ text }
@@ -60,22 +59,6 @@ func textWeightClass(weight TextWeight) string {
 	}
 }
 
-// state returns the state modifier for the Text.
-func textStateClass(state StateColor) string {
-	switch state {
-	case StateInfo:
-		return "text-info"
-	case StateSuccess:
-		return "text-success"
-	case StateWarning:
-		return "text-warning"
-	case StateError:
-		return "text-error"
-	default:
-		return "text-neutral"
-	}
-}
-
 // color returns the color modifier for the Badge.
 func textColorClass(color Color) string {
 	switch color {
@@ -89,6 +72,14 @@ func textColorClass(color Color) string {
 		return "text-ghost"
 	case ColorNeutral:
 		fallthrough
+	case ColorStateInfo:
+		return "text-info"
+	case ColorStateSuccess:
+		return "text-success"
+	case ColorStateWarning:
+		return "text-warning"
+	case ColorStateError:
+		return "text-error"
 	default:
 		return "text-neutral"
 	}

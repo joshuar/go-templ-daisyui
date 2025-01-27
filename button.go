@@ -34,7 +34,6 @@ type ButtonProps struct {
 	htmlAttrID
 	componentAttributes
 	modifierColor
-	modifierStateColor
 	modifierResponsiveSize
 	modifierDisabled
 	modifierActive

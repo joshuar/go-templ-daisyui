@@ -39,7 +39,6 @@ type TextProps struct {
 	weight TextWeight
 	italic bool
 	modifierColor
-	modifierStateColor
 }
 
 // WithTextSize option sets the font size.

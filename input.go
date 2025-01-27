@@ -13,7 +13,6 @@ type BaseInputProps struct {
 
 type modifierBordered struct {
 	modifierColor
-	modifierStateColor
 	bordered bool
 }
 

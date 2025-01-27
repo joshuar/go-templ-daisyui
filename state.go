@@ -12,45 +12,6 @@ func (m *binaryState) Toggle() {
 	m.state = !m.state
 }
 
-const (
-	StateInfo StateColor = iota + 1
-	StateSuccess
-	StateWarning
-	StateError
-)
-
-type StateColor int
-
-// modifierStateColor can be embedded into components to allow setting the state
-// color of the component. The component will need to handle rendering with the
-// appropriate color itself.
-type modifierStateColor struct {
-	stateColor        StateColor
-	stateColorOutline bool
-}
-
-func (m *modifierStateColor) SetStateColor(state StateColor, outline bool) {
-	m.stateColor = state
-	m.stateColorOutline = outline
-}
-
-// StateIsSet will return true if the Component has a size.
-func (m *modifierStateColor) StateColorIsSet() bool {
-	return m.stateColor > 0
-}
-
-type hasModifierStateColor[T any] interface {
-	SetStateColor(state StateColor, outline bool)
-}
-
-// WithStateColor styles the component with the given color state and optionally outlined.
-func WithStateColor[T hasModifierStateColor[T]](state StateColor, outline bool) Option[T] {
-	return func(c T) T {
-		c.SetStateColor(state, outline)
-		return c
-	}
-}
-
 type modifierDisabled struct {
 	binaryState
 }

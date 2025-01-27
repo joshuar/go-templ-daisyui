@@ -14,7 +14,6 @@ templ Button(options ...Option[*ButtonProps]) {
 			templ.KV("glass", btn.UseGlass()),
 			templ.KV("btn-ghost", btn.GhostIsSet()),
 			templ.KV(btn.setColor(), btn.ColorIsSet()),
-			templ.KV(btn.setStateColor(), btn.StateColorIsSet()),
 			templ.KV(btn.setShape(), btn.HasShape()),
 			templ.KV(btn.setSize(), btn.SizeIsSet()),
 		}
@@ -23,28 +22,6 @@ templ Button(options ...Option[*ButtonProps]) {
 	>
 		@btn.content.value
 	</button>
-}
-
-// setState sets a state modifier of the Button.
-func (b ButtonProps) setStateColor() string {
-	var state string
-
-	switch b.stateColor {
-	case StateInfo:
-		state = "btn-info"
-	case StateSuccess:
-		state = "btn-success"
-	case StateWarning:
-		state = "btn-warning"
-	case StateError:
-		state = "btn-error"
-	}
-
-	if b.stateColorOutline {
-		state = state + " btn-outline"
-	}
-
-	return state
 }
 
 // setColor sets a color modifier of the Button.
@@ -62,6 +39,14 @@ func (b ButtonProps) setColor() string {
 		color = "btn-neutral"
 	case ColorGhost:
 		color = "btn-ghost"
+	case ColorStateInfo:
+		color = "btn-info"
+	case ColorStateSuccess:
+		color = "btn-success"
+	case ColorStateWarning:
+		color = "btn-warning"
+	case ColorStateError:
+		color = "btn-error"
 	}
 
 	// Neutral and Ghost colors don't have an outline variant.

@@ -9,6 +9,10 @@ const (
 	ColorSecondary
 	ColorAccent
 	ColorGhost
+	ColorStateInfo
+	ColorStateSuccess
+	ColorStateWarning
+	ColorStateError
 )
 
 const (
@@ -20,11 +24,14 @@ const (
 	ColorBgBase300
 )
 
-// Color represents a DaisyUI color.
-// https://daisyui.com/docs/colors/
-type Color int
-
-type BaseColor int
+type (
+	// Color represents a DaisyUI color.
+	//
+	// https://daisyui.com/docs/colors/
+	Color int
+	// BaseColor represents a `bg-base-*` value
+	BaseColor int
+)
 
 // modifierColor can be embedded into components to allow setting the color of
 // the component. The component will need to handle rendering with the

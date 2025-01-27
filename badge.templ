@@ -21,28 +21,6 @@ func (b BadgeProps) sizeModifier() string {
 	}
 }
 
-// state returns the state modifier for the Badge.
-func (b BadgeProps) stateModifier() string {
-	var state string
-
-	switch b.stateColor {
-	case StateInfo:
-		state = "badge-info"
-	case StateSuccess:
-		state = "badge-success"
-	case StateWarning:
-		state = "badge-warning"
-	case StateError:
-		state = "badge-error"
-	}
-
-	if b.stateColorOutline {
-		state = state + " badge-outline"
-	}
-
-	return state
-}
-
 // color returns the color modifier for the Badge.
 func (b BadgeProps) colorModifier() string {
 	color := "badge-neutral"
@@ -58,6 +36,14 @@ func (b BadgeProps) colorModifier() string {
 		color = "badge-neutral"
 	case ColorGhost:
 		color = "badge-ghost"
+	case ColorStateInfo:
+		color = "badge-info"
+	case ColorStateSuccess:
+		color = "badge-success"
+	case ColorStateWarning:
+		color = "badge-warning"
+	case ColorStateError:
+		color = "badge-error"
 	}
 
 	// Neutral and Ghost colors don't have an outline variant.
@@ -77,7 +63,6 @@ templ Badge(options ...Option[*BadgeProps]) {
 		class={ "badge",
 	templ.KV("indicator-item",badge.indicator),
 	templ.KV(badge.sizeModifier(),badge.SizeIsSet()),
-	templ.KV(badge.stateModifier(),badge.StateColorIsSet()),
 	templ.KV(badge.colorModifier(),badge.ColorIsSet()) }
 	>
 		if badge.desc != "" {
