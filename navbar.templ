@@ -1,0 +1,49 @@
+// Copyright 2025 Joshua Rich <joshua.rich@gmail.com>.
+// SPDX-License-Identifier: 	MIT
+
+package components
+
+// NavBar represents a DaisyUI NavBar Component.
+//
+// https://daisyui.com/components/navbar/
+templ NavBar(options ...Option[*NavBarProps]) {
+	{{ navbar := BuildNavBar(options...) }}
+	<div
+		class={ "navbar",
+        navbar.setBaseColor(),
+            templ.KV(navbar.setZIndex(),navbar.ZIndexIsSet()),
+            templ.KV(navbar.setPosition(),navbar.PositionIsSet()) }
+		{ navbar.ID()... }
+	>
+		// Display NavBar components (if defined).
+		@navbar.Start()
+		@navbar.Center()
+		@navbar.End()
+		// Support displaying custom NavBar content.
+		{ children... }
+	</div>
+}
+
+templ (n *NavBarProps) Start() {
+	if n.start != nil {
+		<div class="navbar-start">
+			@n.start
+		</div>
+	}
+}
+
+templ (n *NavBarProps) Center() {
+	if n.center != nil {
+		<div class="navbar-center">
+			@n.center
+		</div>
+	}
+}
+
+templ (n *NavBarProps) End() {
+	if n.end != nil {
+		<div class="navbar-end">
+			@n.end
+		</div>
+	}
+}
