@@ -5,11 +5,20 @@ package components
 
 // ImageProps represents the properties for an image.
 type ImageProps struct {
-	url string
-	alt string
+	url  string
+	alt  string
+	lazy bool
 	modifierMask
 	modifierSize
 	modifierObjectFit
+}
+
+// WithLazyLoading will add the `loading="lazy"` attribute to the image.
+func WithLazyLoading() Option[*ImageProps] {
+	return func(image *ImageProps) *ImageProps {
+		image.lazy = true
+		return image
+	}
 }
 
 // WithAltText sets the alt text to be displayed for the image.

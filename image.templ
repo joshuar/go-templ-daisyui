@@ -8,6 +8,9 @@ package components
 templ Image(url string, options ...Option[*ImageProps]) {
 	{{ image := BuildImage(url, options...) }}
 	<img
+		if image.lazy {
+			loading="lazy"
+		}
 		class={ templ.KV(image.setSize(), image.SizeIsSet()),
 		templ.KV(image.setMask(), image.MaskIsSet()),
 			templ.KV(image.setFit(), image.ObjectFitIsSet()) }
