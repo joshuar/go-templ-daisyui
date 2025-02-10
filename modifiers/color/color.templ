@@ -1,0 +1,50 @@
+// Copyright 2025 Joshua Rich <joshua.rich@gmail.com>.
+// SPDX-License-Identifier: 	AGPL-3.0-or-later
+
+package color
+
+import "github.com/joshuar/go-templ-daisyui/modifiers/state"
+
+// ThemeColor returns the theme color class. It can be used where no
+// class-specific value is required.
+func (m *Colors) ThemeColor() string {
+	var themeColor string
+
+	switch m.GetColor() {
+	case Neutral:
+		themeColor = "neutral"
+	case Primary:
+		themeColor = "primary"
+	case Secondary:
+		themeColor = "secondary"
+	case Accent:
+		themeColor = "accent"
+	case Ghost:
+		themeColor = "ghost"
+	}
+
+	return themeColor
+}
+
+// StateColor returns the state color class. It can be used where no
+// class-specific value is required.
+func (m *Colors) StateColor() string {
+	var stateColor string
+
+	switch m.GetState() {
+	case state.Info:
+		stateColor = "info"
+	case state.Success:
+		stateColor = "sucess"
+	case state.Warning:
+		stateColor = "warning"
+	case state.Error:
+		stateColor = "error"
+	}
+
+	return stateColor
+}
+
+// noop function so that templ generation doesn't report errors.
+templ colorNOOP() {
+}

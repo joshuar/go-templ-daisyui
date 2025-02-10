@@ -14,7 +14,7 @@ type drawerContent struct {
 }
 
 type DrawerProps struct {
-	htmlAttrID
+	HtmlAttrID
 	visibility ResponsiveSize
 	drawerSide
 	drawerContent

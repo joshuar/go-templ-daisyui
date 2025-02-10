@@ -1,0 +1,75 @@
+// Copyright 2025 Joshua Rich <joshua.rich@gmail.com>.
+// SPDX-License-Identifier: 	AGPL-3.0-or-later
+
+package toggle
+
+import "github.com/joshuar/go-templ-daisyui/modifiers/size"
+import "github.com/joshuar/go-templ-daisyui/modifiers/color"
+import "github.com/joshuar/go-templ-daisyui/modifiers/state"
+
+func (toggle *Props) applySize() string {
+	switch toggle.size {
+	case size.XS:
+		return "toggle-xs"
+	case size.SM:
+		return "toggle-sm"
+	case size.MD:
+		return "toggle-md"
+	case size.LG:
+		return "toggle-lg"
+	case size.XL:
+		return "toggle-xl"
+	default:
+		return "toggle-md"
+	}
+}
+
+// themeColor returns the theme color class of the textinput.
+func (toggle *Props) themeColor() string {
+	themeColor := "toggle-neutral"
+
+	switch toggle.GetColor() {
+	case color.Primary:
+		themeColor = "toggle-primary"
+	case color.Secondary:
+		themeColor = "toggle-secondary"
+	case color.Accent:
+		themeColor = "toggle-accent"
+	case color.Neutral:
+		themeColor = "toggle-neutral"
+	case color.Ghost:
+		themeColor = "toggle-ghost"
+	}
+
+	return themeColor
+}
+
+// stateColor returns the state color class for a Badge.
+func (toggle *Props) stateColor() string {
+	var stateColor string
+
+	switch toggle.GetState() {
+	case state.Info:
+		stateColor = "toggle-info"
+	case state.Success:
+		stateColor = "toggle-sucess"
+	case state.Warning:
+		stateColor = "toggle-warning"
+	case state.Error:
+		stateColor = "toggle-error"
+	}
+
+	return stateColor
+}
+
+templ (toggle *Props) Show() {
+	<toggle
+		type="checkbox"
+		class={ "toggle",
+		templ.KV(toggle.themeColor(), toggle.ColorIsSet()),
+		templ.KV(toggle.stateColor(), toggle.StateIsSet()),
+		templ.KV(toggle.applySize(),toggle.size.Valid()) }
+		disabled?={ toggle.disabled }
+		{ toggle.ShowAttributes()... }
+	></toggle>
+}

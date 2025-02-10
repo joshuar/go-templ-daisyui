@@ -1,0 +1,91 @@
+// Copyright 2024 Joshua Rich <joshua.rich@gmail.com>.
+// SPDX-License-Identifier: 	AGPL-3.0-or-later
+
+package badge
+
+import (
+	"github.com/joshuar/go-templ-daisyui/modifiers/color"
+	"github.com/joshuar/go-templ-daisyui/modifiers/size"
+	"github.com/joshuar/go-templ-daisyui/modifiers/state"
+	"strings"
+)
+
+templ (badge *Props) Show(classes ...string) {
+	<span
+		class={
+			"badge",
+			templ.KV(badge.applySize(), badge.size.Valid()),
+			templ.KV(badge.themeColor(), badge.ColorIsSet()),
+			templ.KV(badge.stateColor(), badge.StateIsSet()),
+			strings.Join(classes, " "),
+		}
+	>
+		if badge.text != "" {
+			{ badge.text }
+		}
+	</span>
+}
+
+// size returns the size class for a Badge.
+func (badge *Props) applySize() string {
+	switch badge.size {
+	case size.XS:
+		return "badge-xs"
+	case size.SM:
+		return "badge-sm"
+	case size.MD:
+		return "badge-md"
+	case size.LG:
+		return "badge-lg"
+	case size.XL:
+		return "badge-xl"
+	default:
+		return "badge-md"
+	}
+}
+
+// themeColor returns the theme color class for a Badge.
+func (badge *Props) themeColor() string {
+	var themeColor string
+
+	switch badge.GetColor() {
+	case color.Neutral:
+		themeColor = "badge-neutral"
+	case color.Primary:
+		themeColor = "badge-primary"
+	case color.Secondary:
+		themeColor = "badge-secondary"
+	case color.Accent:
+		themeColor = "badge-accent"
+	case color.Ghost:
+		themeColor = "badge-ghost"
+	}
+
+	if badge.ColorOutline() {
+		themeColor = themeColor + " badge-outline"
+	}
+
+	return themeColor
+}
+
+// stateColor returns the state color class for a Badge.
+func (badge *Props) stateColor() string {
+	var stateColor string
+
+	switch badge.GetState() {
+	case state.Info:
+		stateColor = "badge-info"
+	case state.Success:
+		stateColor = "badge-sucess"
+	case state.Warning:
+		stateColor = "badge-warning"
+	case state.Error:
+		stateColor = "badge-error"
+	}
+
+	if badge.StateOutline() {
+		stateColor = stateColor + " badge-outline"
+	}
+
+	return stateColor
+}

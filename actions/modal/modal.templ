@@ -1,0 +1,35 @@
+// Copyright 2025 Joshua Rich <joshua.rich@gmail.com>.
+// SPDX-License-Identifier: 	AGPL-3.0-or-later
+
+package modal
+
+// Modal represents a DaisyUI Modal Component.
+templ (modal *Props) Show() {
+	<dialog
+		class={
+			"modal",
+			templ.KV("modal-open", modal.openInitially),
+		}
+		{ modal.ShowAttributes()... }
+	>
+		<div class="modal-box">
+			if modal.closeButton != nil {
+				<div class="absolute right-2 top-2 p-2">
+					@modal.closeButton
+				</div>
+			}
+			{ children... }
+		</div>
+		if modal.closeOutside {
+			// <form class="modal-backdrop" _="on click trigger closeModal"><button>close</button></form>
+			// _={ "on click or keyup[key=='Esc'] take .modal-open from #" + modal.id + " wait 200ms then remove #" + modal.id }
+			<form
+				method="dialog"
+				class="modal-backdrop"
+				_="on click trigger closeModal"
+			>
+				<button>close</button>
+			</form>
+		}
+	</dialog>
+}

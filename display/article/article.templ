@@ -1,0 +1,33 @@
+// Copyright 2025 Joshua Rich <joshua.rich@gmail.com>.
+// SPDX-License-Identifier: 	AGPL-3.0-or-later
+
+package article
+
+func (article *Props) setGrayscale() string {
+	switch article.grayscale {
+	case Gray:
+		return "prose-gray"
+	case Slate:
+		return "prose-slate"
+	case Zinc:
+		return "prose-zinc"
+	case Stone:
+		return "prose-stone"
+	default:
+		return "prose-neutral"
+	}
+}
+
+// Article represents an article component, using Tailwind's typography plugin
+// and "prose" class.
+//
+// https://daisyui.com/docs/layout-and-typography/#-1
+templ (article *Props) Show() {
+	<article
+		class={ "prose",
+	"dark:prose-invert",
+	templ.KV(article.setGrayscale(),article.grayscale > 0) }
+	>
+		{ children... }
+	</article>
+}

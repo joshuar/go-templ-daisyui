@@ -1,0 +1,80 @@
+// Copyright 2025 Joshua Rich <joshua.rich@gmail.com>.
+// SPDX-License-Identifier: 	AGPL-3.0-or-later
+
+package textinput
+
+import "strings"
+import "github.com/joshuar/go-templ-daisyui/modifiers/size"
+import "github.com/joshuar/go-templ-daisyui/modifiers/color"
+import "github.com/joshuar/go-templ-daisyui/modifiers/state"
+
+func (input *Props) applySize() string {
+	switch input.size {
+	case size.XS:
+		return "input-xs"
+	case size.SM:
+		return "input-sm"
+	case size.MD:
+		return "input-md"
+	case size.LG:
+		return "input-lg"
+	case size.XL:
+		return "input-xl"
+	default:
+		return "input-md"
+	}
+}
+
+// themeColor returns the theme color class of the textinput.
+func (input *Props) applyThemeColor() string {
+	themeColor := "input-neutral"
+
+	switch input.GetColor() {
+	case color.Primary:
+		themeColor = "input-primary"
+	case color.Secondary:
+		themeColor = "input-secondary"
+	case color.Accent:
+		themeColor = "input-accent"
+	case color.Neutral:
+		themeColor = "input-neutral"
+	case color.Ghost:
+		themeColor = "input-ghost"
+	}
+
+	return themeColor
+}
+
+// stateColor returns the state color class for a Badge.
+func (input *Props) applyStateColor() string {
+	var stateColor string
+
+	switch input.GetState() {
+	case state.Info:
+		stateColor = "input-info"
+	case state.Success:
+		stateColor = "input-sucess"
+	case state.Warning:
+		stateColor = "input-warning"
+	case state.Error:
+		stateColor = "input-error"
+	}
+
+	return stateColor
+}
+
+templ (input *Props) Show(classes ...string) {
+	<input
+		class={
+			"input",
+			templ.KV("input-bordered", input.bordered),
+			templ.KV(input.applySize(), input.size.Valid()),
+			templ.KV(input.applyStateColor(), input.StateIsSet()),
+			templ.KV(input.applyThemeColor(), input.ColorIsSet()),
+			templ.KV(strings.Join(classes, " "), len(classes) > 0),
+		}
+		required?={ input.required }
+		readonly?={ input.readonly }
+		{ input.ShowAttributes()... }
+	/>
+}

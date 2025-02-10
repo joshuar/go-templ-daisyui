@@ -21,7 +21,7 @@ type LoadingStyle int
 type LoadingProps struct {
 	style         LoadingStyle
 	htmxIndicator bool
-	htmlAttrID
+	HtmlAttrID
 	componentAttributes
 	modifierResponsiveSize
 	modifierColor

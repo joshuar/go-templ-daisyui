@@ -6,7 +6,7 @@ package components
 type BaseInputProps struct {
 	modifierResponsiveSize
 	componentAttributes
-	htmlAttrID
+	HtmlAttrID
 	htmlAttrValue
 	htmlAttrTabIndex
 }

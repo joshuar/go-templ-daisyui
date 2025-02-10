@@ -8,6 +8,11 @@ require (
 )
 
 require (
+	github.com/fogfish/golem/hseq v1.3.0 // indirect
+	github.com/fogfish/golem/optics v0.14.0 // indirect
+)
+
+require (
 	github.com/PuerkitoBio/goquery v1.10.1 // indirect
 	github.com/a-h/parse v0.0.0-20240121214402-3caf7543159a // indirect
 	github.com/a-h/protocol v0.0.0-20240704131721-1e461c188041 // indirect
@@ -16,6 +21,7 @@ require (
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
 	github.com/cli/browser v1.3.0 // indirect
 	github.com/fatih/color v1.16.0 // indirect
+	github.com/fogfish/opts v0.0.5
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect

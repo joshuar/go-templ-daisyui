@@ -1,0 +1,112 @@
+// Copyright 2025 Joshua Rich <joshua.rich@gmail.com>.
+// SPDX-License-Identifier: 	AGPL-3.0-or-later
+
+package button
+
+import (
+	"github.com/joshuar/go-templ-daisyui/modifiers/color"
+	"github.com/joshuar/go-templ-daisyui/modifiers/size"
+	"github.com/joshuar/go-templ-daisyui/modifiers/state"
+	"strings"
+)
+
+// shape sets the shape of the Button.
+func (btn *Props) setShape() string {
+	shape := ""
+	switch btn.shape {
+	case Circle:
+		shape = "btn-circle"
+	case Square:
+		shape = "btn-square"
+	case Wide:
+		shape = "btn-wide"
+	case Block:
+		shape = "btn-block"
+	}
+
+	if btn.shapeOutline {
+		shape = shape + " btn-outline"
+	}
+
+	return shape
+}
+
+// size returns the size class of the button.
+func (btn *Props) applySize() string {
+	switch btn.size {
+	case size.XS:
+		return "btn-xs"
+	case size.SM:
+		return "btn-sm"
+	case size.MD:
+		return "btn-md"
+	case size.LG:
+		return "btn-lg"
+	case size.XL:
+		return "btn-xl"
+	default:
+		return "btn-md"
+	}
+}
+
+// themeColor returns the theme color class of the button.
+func (btn *Props) themeColor() string {
+	themeColor := "btn-neutral"
+
+	switch btn.GetColor() {
+	case color.Primary:
+		themeColor = "btn-primary"
+	case color.Secondary:
+		themeColor = "btn-secondary"
+	case color.Accent:
+		themeColor = "btn-accent"
+	case color.Neutral:
+		themeColor = "btn-neutral"
+	case color.Ghost:
+		themeColor = "btn-ghost"
+	}
+
+	if btn.ColorOutline() {
+		themeColor = themeColor + " btn-outline"
+	}
+
+	return themeColor
+}
+
+// stateColor returns the state color class for a Badge.
+func (btn *Props) stateColor() string {
+	var stateColor string
+
+	switch btn.GetState() {
+	case state.Info:
+		stateColor = "btn-info"
+	case state.Success:
+		stateColor = "btn-sucess"
+	case state.Warning:
+		stateColor = "btn-warning"
+	case state.Error:
+		stateColor = "btn-error"
+	}
+
+	if btn.StateOutline() {
+		stateColor = stateColor + " btn-outline"
+	}
+
+	return stateColor
+}
+
+templ (btn *Props) Show(classes ...string) {
+	<button
+		class={ "btn",
+            templ.KV("no-animation", btn.noClickAnimation),
+            templ.KV(btn.setShape(), btn.shape > 0),
+			templ.KV(btn.applySize(),btn.size.Valid()),
+			templ.KV(btn.themeColor(),btn.ColorIsSet()),
+			templ.KV(btn.stateColor(),btn.StateIsSet()),
+            templ.KV(strings.Join(classes," "),len(classes) > 0) }
+		{ btn.ShowAttributes()... }
+		autofocus?={ btn.autofocus }
+	>
+		@btn.content
+	</button>
+}

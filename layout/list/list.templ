@@ -1,0 +1,28 @@
+// Copyright 2025 Joshua Rich <joshua.rich@gmail.com>.
+// SPDX-License-Identifier: 	AGPL-3.0-or-later
+
+package list
+
+templ (ul *UnorderedListProps) Show(items ...templ.Component) {
+	<ul
+		{ ul.list.ShowAttributes()... }
+	>
+		for _, item := range items {
+			<li>
+				@item
+			</li>
+		}
+	</ul>
+}
+
+templ (ol *OrderedListProps) Show(items ...templ.Component) {
+	<ul
+		{ ol.list.ShowAttributes()... }
+	>
+		for _, item := range items {
+			<li>
+				@item
+			</li>
+		}
+	</ul>
+}

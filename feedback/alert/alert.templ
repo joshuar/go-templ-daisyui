@@ -1,0 +1,54 @@
+// Copyright 2025 Joshua Rich <joshua.rich@gmail.com>.
+// SPDX-License-Identifier: 	AGPL-3.0-or-later
+
+package alert
+
+import "github.com/joshuar/go-templ-daisyui/display/icon"
+
+templ (alert *Props) Alert() {
+	<div
+		role="alert"
+		class="alert"
+		{ alert.ShowAttributes()... }
+	>
+		@icon.BuildInfoIcon().Show()
+		<span>{ alert.text }</span>
+		{ children... }
+	</div>
+}
+
+templ (alert *Props) Success() {
+	<div
+		role="alert"
+		class="alert alert-success"
+		{ alert.ShowAttributes()... }
+	>
+		@icon.BuildSuccessIcon().Show()
+		<span>{ alert.text }</span>
+		{ children... }
+	</div>
+}
+
+templ (alert *Props) Warning() {
+	<div
+		role="alert"
+		class="alert alert-warning"
+		{ alert.ShowAttributes()... }
+	>
+		@icon.BuildWarningIcon().Show()
+		<span>{ alert.text }</span>
+		{ children... }
+	</div>
+}
+
+templ (alert *Props) Error() {
+	<div
+		role="alert"
+		class="alert alert-error"
+		{ alert.ShowAttributes()... }
+	>
+		@icon.BuildErrorIcon().Show()
+		<span>{ alert.text }</span>
+		{ children... }
+	</div>
+}

@@ -24,11 +24,9 @@ func (s *modifierZIndex) setZIndex() string {
 	case Z50:
 		return "z-50"
 	case ZAuto:
-		return "z-auto"
+		fallthrough
 	default:
-		slog.Warn("Unsupported z-index.",
-			slog.Any("value", s.zindex))
-		return ""
+		return "z-auto"
 	}
 }
 

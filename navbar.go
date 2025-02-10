@@ -9,7 +9,7 @@ type NavBarProps struct {
 	modifierZIndex
 	modifierPosition
 	modifierBaseColor
-	htmlAttrID
+	HtmlAttrID
 	start  templ.Component
 	center templ.Component
 	end    templ.Component

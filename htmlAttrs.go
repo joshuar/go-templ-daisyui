@@ -9,32 +9,32 @@ import (
 	"github.com/a-h/templ"
 )
 
-// htmlAttrID is an inheritable struct for components that can have an id
+// HtmlAttrID is an inheritable struct for components that can have an id
 // attribute.
 //
 // https://www.w3schools.com/TAGS/att_global_id.asp
-type htmlAttrID struct {
+type HtmlAttrID struct {
 	id   string
 	name string
 }
 
-func (c *htmlAttrID) SetID(id string) {
+func (c *HtmlAttrID) SetID(id string) {
 	c.id = id
 }
 
-func (c *htmlAttrID) SetName(name string) {
+func (c *HtmlAttrID) SetName(name string) {
 	c.name = name
 }
 
-func (c *htmlAttrID) GetID() string {
+func (c *HtmlAttrID) GetID() string {
 	return c.id
 }
 
-func (c *htmlAttrID) GetName() string {
+func (c *HtmlAttrID) GetName() string {
 	return c.name
 }
 
-func (c *htmlAttrID) ID() templ.Attributes {
+func (c *HtmlAttrID) ID() templ.Attributes {
 	attrs := make(map[string]any)
 	if c.id != "" {
 		attrs["id"] = c.id

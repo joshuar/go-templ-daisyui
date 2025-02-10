@@ -1,0 +1,84 @@
+// Copyright 2025 Joshua Rich <joshua.rich@gmail.com>.
+// SPDX-License-Identifier: 	AGPL-3.0-or-later
+
+package text
+
+// textSizeClass returns the class name for the text size.
+func (text *Props) textSizeClass() string {
+	switch text.size {
+	case SM:
+		return "text-sm"
+	case LG:
+		return "text-lg"
+	case XL:
+		return "text-xl"
+	case XLXL:
+		return "text-2xl"
+	case Base:
+		fallthrough
+	default:
+		return "text-base"
+	}
+}
+
+// textWeightClass returns the class name for the text weight
+func (text *Props) textWeightClass() string {
+	switch text.weight {
+	case Thin:
+		return "font-thin"
+	case Extralight:
+		return "font-extralight"
+	case Light:
+		return "font-light"
+	case Medium:
+		return "font-medium"
+	case Semibold:
+		return "font-semibold"
+	case Bold:
+		return "font-bold"
+	case Black:
+		return "font-black"
+	case Normal:
+		fallthrough
+	default:
+		return "font-normal"
+	}
+}
+
+// // color returns the color modifier for the Badge.
+// func textColorClass(color Color) string {
+// 	switch color {
+// 	case ColorPrimary:
+// 		return "text-primary"
+// 	case ColorSecondary:
+// 		return "text-secondary"
+// 	case ColorAccent:
+// 		return "text-accent"
+// 	case ColorGhost:
+// 		return "text-ghost"
+// 	case ColorNeutral:
+// 		fallthrough
+// 	case ColorStateInfo:
+// 		return "text-info"
+// 	case ColorStateSuccess:
+// 		return "text-success"
+// 	case ColorStateWarning:
+// 		return "text-warning"
+// 	case ColorStateError:
+// 		return "text-error"
+// 	default:
+// 		return "text-neutral"
+// 	}
+// }
+templ (text *Props) Show() {
+	<p
+		class={
+			text.textSizeClass(),
+			text.textWeightClass(),
+			templ.KV("italic", text.italic),
+			// templ.KV(textColorClass(text.color),text.ColorIsSet()) }
+		}
+	>
+		{ text.text }
+	</p>
+}

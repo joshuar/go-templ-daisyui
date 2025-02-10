@@ -1,0 +1,58 @@
+// Copyright 2024 Joshua Rich <joshua.rich@gmail.com>.
+// SPDX-License-Identifier: 	MIT
+
+package mask
+
+// Apply returns the class values for setting the mask.
+func (mask Mask) Apply() string {
+	switch mask {
+	case MaskSquircle:
+		return "mask mask-squircle"
+	case MaskHeart:
+		return "mask mask-heart"
+	case MaskHexagon:
+		return "mask mask-hexagon"
+	case MaskHexagonAlt:
+		return "mask mask-hexagon-2"
+	case MaskDecagon:
+		return "mask mask-decagon"
+	case MaskPentagon:
+		return "mask mask-pentagon"
+	case MaskDiamond:
+		return "mask mask-diamond"
+	case MaskSquare:
+		return "mask mask-square"
+	case MaskCircle:
+		return "mask mask-circle"
+	case MaskParallelogram:
+		return "mask mask-parallelogram"
+	case MaskParallelogramAlt1:
+		return "mask mask-parallelogram-2"
+	case MaskParallelogramAlt2:
+		return "mask mask-parallelogram-3"
+	case MaskParallelogramAlt3:
+		return "mask mask-parallelogram-4"
+	case MaskStar:
+		return "mask mask-star"
+	case MaskStarAlt:
+		return "mask mask-star-2"
+	case MaskTriangle:
+		return "mask mask-triangle"
+	case MaskTriangleAlt1:
+		return "mask mask-triangle-2"
+	case MaskTriangleAlt2:
+		return "mask mask-triangle-3"
+	case MaskTriangleAlt3:
+		return "mask mask-triangle-4"
+	case MaskHalfLeft:
+		return "mask mask-half-1"
+	case MaskHalfRight:
+		return "mask mask-half-2"
+	default:
+		return ""
+	}
+}
+
+// noop function so that templ generation doesn't report errors.
+templ maskNOOP() {
+}

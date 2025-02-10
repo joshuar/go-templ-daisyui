@@ -12,6 +12,8 @@ import (
 // Option represents a generic option that can be applied to a component.
 type Option[T any] func(T) T
 
+type Option2[T any] func(T)
+
 // componentItems is an inheritable struct for components that have "children"
 // items, that could be any other component.
 type componentItems struct {
