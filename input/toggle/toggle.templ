@@ -24,11 +24,11 @@ func (toggle *Props) applySize() string {
 	}
 }
 
-// themeColor returns the theme color class of the textinput.
-func (toggle *Props) themeColor() string {
+// applyThemeColor applies a theme color to the Component.
+func (toggle *Props) applyThemeColor() string {
 	themeColor := "toggle-neutral"
 
-	switch toggle.GetColor() {
+	switch toggle.GetThemeColor() {
 	case color.Primary:
 		themeColor = "toggle-primary"
 	case color.Secondary:
@@ -44,11 +44,11 @@ func (toggle *Props) themeColor() string {
 	return themeColor
 }
 
-// stateColor returns the state color class for a Badge.
-func (toggle *Props) stateColor() string {
+// applyStateColor applies a state color to the Component.
+func (toggle *Props) applyStateColor() string {
 	var stateColor string
 
-	switch toggle.GetState() {
+	switch toggle.GetStateColor() {
 	case state.Info:
 		stateColor = "toggle-info"
 	case state.Success:
@@ -66,8 +66,8 @@ templ (toggle *Props) Show() {
 	<toggle
 		type="checkbox"
 		class={ "toggle",
-		templ.KV(toggle.themeColor(), toggle.ColorIsSet()),
-		templ.KV(toggle.stateColor(), toggle.StateIsSet()),
+		templ.KV(toggle.applyThemeColor(), toggle.ValidThemeColor()),
+		templ.KV(toggle.applyStateColor(), toggle.ValidStateColor()),
 		templ.KV(toggle.applySize(),toggle.size.Valid()) }
 		disabled?={ toggle.disabled }
 		{ toggle.ShowAttributes()... }

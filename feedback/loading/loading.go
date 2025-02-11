@@ -1,10 +1,10 @@
 // Copyright 2025 Joshua Rich <joshua.rich@gmail.com>.
 // SPDX-License-Identifier: 	AGPL-3.0-or-later
 
-// Toggle represents a DaisyUI Toggle Component.
+// Package loading represents a DaisyUI loading style.
 //
-// https://daisyui.com/components/toggle/
-package toggle
+// https://daisyui.com/components/loading/
+package loading
 
 import (
 	"github.com/a-h/templ"
@@ -14,29 +14,46 @@ import (
 	"github.com/joshuar/go-templ-daisyui/modifiers/size"
 )
 
+const (
+	Spinner LoadingStyle = iota
+	Dots
+	Ring
+	Ball
+	Bars
+	Infinity
+)
+
+type LoadingStyle int
+
 type Option components.Option2[*Props]
 
+// Props are the properties of a Loading component.
 type Props struct {
+	style         LoadingStyle
+	htmxIndicator bool
 	*attributes.Attributes
 	size size.ResponsiveSize
 	*color.ThemeColorProps
 	*color.StateColorProps
-	disabled bool
 }
 
-func WithChecked(value bool) Option {
-	return func(p *Props) {
-		if value {
-			p.Checked()
-		}
-
-		p.UnChecked()
+// AsHTMXIndicator adds the "htmx-indicator" class to the Loading component,
+// which will allow HTMX to add styling and control to the component.
+func AsHTMXIndicator() Option {
+	return func(lp *Props) {
+		lp.htmxIndicator = true
 	}
 }
 
-func WithSize(toggleSize size.ResponsiveSize) Option {
+func WithID(id attributes.ID) Option {
 	return func(p *Props) {
-		p.size = toggleSize
+		p.SetID(id)
+	}
+}
+
+func WithExtraAttributes(attrs templ.Attributes) Option {
+	return func(p *Props) {
+		p.AddAttributes(attrs)
 	}
 }
 
@@ -52,40 +69,18 @@ func WithStateColor(stateColor color.StateColor) Option {
 	}
 }
 
-func WithName(name attributes.Name) Option {
-	return func(p *Props) {
-		p.SetName(name)
-	}
-}
-
-func WithID(id attributes.ID) Option {
-	return func(p *Props) {
-		p.SetID(id)
-	}
-}
-
-func WithValue(value attributes.Value) Option {
-	return func(p *Props) {
-		p.SetValue(value)
-	}
-}
-
-func WithExtraAttributes(attrs templ.Attributes) Option {
-	return func(p *Props) {
-		p.AddAttributes(attrs)
-	}
-}
-
-func Build(options ...Option) *Props {
-	toggle := &Props{
+// Build creates a new LoadingProps.
+func Build(style LoadingStyle, options ...Option) *Props {
+	loading := &Props{
+		style:           style,
 		Attributes:      attributes.New(),
 		ThemeColorProps: &color.ThemeColorProps{},
 		StateColorProps: &color.StateColorProps{},
 	}
 
 	for _, option := range options {
-		option(toggle)
+		option(loading)
 	}
 
-	return toggle
+	return loading
 }

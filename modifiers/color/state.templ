@@ -1,0 +1,27 @@
+// Copyright 2025 Joshua Rich <joshua.rich@gmail.com>.
+// SPDX-License-Identifier: 	AGPL-3.0-or-later
+
+package color
+
+import "github.com/joshuar/go-templ-daisyui/modifiers/state"
+
+// ApplyStateColor returns the state color class. It can be used where no
+// class-specific value is required.
+func ApplyStateColor(stateColor StateColor) string {
+	switch stateColor {
+	case state.Info:
+		return "info"
+	case state.Success:
+		return "sucess"
+	case state.Warning:
+		return "warning"
+	case state.Error:
+		return "error"
+	default:
+		return "info"
+	}
+}
+
+// noop function so that templ generation doesn't report errors.
+templ stateNOOP() {
+}

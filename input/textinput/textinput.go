@@ -32,7 +32,8 @@ type Type int
 type Props struct {
 	*attributes.Attributes
 	size size.ResponsiveSize
-	color.Colors
+	*color.ThemeColorProps
+	*color.StateColorProps
 	bordered bool
 	required bool
 	readonly bool
@@ -81,15 +82,15 @@ func WithSize(inputSize size.ResponsiveSize) Option {
 	}
 }
 
-func WithThemeColor(themeColor color.ThemeColor, outline bool) Option {
+func WithThemeColor(themeColor color.ThemeColor) Option {
 	return func(p *Props) {
-		p.SetColor(themeColor, outline)
+		p.ThemeColorProps = color.NewThemeColor(themeColor, false)
 	}
 }
 
-func WithStateColor(stateColor color.StateColor, outline bool) Option {
+func WithStateColor(stateColor color.StateColor) Option {
 	return func(p *Props) {
-		p.SetState(stateColor, outline)
+		p.StateColorProps = color.NewStateColor(stateColor, false)
 	}
 }
 
@@ -119,7 +120,9 @@ func WithExtraAttributes(attrs templ.Attributes) Option {
 
 func Build(options ...Option) *Props {
 	textinput := &Props{
-		Attributes: attributes.New(),
+		Attributes:      attributes.New(),
+		ThemeColorProps: &color.ThemeColorProps{},
+		StateColorProps: &color.StateColorProps{},
 	}
 
 	for _, option := range options {

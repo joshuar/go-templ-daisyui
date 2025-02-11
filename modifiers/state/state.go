@@ -4,12 +4,18 @@
 package state
 
 const (
-	Unset State = iota
+	MinInvalid State = iota
 	Info
 	Success
 	Warning
 	Error
+	MaxInvalid
 )
 
 // State represents a state such as alert, info, warning or error.
 type State int
+
+// Valid returns whether the state is a valid value.
+func (state State) Valid() bool {
+	return state > MinInvalid && state < MaxInvalid
+}

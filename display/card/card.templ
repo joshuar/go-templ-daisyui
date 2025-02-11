@@ -3,155 +3,75 @@
 
 package card
 
-// layoutModifier returns the Card layout modifier value.
-func (c CardProps) layoutModifier() string {
-	switch c.layout {
-	case CardLayoutSide:
-		return "card-side"
-	default:
+import "strings"
+import "github.com/joshuar/go-templ-daisyui/modifiers/shadow"
+
+// applyLayout will apply the specified layout to the Card.
+func (card *Props) applyLayout() string {
+	switch card.layout {
+	case LayoutNormal:
 		return "card-normal"
+	case LayoutSide:
+		return "card-side"
+	case LayoutCompact:
+		return "card-compact"
 	}
+
+	return ""
 }
 
-// Card is a DaisyUI Card component.
-//
-// https://daisyui.com/components/card/
-templ Card(options ...Option[*CardProps]) {
-	{{ card := BuildCard(options...) }}
+// Show will display a Card with the given options.
+templ (card *Props) Show(classes ...string) {
 	<div
 		class={ "card",
-		templ.KV("card-bordered",card.border),
-		templ.KV("glass",card.UseGlass()),
-		templ.KV("image-full",card.image != nil && card.image.layout == ImageOverlay),
-		templ.KV(card.layoutModifier(),card.layout > 0),
-		templ.KV(card.setShadow(),card.shadowSize > 0),
-		templ.KV("card-compact",card.compact),
-		card.setBaseColor() }
-		{ card.Attributes()... }
-		if card.id != "" {
-			id={ card.id }
-		}
+			templ.KV(card.applyLayout(),card.layout > 0),
+			templ.KV("card-bordered",card.border),
+			templ.KV("glass",card.glass),
+			templ.KV("image-full",card.fullImage),
+	card.baseColor.ApplyBaseColor(),
+	templ.KV(shadow.ApplyShadow(card.shadow),card.shadow >0),
+	templ.KV(strings.Join(classes, " "),len(classes) >0) }
+		{ card.ShowAttributes()... }
 	>
-		@cardBody(card)
+		// Show the Card image, if specified.
+		if card.image != nil {
+			if card.centeredContent {
+				<figure class="px-10 pt-10">
+					@card.image.Show("rounded-xl")
+				</figure>
+			}
+		}
+		// Show the Card body, if specified.
+		if card.body != nil {
+			if card.centeredContent {
+				@card.body.Show("items-center text-center")
+			} else {
+				@card.body.Show()
+			}
+		}
 	</div>
 }
 
-templ cardBody(card *CardProps) {
-	{{ body := card.Body }}
-	if card.image != nil && card.image.layout == ImageTop {
-		@cardImage(*card.image, card.centered)
-	}
-	<div
-		class={ "card-body",
-	templ.KV("items-center text-center", card.centered) }
-		if body.attributes != nil {
-			{ body.attributes... }
-		}
-	>
-		if body.TopLeft != nil {
-			<div class={ "card-actions", "justify-start" }>
-				@body.TopLeft
-			</div>
-		}
-		if body.TopRight != nil {
-			<div class={ "card-actions", "justify-end" }>
-				@body.TopRight
-			</div>
-		}
-		if card.Title != nil {
-			@cardTitle(card.Title)
-		}
-		if body.Content != nil {
-			@body.Content
-		}
-		if body.BottomLeft != nil {
-			<div class={ "card-actions", "justify-start" }>
-				@body.BottomLeft
-			</div>
-		}
-		if body.BottomRight != nil {
-			<div class={ "card-actions", "justify-end" }>
-				@body.BottomRight
-			</div>
-		}
-	</div>
-	if card.image != nil && card.image.layout == ImageBottom {
-		@cardImage(*card.image, card.centered)
-	}
-}
-
-// cardImage will render the Card image, if available.
-templ cardImage(image cardImageProps, centered bool) {
-	<figure
-		if centered {
-			class="px-10 pt-10"
-		}
-	>
-		@image.image
-	</figure>
-}
-
-// cardTitle will render the Card title.
-templ cardTitle(props *cardTitleProps) {
-	switch props.size {
-		case H1:
-			<h1 class="card-title">
-				{ props.text }
-				if len(props.badges) > 0 {
-					@cardTitleBadges(props.badges...)
-				}
-			</h1>
-		case H2:
-			<h2 class="card-title text-wrap">
-				{ props.text }
-				if len(props.badges) > 0 {
-					@cardTitleBadges(props.badges...)
-				}
+// Show will display the Card body with the given options.
+templ (body *BodyProps) Show(classes ...string) {
+	<div class={ "card-body", templ.KV(strings.Join(classes, " "),len(classes) >0) }>
+		// Display the Card title, if specified.
+		if body.title != nil {
+			<h2 class="card-title">
+				@body.title
 			</h2>
-		case H3:
-			<h3 class="card-title">
-				{ props.text }
-				if len(props.badges) > 0 {
-					@cardTitleBadges(props.badges...)
+		}
+		// Display the Card body content, if specified.
+		if body.content != nil {
+			@body.content
+		}
+		// Display any specified Card actions.
+		if len(body.actions) >0 {
+			<div class="card-actions justify-end">
+				for _, action := range body.actions {
+					@action
 				}
-			</h3>
-		case H4:
-			<h4 class="card-title">
-				{ props.text }
-				if len(props.badges) > 0 {
-					@cardTitleBadges(props.badges...)
-				}
-			</h4>
-		case H5:
-			<h5 class="card-title">
-				{ props.text }
-				if len(props.badges) > 0 {
-					@cardTitleBadges(props.badges...)
-				}
-			</h5>
-		case H6:
-			<h6 class="card-title">
-				{ props.text }
-				if len(props.badges) > 0 {
-					@cardTitleBadges(props.badges...)
-				}
-			</h6>
-	}
-}
-
-// cardTitleBadges will render a list of badges after the Card title.
-templ cardTitleBadges(badges ...templ.Component) {
-	for _, badge := range badges {
-		@badge
-	}
-}
-
-// cardActions will render a list of actions, justified with the provided justify
-// value.
-templ cardActions(justify string, actions ...templ.Component) {
-	<div class={ "card-actions", justify }>
-		for _, action := range actions {
-			@action
+			</div>
 		}
 	</div>
 }

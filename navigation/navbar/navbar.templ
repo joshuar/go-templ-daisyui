@@ -1,0 +1,45 @@
+// Copyright 2025 Joshua Rich <joshua.rich@gmail.com>.
+// SPDX-License-Identifier: 	AGPL-3.0-or-later
+
+package navbar
+
+// templ.KV(navbar.setZIndex(),navbar.ZIndexIsSet()),
+// templ.KV(navbar.setPosition(),navbar.PositionIsSet()) }
+templ (navbar *Props) Show() {
+	<div
+		class={ "navbar",
+		navbar.baseColor.ApplyBaseColor() }
+		{ navbar.ShowAttributes()... }
+	>
+		// Display NavBar components (if defined).
+		@navbar.Start()
+		@navbar.Center()
+		@navbar.End()
+		// Support displaying custom NavBar content.
+		{ children... }
+	</div>
+}
+
+templ (navbar *Props) Start() {
+	if navbar.start != nil {
+		<div class="navbar-start">
+			@navbar.start
+		</div>
+	}
+}
+
+templ (navbar *Props) Center() {
+	if navbar.center != nil {
+		<div class="navbar-center">
+			@navbar.center
+		</div>
+	}
+}
+
+templ (navbar *Props) End() {
+	if navbar.end != nil {
+		<div class="navbar-end">
+			@navbar.end
+		</div>
+	}
+}

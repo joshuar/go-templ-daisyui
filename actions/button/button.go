@@ -7,7 +7,6 @@ import (
 	"github.com/a-h/templ"
 	components "github.com/joshuar/go-templ-daisyui"
 	"github.com/joshuar/go-templ-daisyui/attributes"
-	"github.com/joshuar/go-templ-daisyui/display/icon"
 	"github.com/joshuar/go-templ-daisyui/modifiers/color"
 	"github.com/joshuar/go-templ-daisyui/modifiers/size"
 )
@@ -36,7 +35,8 @@ type modifierShape struct {
 type Props struct {
 	*attributes.Attributes
 	size size.ResponsiveSize
-	color.Colors
+	*color.ThemeColorProps
+	*color.StateColorProps
 	*modifierShape
 	content          templ.Component
 	noClickAnimation bool
@@ -59,7 +59,7 @@ func AsShape(shape Shape, outline bool) Option {
 // WithContent sets the content for the Button.
 func WithContent(content any) Option {
 	return func(p *Props) {
-		p.content = setContent(content)
+		p.content = components.SetContent(content)
 	}
 }
 
@@ -86,13 +86,13 @@ func WithSize(btnSize size.ResponsiveSize) Option {
 
 func WithThemeColor(themeColor color.ThemeColor, outline bool) Option {
 	return func(p *Props) {
-		p.SetColor(themeColor, outline)
+		p.ThemeColorProps = color.NewThemeColor(themeColor, outline)
 	}
 }
 
 func WithStateColor(stateColor color.StateColor, outline bool) Option {
 	return func(p *Props) {
-		p.SetState(stateColor, outline)
+		p.StateColorProps = color.NewStateColor(stateColor, outline)
 	}
 }
 
@@ -122,8 +122,10 @@ func WithExtraAttributes(attrs templ.Attributes) Option {
 
 func Build(options ...Option) *Props {
 	btn := &Props{
-		Attributes:    attributes.New(),
-		modifierShape: &modifierShape{},
+		Attributes:      attributes.New(),
+		modifierShape:   &modifierShape{},
+		ThemeColorProps: &color.ThemeColorProps{},
+		StateColorProps: &color.StateColorProps{},
 	}
 
 	for _, option := range options {
@@ -131,20 +133,4 @@ func Build(options ...Option) *Props {
 	}
 
 	return btn
-}
-
-// setContent converts the content of any valid type into a templ.Component to
-// be used as the Button content. Invalid types are silently ignored and the
-// function will return nil.
-func setContent(content any) templ.Component {
-	switch value := content.(type) {
-	case string:
-		return templ.Raw(value)
-	case *icon.Props:
-		return value.Show()
-	case templ.Component:
-		return value
-	default:
-		return nil
-	}
 }

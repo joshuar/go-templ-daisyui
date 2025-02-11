@@ -4,8 +4,6 @@
 package components
 
 import (
-	"log/slog"
-
 	"github.com/a-h/templ"
 )
 
@@ -13,6 +11,27 @@ import (
 type Option[T any] func(T) T
 
 type Option2[T any] func(T)
+
+// Component represents any DaisyUI component.
+type Component interface {
+	Show(classes ...string) templ.Component
+}
+
+// setContent converts the content of any valid type into a templ.Component to
+// be used within a Component as its content. Invalid types are silently ignored
+// and the function will return nil.
+func SetContent(content any) templ.Component {
+	switch value := content.(type) {
+	case string:
+		return templ.Raw(value)
+	case Component:
+		return value.Show()
+	case templ.Component:
+		return value
+	default:
+		return nil
+	}
+}
 
 // componentItems is an inheritable struct for components that have "children"
 // items, that could be any other component.
@@ -44,38 +63,3 @@ const (
 )
 
 type ContentLocation int
-
-type borderContent struct {
-	TopRight    templ.Component
-	BottomRight templ.Component
-	TopLeft     templ.Component
-	BottomLeft  templ.Component
-}
-
-func (c *borderContent) SetBorderContent(location ContentLocation, content templ.Component) {
-	switch location {
-	case TopRight:
-		c.TopRight = content
-	case TopLeft:
-		c.TopLeft = content
-	case BottomRight:
-		c.BottomRight = content
-	case BottomLeft:
-		c.BottomLeft = content
-	default:
-		slog.Debug("Unsupported location for border content.",
-			slog.Any("location", location))
-	}
-}
-
-type hasBorderContent[T any] interface {
-	SetBorderContent(location ContentLocation, content templ.Component)
-}
-
-// WithValue allows setting an value on a component.
-func WithBorderContent[T hasBorderContent[T]](location ContentLocation, content templ.Component) Option[T] {
-	return func(c T) T {
-		c.SetBorderContent(location, content)
-		return c
-	}
-}

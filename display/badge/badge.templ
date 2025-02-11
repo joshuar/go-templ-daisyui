@@ -10,22 +10,6 @@ import (
 	"strings"
 )
 
-templ (badge *Props) Show(classes ...string) {
-	<span
-		class={
-			"badge",
-			templ.KV(badge.applySize(), badge.size.Valid()),
-			templ.KV(badge.themeColor(), badge.ColorIsSet()),
-			templ.KV(badge.stateColor(), badge.StateIsSet()),
-			strings.Join(classes, " "),
-		}
-	>
-		if badge.text != "" {
-			{ badge.text }
-		}
-	</span>
-}
-
 // size returns the size class for a Badge.
 func (badge *Props) applySize() string {
 	switch badge.size {
@@ -44,35 +28,35 @@ func (badge *Props) applySize() string {
 	}
 }
 
-// themeColor returns the theme color class for a Badge.
-func (badge *Props) themeColor() string {
-	var themeColor string
+// applyThemeColor applies a theme color to the Component.
+func (badge *Props) applyThemeColor() string {
+	themeColor := "badge-neutral"
 
-	switch badge.GetColor() {
-	case color.Neutral:
-		themeColor = "badge-neutral"
+	switch badge.GetThemeColor() {
 	case color.Primary:
 		themeColor = "badge-primary"
 	case color.Secondary:
 		themeColor = "badge-secondary"
 	case color.Accent:
 		themeColor = "badge-accent"
+	case color.Neutral:
+		themeColor = "badge-neutral"
 	case color.Ghost:
 		themeColor = "badge-ghost"
 	}
 
-	if badge.ColorOutline() {
+	if badge.OutlineTheme() {
 		themeColor = themeColor + " badge-outline"
 	}
 
 	return themeColor
 }
 
-// stateColor returns the state color class for a Badge.
-func (badge *Props) stateColor() string {
+// applyStateColor applies a state color to the Component.
+func (badge *Props) applyStateColor() string {
 	var stateColor string
 
-	switch badge.GetState() {
+	switch badge.GetStateColor() {
 	case state.Info:
 		stateColor = "badge-info"
 	case state.Success:
@@ -83,9 +67,25 @@ func (badge *Props) stateColor() string {
 		stateColor = "badge-error"
 	}
 
-	if badge.StateOutline() {
+	if badge.OutlineState() {
 		stateColor = stateColor + " badge-outline"
 	}
 
 	return stateColor
+}
+
+templ (badge *Props) Show(classes ...string) {
+	<span
+		class={
+			"badge",
+			templ.KV(badge.applySize(), badge.size.Valid()),
+			templ.KV(badge.applyThemeColor(), badge.ValidThemeColor()),
+			templ.KV(badge.applyStateColor(), badge.ValidStateColor()),
+			strings.Join(classes, " "),
+		}
+	>
+		if badge.text != "" {
+			{ badge.text }
+		}
+	</span>
 }

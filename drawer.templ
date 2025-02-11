@@ -5,10 +5,10 @@ templ Drawer(id string, options ...Option[*DrawerProps]) {
 	{{ drawer := BuildDrawer(id, options...) }}
 	<div
 		id={ drawer.GetID() }
-		class={ "drawer", templ.KV(drawer.setVisibility(), drawer.visibility > 0), "max-w-full" }
+		class={ "drawer", templ.KV(drawer.setVisibility(), drawer.visibility > 0) }
 	>
 		<input id={ drawer.GetID() + "_toggle" } type="checkbox" class="drawer-toggle"/>
-		<div id={ drawer.GetID() + "_content" } class="drawer-content flex flex-col max-w-full">
+		<div id={ drawer.GetID() + "_content" } class="drawer-content container mx-auto">
 			@drawer.mainContent
 		</div>
 		<div id={ drawer.GetID() + "_side" } class="drawer-side">

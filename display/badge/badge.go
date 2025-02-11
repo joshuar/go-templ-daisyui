@@ -17,7 +17,8 @@ type Option components.Option2[*Props]
 // BadgeProps represents the properties for a Badge.
 type Props struct {
 	size size.ResponsiveSize
-	color.Colors
+	*color.ThemeColorProps
+	*color.StateColorProps
 	text string
 }
 
@@ -37,20 +38,23 @@ func WithSize(badgeSize size.ResponsiveSize) Option {
 
 func WithThemeColor(themeColor color.ThemeColor, outline bool) Option {
 	return func(p *Props) {
-		p.SetColor(themeColor, outline)
+		p.ThemeColorProps = color.NewThemeColor(themeColor, outline)
 	}
 }
 
 func WithStateColor(stateColor color.StateColor, outline bool) Option {
 	return func(p *Props) {
-		p.SetState(stateColor, outline)
+		p.StateColorProps = color.NewStateColor(stateColor, outline)
 	}
 }
 
 // Build creates a new Badge without rendering it. The Badge properties can then
 // be modified before finally rendering by calling the Show() method.
 func Build(options ...Option) *Props {
-	badge := &Props{}
+	badge := &Props{
+		ThemeColorProps: &color.ThemeColorProps{},
+		StateColorProps: &color.StateColorProps{},
+	}
 
 	for _, option := range options {
 		option(badge)

@@ -1,0 +1,91 @@
+// Copyright 2025 Joshua Rich <joshua.rich@gmail.com>.
+// SPDX-License-Identifier: 	AGPL-3.0-or-later
+
+
+package loading
+
+import "github.com/joshuar/go-templ-daisyui/modifiers/size"
+import "github.com/joshuar/go-templ-daisyui/modifiers/color"
+import "github.com/joshuar/go-templ-daisyui/modifiers/state"
+
+// sizeModifier returns the size modifier of the Loading component.
+func (loading *Props) applySize() string {
+	switch loading.size {
+	case size.XS:
+		return "loading-xs"
+	case size.SM:
+		return "loading-sm"
+	case size.MD:
+		return "loading-md"
+	case size.LG:
+		return "loading-lg"
+	case size.XL:
+		return "loading-xl"
+	default:
+		return "loading-md"
+	}
+}
+
+func (loading *Props) applyThemeColor() string {
+	switch loading.GetThemeColor() {
+	case color.Primary:
+		return "loading-primary"
+	case color.Secondary:
+		return "loading-secondary"
+	case color.Accent:
+		return "loading-accent"
+	case color.Neutral:
+		return "loading-neutral"
+	case color.Ghost:
+		return "loading-ghost"
+	default:
+		return "loading-neutral"
+	}
+}
+
+func (loading *Props) applyStateColor() string {
+	switch loading.GetStateColor() {
+	case state.Info:
+		return "loading-info"
+	case state.Success:
+		return "loading-success"
+	case state.Warning:
+		return "loading-warning"
+	case state.Error:
+		return "loading-error"
+	default:
+		return "loading-success"
+	}
+}
+
+// applyStyle applies the loading style.
+func (loading *Props) applyStyle() string {
+	switch loading.style {
+	case Ball:
+		return "loading-ball"
+	case Bars:
+		return "loading-bars"
+	case Dots:
+		return "loading-dots"
+	case Infinity:
+		return "loading-infinity"
+	case Ring:
+		return "loading-ring"
+	case Spinner:
+		return "loading-spinner"
+	default:
+		return "loading-spinner"
+	}
+}
+
+templ (loading *Props) Show() {
+	<span
+		class={ "loading",
+		loading.applyStyle(),
+		templ.KV("htmx-indicator",loading.htmxIndicator),
+	templ.KV(loading.applySize(),loading.size.Valid()),
+	templ.KV(loading.applyThemeColor(),loading.ValidThemeColor()),
+	templ.KV(loading.applyStateColor(),loading.ValidStateColor()) }
+		{ loading.ShowAttributes()... }
+	></span>
+}

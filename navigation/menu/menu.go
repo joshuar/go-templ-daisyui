@@ -24,8 +24,8 @@ type (
 		title  string
 		layout Layout
 		*attributes.Attributes
-		size size.ResponsiveSize
-		color.Colors
+		size      size.ResponsiveSize
+		baseColor color.BaseColor
 		breakpoints.Breakpoints
 		// components.componentItems
 		// componentHiddenBreakpoint
@@ -71,7 +71,7 @@ func WithSize(menuSize size.ResponsiveSize) Option {
 
 func WithBaseColor(base color.BaseColor) Option {
 	return func(p *Props) {
-		p.SetBase(base)
+		p.baseColor = base
 	}
 }
 

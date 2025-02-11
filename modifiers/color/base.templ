@@ -1,0 +1,22 @@
+// Copyright 2025 Joshua Rich <joshua.rich@gmail.com>.
+// SPDX-License-Identifier: 	AGPL-3.0-or-later
+
+package color
+
+// ApplyBaseColor will return a class string appropriate for the BaseColor.
+func (base BaseColor) ApplyBaseColor() string {
+	switch base {
+	case Base300:
+		return "bg-base-300"
+	case Base200:
+		return "bg-base-200"
+	case Base100:
+		fallthrough
+	default:
+		return "bg-base-100"
+	}
+}
+
+// noop function so that templ generation doesn't report errors.
+templ baseNOOP() {
+}

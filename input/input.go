@@ -19,7 +19,7 @@ type Option components.Option2[*Props]
 // Input is an interface to represent any type of input component.
 type Input interface {
 	SetValue(value attributes.Value)
-	SetState(stateColor color.StateColor, outline bool)
+	SetStateColor(stateColor color.StateColor)
 	Show(classes ...string) templ.Component
 }
 

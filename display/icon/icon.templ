@@ -3,20 +3,11 @@
 
 package icon
 
-import "github.com/joshuar/go-templ-daisyui/modifiers/size"
-import "strings"
-
-templ (icon *Props) Show(classes ...string) {
-	<i
-		class={
-			icon.name, icon.faStyle(),
-			icon.faSize(),
-			templ.KV(icon.ThemeColor(), icon.ColorIsSet()),
-			templ.KV(icon.StateColor(), icon.StateIsSet()),
-			templ.KV(strings.Join(classes, " "), len(classes) > 0),
-		}
-	></i>
-}
+import (
+	"github.com/joshuar/go-templ-daisyui/modifiers/color"
+	"github.com/joshuar/go-templ-daisyui/modifiers/size"
+	"strings"
+)
 
 // faStyle returns an appropriate FontAwesome style for the icon.
 func (icon *Props) faStyle() string {
@@ -68,4 +59,16 @@ func BuildWarningIcon(options ...Option) *Props {
 // BuildErrorIcon is a helper to build an icon that represents error state.
 func BuildErrorIcon(options ...Option) *Props {
 	return Build("fa-circle-xmark")
+}
+
+templ (icon *Props) Show(classes ...string) {
+	<i
+		class={
+			icon.name, icon.faStyle(),
+			icon.faSize(),
+			templ.KV(color.ApplyThemeColor(icon.GetThemeColor()), icon.ValidThemeColor()),
+			templ.KV(color.ApplyStateColor(icon.GetStateColor()), icon.ValidStateColor()),
+			templ.KV(strings.Join(classes, " "), len(classes) > 0),
+		}
+	></i>
 }

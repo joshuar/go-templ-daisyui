@@ -49,11 +49,11 @@ func (btn *Props) applySize() string {
 	}
 }
 
-// themeColor returns the theme color class of the button.
-func (btn *Props) themeColor() string {
+// applyThemeColor applies a theme color to the Component.
+func (btn *Props) applyThemeColor() string {
 	themeColor := "btn-neutral"
 
-	switch btn.GetColor() {
+	switch btn.GetThemeColor() {
 	case color.Primary:
 		themeColor = "btn-primary"
 	case color.Secondary:
@@ -66,18 +66,18 @@ func (btn *Props) themeColor() string {
 		themeColor = "btn-ghost"
 	}
 
-	if btn.ColorOutline() {
+	if btn.OutlineTheme() {
 		themeColor = themeColor + " btn-outline"
 	}
 
 	return themeColor
 }
 
-// stateColor returns the state color class for a Badge.
-func (btn *Props) stateColor() string {
+// applyStateColor applies a state color to the Component.
+func (btn *Props) applyStateColor() string {
 	var stateColor string
 
-	switch btn.GetState() {
+	switch btn.GetStateColor() {
 	case state.Info:
 		stateColor = "btn-info"
 	case state.Success:
@@ -88,7 +88,7 @@ func (btn *Props) stateColor() string {
 		stateColor = "btn-error"
 	}
 
-	if btn.StateOutline() {
+	if btn.OutlineState() {
 		stateColor = stateColor + " btn-outline"
 	}
 
@@ -101,12 +101,14 @@ templ (btn *Props) Show(classes ...string) {
             templ.KV("no-animation", btn.noClickAnimation),
             templ.KV(btn.setShape(), btn.shape > 0),
 			templ.KV(btn.applySize(),btn.size.Valid()),
-			templ.KV(btn.themeColor(),btn.ColorIsSet()),
-			templ.KV(btn.stateColor(),btn.StateIsSet()),
+			templ.KV(btn.applyThemeColor(),btn.ValidThemeColor()),
+			templ.KV(btn.applyStateColor(),btn.ValidStateColor()),
             templ.KV(strings.Join(classes," "),len(classes) > 0) }
 		{ btn.ShowAttributes()... }
 		autofocus?={ btn.autofocus }
 	>
-		@btn.content
+		if btn.content != nil {
+			@btn.content
+		}
 	</button>
 }

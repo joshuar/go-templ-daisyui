@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	Base TextSize = iota
+	Base Size = iota
 	SM
 	LG
 	XL
@@ -19,7 +19,7 @@ const (
 )
 
 const (
-	Normal TextWeight = iota
+	Normal Weight = iota
 	Thin
 	Extralight
 	Light
@@ -34,27 +34,28 @@ type (
 	// Text Size
 	//
 	// https://tailwindcss.com/docs/font-size
-	TextSize int
+	Size int
 	// Text Weight
 	//
 	// https://tailwindcss.com/docs/font-weight
-	TextWeight int
+	Weight int
 )
 
 type Option components.Option2[*Props]
 
 type Props struct {
-	size   TextSize
-	weight TextWeight
+	size   Size
+	weight Weight
 	italic bool
-	color.Colors
-	text string
+	text   string
+	*color.ThemeColorProps
+	*color.StateColorProps
 }
 
 // WithTextSize option sets the font size.
 //
 // https://tailwindcss.com/docs/font-size
-func WithTextSize(size TextSize) Option {
+func WithTextSize(size Size) Option {
 	return func(text *Props) {
 		text.size = size
 	}
@@ -63,7 +64,7 @@ func WithTextSize(size TextSize) Option {
 // WithTextWeight option sets the font weight.
 //
 // https://tailwindcss.com/docs/font-weight
-func WithTextWeight(weight TextWeight) Option {
+func WithTextWeight(weight Weight) Option {
 	return func(text *Props) {
 		text.weight = weight
 	}
@@ -75,6 +76,18 @@ func WithTextWeight(weight TextWeight) Option {
 func AsItalicText() Option {
 	return func(text *Props) {
 		text.italic = true
+	}
+}
+
+func WithThemeColor(themeColor color.ThemeColor) Option {
+	return func(p *Props) {
+		p.ThemeColorProps = color.NewThemeColor(themeColor, false)
+	}
+}
+
+func WithStateColor(stateColor color.StateColor) Option {
+	return func(p *Props) {
+		p.StateColorProps = color.NewStateColor(stateColor, false)
 	}
 }
 

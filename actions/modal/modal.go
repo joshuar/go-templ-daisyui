@@ -37,7 +37,7 @@ func WithModalCloseButton() Option {
 	return func(p *Props) {
 		p.closeButton = button.Build(
 			button.AsShape(button.Circle, false),
-			button.WithThemeColor(color.Ghost, false),
+			button.WithThemeColor(color.Accent, false),
 			button.WithContent(icon.Build("fa-xmark")),
 			button.WithExtraAttributes(templ.Attributes{
 				"_": "on click trigger closeModal",

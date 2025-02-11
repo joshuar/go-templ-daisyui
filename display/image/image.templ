@@ -3,11 +3,13 @@
 
 package image
 
+import "strings"
+
 // templ.KV(image.setFit(), image.ObjectFitIsSet()) }
 
 // Image will render an `<img/>` element pointing to the given URL and with the
 // given options.
-templ (image *Props) Show() {
+templ (image *Props) Show(classes ...string) {
 	<img
 		if image.lazyLoading {
 			loading="lazy"
@@ -15,6 +17,7 @@ templ (image *Props) Show() {
 		class={
 			templ.KV(image.size.ApplyFixedSize(), image.size.Valid()),
 			templ.KV(image.mask.Apply(), image.mask.Valid()),
+			strings.Join(classes, " "),
 		}
 		src={ image.url }
 		if image.alt != "" {

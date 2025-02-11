@@ -25,7 +25,8 @@ type Props struct {
 	name         string
 	style        FontAwesomeStyle
 	relativeSize size.ResponsiveSize
-	color.Colors
+	*color.ThemeColorProps
+	*color.StateColorProps
 }
 
 // WithStyle assigns the given FontAwesome style to the Icon.
@@ -46,20 +47,22 @@ func WithRelativeSize(relativeSize size.ResponsiveSize) Option {
 
 func WithThemeColor(themeColor color.ThemeColor) Option {
 	return func(p *Props) {
-		p.SetColor(themeColor, false)
+		p.ThemeColorProps = color.NewThemeColor(themeColor, false)
 	}
 }
 
 func WithStateColor(stateColor color.StateColor) Option {
 	return func(p *Props) {
-		p.SetState(stateColor, false)
+		p.StateColorProps = color.NewStateColor(stateColor, false)
 	}
 }
 
 // New creates iconProps with the given options.
 func Build(name string, options ...Option) *Props {
 	icon := &Props{
-		name: name,
+		name:            name,
+		ThemeColorProps: &color.ThemeColorProps{},
+		StateColorProps: &color.StateColorProps{},
 	}
 
 	for _, option := range options {
