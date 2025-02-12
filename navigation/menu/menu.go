@@ -4,8 +4,10 @@
 package menu
 
 import (
+	"github.com/a-h/templ"
 	components "github.com/joshuar/go-templ-daisyui"
 	"github.com/joshuar/go-templ-daisyui/attributes"
+	"github.com/joshuar/go-templ-daisyui/items"
 	"github.com/joshuar/go-templ-daisyui/modifiers/breakpoints"
 	"github.com/joshuar/go-templ-daisyui/modifiers/color"
 	"github.com/joshuar/go-templ-daisyui/modifiers/size"
@@ -27,6 +29,7 @@ type (
 		size      size.ResponsiveSize
 		baseColor color.BaseColor
 		breakpoints.Breakpoints
+		*items.Items
 		// components.componentItems
 		// componentHiddenBreakpoint
 		// componentRevealedBreakpoint
@@ -75,10 +78,19 @@ func WithBaseColor(base color.BaseColor) Option {
 	}
 }
 
+// WithItems option sets the list of items to display in the dropdown menu. Each
+// item will be wrapped in an list element.
+func WithItems(listItems ...templ.Component) Option {
+	return func(p *Props) {
+		p.ReplaceItems(listItems...)
+	}
+}
+
 // NewMenu creates a new menu with the given options.
 func Build(options ...Option) *Props {
 	menu := &Props{
 		Attributes: attributes.New(),
+		Items:      items.New(),
 	}
 
 	for _, option := range options {

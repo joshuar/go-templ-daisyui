@@ -3,7 +3,10 @@
 
 package menu
 
-import "github.com/joshuar/go-templ-daisyui/modifiers/size"
+import (
+	"github.com/joshuar/go-templ-daisyui/modifiers/size"
+	"strings"
+)
 
 // setLayout sets the layout of the Menu.
 func (menu *Props) getLayout() string {
@@ -33,24 +36,24 @@ func (menu *Props) applySize() string {
 	}
 }
 
-templ (menu *Props) Show(items ...templ.Component) {
+templ (menu *Props) Show(classes ...string) {
 	<ul
-		class={
-			"menu",
+		class={ "menu",
 			menu.getLayout(),
 			templ.KV(menu.applySize(), menu.size.Valid()),
 			templ.KV(menu.GetHiddenBreakpoint(), menu.HiddenBreakpointSet()),
 			templ.KV(menu.GetRevealedBreakpoint(), menu.RevealedBreakpointSet()),
-		}
+			templ.KV(strings.Join(classes, " "),len(classes) > 0 ) }
 		{ menu.ShowAttributes()... }
 	>
 		if menu.title != "" {
 			<li class="menu-title">{ menu.title }</li>
 		}
-		for _, item := range items {
-			@item
+		for _, item := range menu.GetItems() {
+			<li>
+				@item
+			</li>
 		}
-		{ children... }
 	</ul>
 }
 
