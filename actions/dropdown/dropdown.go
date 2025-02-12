@@ -6,7 +6,14 @@
 // https://daisyui.com/components/dropdown
 package dropdown
 
-import components "github.com/joshuar/go-templ-daisyui"
+import (
+	"github.com/a-h/templ"
+	components "github.com/joshuar/go-templ-daisyui"
+	"github.com/joshuar/go-templ-daisyui/actions/button"
+	"github.com/joshuar/go-templ-daisyui/modifiers/breakpoints"
+	"github.com/joshuar/go-templ-daisyui/modifiers/size"
+	"github.com/joshuar/go-templ-daisyui/navigation/menu"
+)
 
 const (
 	OpenTop Open = iota + 1
@@ -24,6 +31,9 @@ type Props struct {
 	alignToEnd  bool
 	openOnHover bool
 	forceOpen   bool
+	button      *button.Props
+	menu        *menu.Props
+	*breakpoints.Breakpoints
 }
 
 // WithOpenOnHover option will ensure the Dropdown will open on hover.
@@ -40,7 +50,7 @@ func WithForceOpen() Option {
 	}
 }
 
-// WithOpenFrom customises how the dropdown will open and optional alignment. By default, if this
+// WithOpenFrom customizes how the dropdown will open and optional alignment. By default, if this
 // option is not specified, the dropdown will open from the bottom.
 func WithOpenFrom(from Open, alignToEnd bool) Option {
 	return func(p *Props) {
@@ -49,10 +59,45 @@ func WithOpenFrom(from Open, alignToEnd bool) Option {
 	}
 }
 
+// WithButton option sets the options for the dropdown button. If not specified,
+// a default button will be used with minimal styling and the text "Click" inside.
+func WithButton(options ...button.Option) Option {
+	return func(p *Props) {
+		p.button = button.Build(options...)
+		button.WithExtraAttributes(templ.Attributes{
+			"tabindex": 0,
+		})(p.button)
+	}
+}
+
+// WithMenuOptions option sets the options for the dropdown menu. Use this
+// option to set optional menu styling and to define the list of items for the
+// dropdown menu.
+func WithMenuOptions(options ...menu.Option) Option {
+	return func(p *Props) {
+		p.menu = menu.Build(options...)
+		p.menu.SetAttribute("tabindex", 0)
+	}
+}
+
+func WithHiddenBreakpoint(from size.ResponsiveSize) Option {
+	return func(p *Props) {
+		p.SetHiddenBreakpoint(from)
+	}
+}
+
+func WithRevealedBreakpoint(from size.ResponsiveSize) Option {
+	return func(p *Props) {
+		p.SetRevealedBreakpoint(from)
+	}
+}
+
 // BuildDropdown builds a DropdownProps from the given options. Use this to
 // pre-build a Dropdown Component before rendering.
 func Build(options ...Option) *Props {
-	dropdown := &Props{}
+	dropdown := &Props{
+		Breakpoints: &breakpoints.Breakpoints{},
+	}
 
 	for _, option := range options {
 		option(dropdown)

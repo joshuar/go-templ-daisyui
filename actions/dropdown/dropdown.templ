@@ -3,15 +3,25 @@
 
 package dropdown
 
-templ (dropdown *Props) Build() {
+import "strings"
+
+templ (dropdown *Props) Show(classes ...string) {
 	<div
 		class={ "dropdown",
-		templ.KV(openFrom(dropdown.open), dropdown.open > 0),
-		templ.KV("dropdown-hover",dropdown.openOnHover),
-		templ.KV("dropdown-open",dropdown.forceOpen),
-		templ.KV("dropdown-end",dropdown.alignToEnd) }
+			templ.KV(openFrom(dropdown.open), dropdown.open > 0),
+			templ.KV("dropdown-hover", dropdown.openOnHover),
+			templ.KV("dropdown-open", dropdown.forceOpen),
+			templ.KV("dropdown-end", dropdown.alignToEnd),
+			templ.KV(dropdown.GetHiddenBreakpoint(), dropdown.HiddenBreakpointSet()),
+			templ.KV(dropdown.GetRevealedBreakpoint(), dropdown.RevealedBreakpointSet()),
+			templ.KV(strings.Join(classes, " "), len(classes) > 0) }
 	>
-		{ children... }
+		if dropdown.button != nil {
+			@dropdown.button.Show()
+		} else {
+			<div tabindex="0" role="button" class="btn m-1">Click</div>
+		}
+		@dropdown.menu.Show("dropdown-content", "rounded-box", "shadow")
 	</div>
 }
 
