@@ -15,7 +15,7 @@ const (
 	Regular                         // fa-regular
 )
 
-type Option components.Option2[*Props]
+type Option components.Option[*Props]
 
 // FontAwesomeStyle is a valid FontAwesome Icon style.
 type FontAwesomeStyle int

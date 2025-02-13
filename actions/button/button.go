@@ -22,7 +22,7 @@ const (
 	Block
 )
 
-type Option components.Option2[*Props]
+type Option components.Option[*Props]
 
 // Shape sets the shape of the button.
 type Shape int

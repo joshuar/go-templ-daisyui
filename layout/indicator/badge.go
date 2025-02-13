@@ -8,7 +8,7 @@ import (
 	"github.com/joshuar/go-templ-daisyui/display/badge"
 )
 
-type Option components.Option2[*BadgeIndicatorProps]
+type Option components.Option[*BadgeIndicatorProps]
 
 type BadgeIndicatorProps struct {
 	badge *badge.Props

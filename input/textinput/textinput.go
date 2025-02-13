@@ -24,7 +24,7 @@ const (
 	AttrPlaceholder = "placeholder"
 )
 
-type Option components.Option2[*Props]
+type Option components.Option[*Props]
 
 // Type is the type of textinput (i.e., text, password, email, url, etc.).
 type Type int

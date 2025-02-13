@@ -9,7 +9,7 @@ import (
 	"github.com/joshuar/go-templ-daisyui/modifiers/size"
 )
 
-type Option components.Option2[*Props]
+type Option components.Option[*Props]
 
 // Props represents the properties for an image.
 type Props struct {

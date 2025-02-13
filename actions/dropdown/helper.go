@@ -9,7 +9,7 @@ import (
 	"github.com/joshuar/go-templ-daisyui/modifiers/state"
 )
 
-type HelperOption components.Option2[*HelperProps]
+type HelperOption components.Option[*HelperProps]
 
 type HelperProps struct {
 	icon *icon.Props

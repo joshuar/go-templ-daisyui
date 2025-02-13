@@ -21,7 +21,7 @@ const (
 type Layout int
 
 type (
-	Option components.Option2[*Props]
+	Option components.Option[*Props]
 	Props  struct {
 		title  string
 		layout Layout

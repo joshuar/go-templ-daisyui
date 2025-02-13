@@ -13,7 +13,7 @@ import (
 	"github.com/joshuar/go-templ-daisyui/modifiers/color"
 )
 
-type Option components.Option2[*Props]
+type Option components.Option[*Props]
 
 // Props represents the properties for a DaisyUI Modal component.
 type Props struct {

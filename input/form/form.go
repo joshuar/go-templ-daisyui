@@ -10,7 +10,7 @@ import (
 	"github.com/joshuar/go-templ-daisyui/attributes"
 )
 
-type Option components.Option2[*Props]
+type Option components.Option[*Props]
 
 type Props struct {
 	*attributes.Attributes

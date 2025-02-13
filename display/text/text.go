@@ -41,7 +41,7 @@ type (
 	Weight int
 )
 
-type Option components.Option2[*Props]
+type Option components.Option[*Props]
 
 type Props struct {
 	size   Size

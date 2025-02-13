@@ -14,7 +14,7 @@ const (
 	AttrType = "type"
 )
 
-type Option components.Option2[*Props]
+type Option components.Option[*Props]
 
 // Input is an interface to represent any type of input component.
 type Input interface {

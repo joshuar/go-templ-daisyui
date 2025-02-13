@@ -9,7 +9,7 @@ import (
 	"github.com/joshuar/go-templ-daisyui/attributes"
 )
 
-type Option components.Option2[*List]
+type Option components.Option[*List]
 
 type List struct {
 	*attributes.Attributes

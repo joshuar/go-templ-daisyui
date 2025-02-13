@@ -25,7 +25,7 @@ const (
 
 type LoadingStyle int
 
-type Option components.Option2[*Props]
+type Option components.Option[*Props]
 
 // Props are the properties of a Loading component.
 type Props struct {

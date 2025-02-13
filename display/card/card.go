@@ -23,7 +23,7 @@ const (
 
 type Layout int
 
-type Option components.Option2[*Props]
+type Option components.Option[*Props]
 
 type Props struct {
 	*attributes.Attributes

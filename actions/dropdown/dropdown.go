@@ -24,7 +24,7 @@ const (
 
 type Open int
 
-type Option components.Option2[*Props]
+type Option components.Option[*Props]
 
 type Props struct {
 	open        Open
