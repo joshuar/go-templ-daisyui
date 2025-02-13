@@ -3,7 +3,10 @@
 
 package article
 
-import components "github.com/joshuar/go-templ-daisyui"
+import (
+	"github.com/a-h/templ"
+	components "github.com/joshuar/go-templ-daisyui"
+)
 
 const (
 	Gray    ProseGrayScale = iota + 1 // prose-gray
@@ -19,6 +22,7 @@ type Option components.Option[*Props]
 
 type Props struct {
 	grayscale ProseGrayScale
+	content   templ.Component
 }
 
 // WithGrayScale adds optional gray scale scheme to the prose.
@@ -31,8 +35,10 @@ func WithGrayScale(scale ProseGrayScale) Option {
 
 // BuildArticle creates a new article component with the given title, content and
 // options. Title is optional.
-func Build(options ...Option) *Props {
-	article := &Props{}
+func Build(content templ.Component, options ...Option) *Props {
+	article := &Props{
+		content: content,
+	}
 
 	for _, option := range options {
 		option(article)

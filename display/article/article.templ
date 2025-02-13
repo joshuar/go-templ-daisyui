@@ -28,6 +28,6 @@ templ (article *Props) Show() {
 	"dark:prose-invert",
 	templ.KV(article.setGrayscale(),article.grayscale > 0) }
 	>
-		{ children... }
+		@article.content
 	</article>
 }
