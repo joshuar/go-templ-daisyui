@@ -40,6 +40,7 @@ templ (card *Props) Show(classes ...string) {
 					@card.image.Show("rounded-xl")
 				</figure>
 			}
+					@card.image.Show("object-scale-down")
 		}
 		// Show the Card body, if specified.
 		if card.body != nil {
