@@ -34,6 +34,20 @@ func (value Value) String() string {
 }
 
 // SetAttribute will set the attribute with the given key to the given value.
+func (a *Attributes) GetAttribute(key string) string {
+	a.mu.Lock()
+	defer a.mu.Unlock()
+
+	if attribute, found := a.attributes[key]; found {
+		if value, ok := attribute.(string); ok {
+			return value
+		}
+	}
+
+	return ""
+}
+
+// SetAttribute will set the attribute with the given key to the given value.
 func (a *Attributes) SetAttribute(key string, value any) {
 	a.mu.Lock()
 	defer a.mu.Unlock()
@@ -77,6 +91,10 @@ func (a *Attributes) ShowAttributes() templ.Attributes {
 // SetID will set the id attribute for the Component.
 func (a *Attributes) SetID(id ID) {
 	a.SetAttribute("id", string(id))
+}
+
+func (a *Attributes) GetID() string {
+	return a.GetAttribute("id")
 }
 
 // SetValue will set the value attribute for the Component.
