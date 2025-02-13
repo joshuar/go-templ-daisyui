@@ -1,0 +1,42 @@
+// Copyright 2025 Joshua Rich <joshua.rich@gmail.com>.
+// SPDX-License-Identifier: 	AGPL-3.0-or-later
+
+
+package drawer
+
+import "github.com/joshuar/go-templ-daisyui/modifiers/size"
+
+func (drawer *Props) applySideVisibility() string {
+	switch drawer.sideVisibility {
+	case size.XS:
+		return "xs:drawer-open"
+	case size.SM:
+		return "sm:drawer-open"
+	case size.MD:
+		return "md:drawer-open"
+	case size.LG:
+		return "lg:drawer-open"
+	case size.XL:
+		return "xl:drawer-open"
+	default:
+		return "md:drawer-open"
+	}
+}
+
+// Show will render the Drawer with its options.
+templ (drawer *Props) Show() {
+	<div
+		class={ "drawer",
+		templ.KV(drawer.applySideVisibility(), drawer.sideVisibility > 0) }
+		{ drawer.ShowAttributes()... }
+	>
+		<input id={ drawer.GetID() + "_toggle" } type="checkbox" class="drawer-toggle"/>
+		<div id={ drawer.GetID() + "_content" } class="drawer-content container mx-auto">
+			@drawer.mainContent
+		</div>
+		<div id={ drawer.GetID() + "_side" } class="drawer-side">
+			<label for={ drawer.GetID() + "_toggle" } aria-label="close sidebar" class="drawer-overlay"></label>
+			@drawer.sideContent
+		</div>
+	</div>
+}
