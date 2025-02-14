@@ -19,6 +19,11 @@ const (
 // ThemeColor represents a theme color.
 type ThemeColor int
 
+// Valid returns true if the color is a valid color value.
+func (themeColor ThemeColor) Valid() bool {
+	return themeColor > InvalidMinColor && themeColor < InvalidMaxColor
+}
+
 // ThemeColorProps contains properties for setting a theme color.
 type ThemeColorProps struct {
 	theme   ThemeColor
@@ -35,7 +40,7 @@ func (p *ThemeColorProps) SetOutline(value bool) {
 
 // ValidThemeColor returns true if the color is a valid color value.
 func (p *ThemeColorProps) ValidThemeColor() bool {
-	return p.theme > InvalidMinColor && p.theme < InvalidMaxColor
+	return p.theme.Valid()
 }
 
 func (p *ThemeColorProps) GetThemeColor() ThemeColor {
