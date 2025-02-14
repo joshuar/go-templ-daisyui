@@ -86,6 +86,18 @@ func WithItems(listItems ...templ.Component) Option {
 	}
 }
 
+func WithID(id attributes.ID) Option {
+	return func(p *Props) {
+		p.SetID(id)
+	}
+}
+
+func WithExtraAttributes(attrs templ.Attributes) Option {
+	return func(p *Props) {
+		p.AddAttributes(attrs)
+	}
+}
+
 // NewMenu creates a new menu with the given options.
 func Build(options ...Option) *Props {
 	menu := &Props{
