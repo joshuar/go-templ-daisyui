@@ -12,6 +12,7 @@ import (
 
 const (
 	Base Size = iota
+	XS
 	SM
 	LG
 	XL
@@ -52,7 +53,8 @@ type Props struct {
 	*color.StateColorProps
 }
 
-// WithTextSize option sets the font size.
+// WithTextSize option sets the font size. If this option is not specified,
+// 'text-base' is used.
 //
 // https://tailwindcss.com/docs/font-size
 func WithTextSize(size Size) Option {

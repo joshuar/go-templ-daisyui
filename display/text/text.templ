@@ -3,9 +3,12 @@
 
 package text
 
-// textSizeClass returns the class name for the text size.
-func (text *Props) textSizeClass() string {
+import "strings"
+
+func (text *Props) applyTextSize() string {
 	switch text.size {
+	case XS:
+		return "text-xs"
 	case SM:
 		return "text-sm"
 	case LG:
@@ -21,8 +24,7 @@ func (text *Props) textSizeClass() string {
 	}
 }
 
-// textWeightClass returns the class name for the text weight
-func (text *Props) textWeightClass() string {
+func (text *Props) applyTextWeight() string {
 	switch text.weight {
 	case Thin:
 		return "font-thin"
@@ -45,38 +47,13 @@ func (text *Props) textWeightClass() string {
 	}
 }
 
-// // color returns the color modifier for the Badge.
-// func textColorClass(color Color) string {
-// 	switch color {
-// 	case ColorPrimary:
-// 		return "text-primary"
-// 	case ColorSecondary:
-// 		return "text-secondary"
-// 	case ColorAccent:
-// 		return "text-accent"
-// 	case ColorGhost:
-// 		return "text-ghost"
-// 	case ColorNeutral:
-// 		fallthrough
-// 	case ColorStateInfo:
-// 		return "text-info"
-// 	case ColorStateSuccess:
-// 		return "text-success"
-// 	case ColorStateWarning:
-// 		return "text-warning"
-// 	case ColorStateError:
-// 		return "text-error"
-// 	default:
-// 		return "text-neutral"
-// 	}
-// }
-templ (text *Props) Show() {
+templ (text *Props) Show(classes ...string) {
 	<p
 		class={
-			text.textSizeClass(),
-			text.textWeightClass(),
+			text.applyTextSize(),
+			text.applyTextWeight(),
 			templ.KV("italic", text.italic),
-			// templ.KV(textColorClass(text.color),text.ColorIsSet()) }
+			templ.KV(strings.Join(classes, " "), len(classes) > 0),
 		}
 	>
 		{ text.text }
