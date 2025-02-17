@@ -7,7 +7,9 @@
 package badge
 
 import (
+	"github.com/a-h/templ"
 	components "github.com/joshuar/go-templ-daisyui"
+	"github.com/joshuar/go-templ-daisyui/attributes"
 	"github.com/joshuar/go-templ-daisyui/modifiers/color"
 	"github.com/joshuar/go-templ-daisyui/modifiers/size"
 )
@@ -19,13 +21,14 @@ type Props struct {
 	size size.ResponsiveSize
 	*color.ThemeColorProps
 	*color.StateColorProps
-	text string
+	content templ.Component
+	*attributes.Attributes
 }
 
 // WithText will set the text to display within the Badge.
-func WithText(text string) Option {
+func WithContent(content any) Option {
 	return func(p *Props) {
-		p.text = text
+		p.content = components.SetContent(content)
 	}
 }
 
@@ -48,12 +51,19 @@ func WithStateColor(stateColor color.StateColor, outline bool) Option {
 	}
 }
 
+func WithExtraAttributes(attrs templ.Attributes) Option {
+	return func(p *Props) {
+		p.AddAttributes(attrs)
+	}
+}
+
 // Build creates a new Badge without rendering it. The Badge properties can then
 // be modified before finally rendering by calling the Show() method.
 func Build(options ...Option) *Props {
 	badge := &Props{
 		ThemeColorProps: &color.ThemeColorProps{},
 		StateColorProps: &color.StateColorProps{},
+		Attributes:      attributes.New(),
 	}
 
 	for _, option := range options {
