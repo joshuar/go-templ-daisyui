@@ -40,14 +40,16 @@ templ (card *Props) Show(classes ...string) {
 					@card.image.Show("rounded-xl")
 				</figure>
 			}
-					@card.image.Show("object-scale-down")
+			<figure class="px-10 pt-10">
+				@card.image.Show("object-scale-down")
+			</figure>
 		}
 		// Show the Card body, if specified.
 		if card.body != nil {
 			if card.centeredContent {
 				@card.body.Show("items-center text-center")
 			} else {
-				@card.body.Show()
+				@card.body.Show("p-4")
 			}
 		}
 	</div>
