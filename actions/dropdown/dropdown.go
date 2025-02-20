@@ -156,6 +156,7 @@ func AsStyle(style Style) Option {
 // pre-build a Dropdown Component before rendering.
 func Build(options ...Option) *Props {
 	dropdown := &Props{
+		openProps:   &OpenProps{},
 		Breakpoints: &breakpoints.Breakpoints{},
 	}
 

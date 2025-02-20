@@ -69,8 +69,8 @@ templ (dropdown *Props) showAsDetails(classes ...string) {
 templ (dropdown *Props) Show(classes ...string) {
 	switch dropdown.style {
 		case Class:
-			dropdown.showAsClass(classes...)
+			@dropdown.showAsClass(classes...)
 		default:
-			dropdown.showAsDetails(classes...)
+			@dropdown.showAsDetails(classes...)
 	}
 }
