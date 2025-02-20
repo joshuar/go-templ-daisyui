@@ -112,3 +112,23 @@ templ (btn *Props) Show(classes ...string) {
 		}
 	</button>
 }
+
+// ShowAsSummary renders a Button component styled as a <summary></summary>
+// element. This is used by the DropDown component.
+templ (btn *Props) ShowAsSummary(classes ...string) {
+	<summary
+		class={ "btn",
+            templ.KV("no-animation", btn.noClickAnimation),
+            templ.KV(btn.setShape(), btn.shape > 0),
+			templ.KV(btn.applySize(),btn.size.Valid()),
+			templ.KV(btn.applyThemeColor(),btn.ValidThemeColor()),
+			templ.KV(btn.applyStateColor(),btn.ValidStateColor()),
+            templ.KV(strings.Join(classes," "),len(classes) > 0) }
+		{ btn.ShowAttributes()... }
+		autofocus?={ btn.autofocus }
+	>
+		if btn.content != nil {
+			@btn.content
+		}
+	</summary>
+}

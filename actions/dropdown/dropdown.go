@@ -10,6 +10,7 @@ import (
 	"github.com/a-h/templ"
 	components "github.com/joshuar/go-templ-daisyui"
 	"github.com/joshuar/go-templ-daisyui/actions/button"
+	"github.com/joshuar/go-templ-daisyui/display/card"
 	"github.com/joshuar/go-templ-daisyui/modifiers/breakpoints"
 	"github.com/joshuar/go-templ-daisyui/modifiers/size"
 	"github.com/joshuar/go-templ-daisyui/navigation/menu"
@@ -22,40 +23,82 @@ const (
 	OpenRight
 )
 
+// Open defines where the Dropdown will open from.
 type Open int
 
+const (
+	// Details uses a <details> element for the Dropdown.
+	//
+	// https://daisyui.com/components/dropdown/#dropdown-menu-using-details-tag
+	Details Style = iota
+	// Class uses a <div> element for the Dropdown.
+	//
+	// https://daisyui.com/components/dropdown/#dropdown-menu
+	Class
+)
+
+// Style defines what type of Dropdown to use. This can be either Details (using
+// a <details> element) or Class (using a <div> element).
+type Style int
+
+// Content is an interface to represent any type of Component that can be set as
+// the Dropdown content.
+type Content interface {
+	Show(classes ...string) templ.Component
+}
+
+// Props holds common properties for all types of Dropdown components.
+type Props struct {
+	style     Style
+	openProps *OpenProps
+	button    *button.Props
+	*breakpoints.Breakpoints
+	content Content
+}
+
+// Option is a functional option to apply to a Dropdown.
 type Option components.Option[*Props]
 
-type Props struct {
-	open        Open
-	alignToEnd  bool
-	openOnHover bool
-	forceOpen   bool
-	button      *button.Props
-	menu        *menu.Props
-	*breakpoints.Breakpoints
+// OpenProps defines properties for how a Dropdown will open.
+type OpenProps struct {
+	From         Open
+	EndAlignment bool
+	Hover        bool
+	Force        bool
 }
 
-// WithOpenOnHover option will ensure the Dropdown will open on hover.
-func WithOpenOnHover() Option {
-	return func(p *Props) {
-		p.openOnHover = true
+// OpenOption is a functional option to control how a Dropdown will open.
+type OpenOption components.Option[*OpenProps]
+
+// OnHover option will ensure the Dropdown will open on hover.
+func OnHover() OpenOption {
+	return func(p *OpenProps) {
+		p.Hover = true
 	}
 }
 
-// WithForceOpen will ensure the Dropdown will be open by default.
-func WithForceOpen() Option {
-	return func(p *Props) {
-		p.forceOpen = true
+// ForceOpen option will ensure the Dropdown will be open by default.
+func ForceOpen() OpenOption {
+	return func(p *OpenProps) {
+		p.Force = true
 	}
 }
 
-// WithOpenFrom customizes how the dropdown will open and optional alignment. By default, if this
+// From customizes how the dropdown will open and optional alignment. By default, if this
 // option is not specified, the dropdown will open from the bottom.
-func WithOpenFrom(from Open, alignToEnd bool) Option {
+func From(from Open, alignend bool) OpenOption {
+	return func(p *OpenProps) {
+		p.From = from
+		p.EndAlignment = alignend
+	}
+}
+
+// WithOpenOptions option sets the options for how the Dropdown will open.
+func WithOpenOptions(options ...OpenOption) Option {
 	return func(p *Props) {
-		p.open = from
-		p.alignToEnd = alignToEnd
+		for _, option := range options {
+			option(p.openProps)
+		}
 	}
 }
 
@@ -73,10 +116,20 @@ func WithButton(options ...button.Option) Option {
 // WithMenuOptions option sets the options for the dropdown menu. Use this
 // option to set optional menu styling and to define the list of items for the
 // dropdown menu.
-func WithMenuOptions(options ...menu.Option) Option {
+func WithMenuContent(options ...menu.Option) Option {
 	return func(p *Props) {
-		p.menu = menu.Build(options...)
-		p.menu.SetAttribute("tabindex", 0)
+		menu := menu.Build(options...)
+		menu.SetAttribute("tabindex", 0)
+		p.content = menu
+	}
+}
+
+// WithCardContent option sets the options for a Card component as the Dropdown
+// content.. Use this option to set the Card content and optional styling.
+func WithCardContent(options ...card.Option) Option {
+	return func(p *Props) {
+		card := card.Build(options...)
+		p.content = card
 	}
 }
 
@@ -89,6 +142,13 @@ func WithHiddenBreakpoint(from size.ResponsiveSize) Option {
 func WithRevealedBreakpoint(from size.ResponsiveSize) Option {
 	return func(p *Props) {
 		p.SetRevealedBreakpoint(from)
+	}
+}
+
+// AsStyle option sets the style of the Dropdown component.
+func AsStyle(style Style) Option {
+	return func(p *Props) {
+		p.style = style
 	}
 }
 
