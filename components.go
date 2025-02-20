@@ -15,7 +15,7 @@ type Component interface {
 	Show(classes ...string) templ.Component
 }
 
-// setContent converts the content of any valid type into a templ.Component to
+// SetContent converts the content of any valid type into a templ.Component to
 // be used within a Component as its content. Invalid types are silently ignored
 // and the function will return nil.
 func SetContent(content any) templ.Component {

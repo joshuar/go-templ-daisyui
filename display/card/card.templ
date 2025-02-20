@@ -40,8 +40,8 @@ templ (card *Props) Show(classes ...string) {
 					@card.image.Show("rounded-xl")
 				</figure>
 			}
-			<figure class="px-10 pt-10">
-				@card.image.Show("object-scale-down")
+			<figure class="min-w-8">
+				@card.image.Show("object-fill")
 			</figure>
 		}
 		// Show the Card body, if specified.

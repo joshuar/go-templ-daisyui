@@ -21,10 +21,18 @@ const (
 	LayoutSide                      // card-side
 )
 
+// Layout defines a Card layout.
 type Layout int
 
-type Option components.Option[*Props]
+type (
+	// Option is a functional option for a Card component.
+	Option components.Option[*Props]
+	// BodyOption is a functional option for a Card body.
+	BodyOption components.Option[*BodyProps]
+)
 
+// Props represents a Card's properties. These are used when the Show() method
+// is called to render the Card.
 type Props struct {
 	*attributes.Attributes
 	body            *BodyProps
@@ -38,11 +46,13 @@ type Props struct {
 	centeredContent bool
 }
 
-// BodyProps is the container for the Card content.
+// BodyProps represents a Card's body properties. These are used when the Show()
+// method is called to render the Card body.
 type BodyProps struct {
 	title   templ.Component
 	content templ.Component
 	*ActionsProps
+	*attributes.Attributes
 }
 
 // ActionsProps is the container for Card actions.
@@ -61,22 +71,6 @@ func Bordered() Option {
 func Glass() Option {
 	return func(p *Props) {
 		p.glass = true
-	}
-}
-
-// WithTitle option sets the Card title. This can be text, another DaisyUI
-// component or a custom templ.Component. Other values are ignore and will
-// result in an empty title.
-func WithTitle(title any) Option {
-	return func(p *Props) {
-		p.body.title = components.SetContent(title)
-	}
-}
-
-// WithContent option sets the Card body content.
-func WithContent(content templ.Component) Option {
-	return func(p *Props) {
-		p.body.content = content
 	}
 }
 
@@ -124,11 +118,19 @@ func WithShadow(shadowSize shadow.ShadowSize) Option {
 	}
 }
 
-// WithActions option sets the actions to display in the bottom right of the
-// Card body.
-func WithActions(actions ...templ.Component) Option {
+// WithBodyOptions option sets the options for the Card body.
+func WithBodyOptions(options ...BodyOption) Option {
 	return func(p *Props) {
-		p.body.actions = actions
+		p.body = BuildBody(options...)
+	}
+}
+
+// WithTitle option sets a title in the Card body. This can be text, another DaisyUI
+// component or a custom templ.Component. Other values are ignored and will
+// result in an empty title.
+func WithTitle(title any) BodyOption {
+	return func(p *BodyProps) {
+		p.title = components.SetContent(title)
 	}
 }
 
@@ -150,12 +152,41 @@ func WithExtraAttributes(attrs templ.Attributes) Option {
 	}
 }
 
+// WithContent option sets the Card body content. This can be text, another DaisyUI
+// component or a custom templ.Component. Other values are ignored and will
+// result in an empty title.
+func WithContent(content any) BodyOption {
+	return func(p *BodyProps) {
+		p.content = components.SetContent(content)
+	}
+}
+
+// WithActions option sets the actions to display in the bottom right of the
+// Card body.
+func WithActions(actions ...templ.Component) BodyOption {
+	return func(p *BodyProps) {
+		p.actions = actions
+	}
+}
+
+// WithBodyID option sets the id attribute on the Card body.
+func WithBodyID(id attributes.ID) BodyOption {
+	return func(p *BodyProps) {
+		p.SetID(id)
+	}
+}
+
+// WithBodyExtraAttributes option sets additional attributes on the Card body.
+func WithBodyExtraAttributes(attrs templ.Attributes) BodyOption {
+	return func(p *BodyProps) {
+		p.AddAttributes(attrs)
+	}
+}
+
+// Build creates a Card component from the given options.
 func Build(options ...Option) *Props {
 	card := &Props{
 		Attributes: attributes.New(),
-		body: &BodyProps{
-			ActionsProps: &ActionsProps{},
-		},
 	}
 
 	for _, option := range options {
@@ -163,4 +194,18 @@ func Build(options ...Option) *Props {
 	}
 
 	return card
+}
+
+// BuildBody creates a Card body from the given options.
+func BuildBody(options ...BodyOption) *BodyProps {
+	body := &BodyProps{
+		ActionsProps: &ActionsProps{},
+		Attributes:   attributes.New(),
+	}
+
+	for _, option := range options {
+		option(body)
+	}
+
+	return body
 }
