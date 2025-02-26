@@ -3,6 +3,8 @@
 
 package article
 
+import "strings"
+
 func (article *Props) setGrayscale() string {
 	switch article.grayscale {
 	case Gray:
@@ -22,11 +24,14 @@ func (article *Props) setGrayscale() string {
 // and "prose" class.
 //
 // https://daisyui.com/docs/layout-and-typography/#-1
-templ (article *Props) Show() {
+templ (article *Props) Show(classes ...string) {
 	<article
-		class={ "prose",
-	"dark:prose-invert",
-	templ.KV(article.setGrayscale(),article.grayscale > 0) }
+		class={
+			"prose",
+			"dark:prose-invert",
+			templ.KV(article.setGrayscale(), article.grayscale > 0),
+			templ.KV(strings.Join(classes, " "), len(classes) > 0),
+		}
 	>
 		@article.content
 	</article>
