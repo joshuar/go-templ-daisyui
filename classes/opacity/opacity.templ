@@ -1,0 +1,23 @@
+// Copyright 2025 Joshua Rich <joshua.rich@gmail.com>.
+// SPDX-License-Identifier: 	AGPL-3.0-or-later
+
+package opacity
+
+import "github.com/joshuar/go-templ-daisyui/classes"
+
+// Apply will generate a class string for the given opacity amount.
+func Apply(opacity int) classes.Class {
+	switch opacity {
+	case 25:
+		return "opacity-25"
+	case 50:
+		return "opacity-50"
+	case 75:
+		return "opacity-75"
+	}
+
+	return "opacity-100"
+}
+
+templ opacityNOOP() {
+}
