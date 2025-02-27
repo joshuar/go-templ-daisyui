@@ -30,6 +30,7 @@ templ (card *Props) Show(classes ...string) {
 			templ.KV("image-full",card.fullImage),
 	card.baseColor.ApplyBaseColor(),
 	templ.KV(shadow.ApplyShadow(card.shadow),card.shadow >0),
+	templ.KV(card.ShowClasses(),card.HasClasses()),
 	templ.KV(strings.Join(classes, " "),len(classes) >0) }
 		{ card.ShowAttributes()... }
 	>
@@ -40,8 +41,8 @@ templ (card *Props) Show(classes ...string) {
 					@card.image.Show("rounded-xl")
 				</figure>
 			}
-			<figure class="min-w-8">
-				@card.image.Show("object-fill")
+			<figure class="h-48">
+				@card.image.Show("object-scale-down", "max-h-full", "m-auto")
 			</figure>
 		}
 		// Show the Card body, if specified.

@@ -10,6 +10,7 @@ import (
 	"github.com/a-h/templ"
 	components "github.com/joshuar/go-templ-daisyui"
 	"github.com/joshuar/go-templ-daisyui/attributes"
+	"github.com/joshuar/go-templ-daisyui/classes"
 	"github.com/joshuar/go-templ-daisyui/display/image"
 	"github.com/joshuar/go-templ-daisyui/modifiers/color"
 	"github.com/joshuar/go-templ-daisyui/modifiers/shadow"
@@ -35,6 +36,7 @@ type (
 // is called to render the Card.
 type Props struct {
 	*attributes.Attributes
+	*classes.Classes
 	body            *BodyProps
 	border          bool
 	glass           bool
@@ -152,6 +154,14 @@ func WithExtraAttributes(attrs templ.Attributes) Option {
 	}
 }
 
+func WithExtraClasses(extraClasses ...classes.Class) Option {
+	return func(p *Props) {
+		for _, class := range extraClasses {
+			p.AddClass(class)
+		}
+	}
+}
+
 // WithContent option sets the Card body content. This can be text, another DaisyUI
 // component or a custom templ.Component. Other values are ignored and will
 // result in an empty title.
@@ -187,6 +197,7 @@ func WithBodyExtraAttributes(attrs templ.Attributes) BodyOption {
 func Build(options ...Option) *Props {
 	card := &Props{
 		Attributes: attributes.New(),
+		Classes:    classes.New(),
 	}
 
 	for _, option := range options {
