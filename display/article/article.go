@@ -6,6 +6,8 @@ package article
 import (
 	"github.com/a-h/templ"
 	components "github.com/joshuar/go-templ-daisyui"
+	"github.com/joshuar/go-templ-daisyui/attributes"
+	"github.com/joshuar/go-templ-daisyui/classes"
 )
 
 const (
@@ -23,6 +25,8 @@ type Option components.Option[*Props]
 type Props struct {
 	grayscale ProseGrayScale
 	content   templ.Component
+	*attributes.Attributes
+	*classes.Classes
 }
 
 // WithGrayScale adds optional gray scale scheme to the prose.
@@ -33,11 +37,29 @@ func WithGrayScale(scale ProseGrayScale) Option {
 	}
 }
 
+// WithExtraAttributes assigns additional attributes to the Component.
+func WithExtraAttributes(attrs templ.Attributes) Option {
+	return func(p *Props) {
+		p.AddAttributes(attrs)
+	}
+}
+
+// WithExtraClasses assigns additional classes to the Component.
+func WithExtraClasses(extraClasses ...classes.Class) Option {
+	return func(p *Props) {
+		for _, class := range extraClasses {
+			p.AddClass(class)
+		}
+	}
+}
+
 // BuildArticle creates a new article component with the given title, content and
 // options. Title is optional.
 func Build(content templ.Component, options ...Option) *Props {
 	article := &Props{
-		content: content,
+		content:    content,
+		Attributes: attributes.New(),
+		Classes:    classes.New(),
 	}
 
 	for _, option := range options {

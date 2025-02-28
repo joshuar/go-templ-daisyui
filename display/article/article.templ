@@ -30,8 +30,10 @@ templ (article *Props) Show(classes ...string) {
 			"prose",
 			"dark:prose-invert",
 			templ.KV(article.setGrayscale(), article.grayscale > 0),
+			templ.KV(article.ShowClasses(), article.HasClasses()),
 			templ.KV(strings.Join(classes, " "), len(classes) > 0),
 		}
+		{ article.ShowAttributes()... }
 	>
 		@article.content
 	</article>
