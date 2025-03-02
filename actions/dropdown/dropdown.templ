@@ -35,11 +35,11 @@ templ (dropdown *Props) showAsClass(classes ...string) {
 			templ.KV(strings.Join(classes, " "), len(classes) > 0) }
 	>
 		if dropdown.button != nil {
-			@dropdown.button.Show()
+			@dropdown.button.Show("m-1")
 		} else {
 			<div tabindex="0" role="button" class="btn m-1">Click</div>
 		}
-		@dropdown.content.Show("dropdown-content", "rounded-box", "shadow")
+		@dropdown.content.Show("dropdown-content", "rounded-box", "z-[1]", "w-52", "p-2", "shadow")
 	</div>
 }
 
@@ -56,11 +56,11 @@ templ (dropdown *Props) showAsDetails(classes ...string) {
 			templ.KV(strings.Join(classes, " "), len(classes) > 0) }
 	>
 		if dropdown.button != nil {
-			@dropdown.button.ShowAsSummary()
+			@dropdown.button.ShowAsSummary("m-1")
 		} else {
 			<summary class="btn m-1">Click</summary>
 		}
-		@dropdown.content.Show("dropdown-content", "shadow")
+		@dropdown.content.Show("dropdown-content", "z-[1]", "w-52", "p-2", "shadow")
 	</details>
 }
 
