@@ -55,6 +55,7 @@
     - [🏗️ Tech Stack](#️-tech-stack)
     - [🎯 Features](#-features)
   - [🧰 Usage](#-usage)
+    - [Custom Classes](#custom-classes)
   - [👋 Contributing](#-contributing)
     - [🤝 Code of Conduct](#-code-of-conduct)
   - [🧑‍⚖️ License](#️-license)
@@ -93,8 +94,23 @@
 Include as a module in your Go project:
 
 ```go
-import components "github.com/joshuar/go-templ-daisyui" 
+import components "github.com/joshuar/go-templ-daisyui"
 ```
+
+### Custom Classes
+
+Components support custom classes by passing the following to their `Show()` method:
+
+- a list of strings
+- a single string with space-separated class values
+
+The classes will be added to the Component enclosure element.
+
+> [!NOTE]
+> When adding custom classes, ensure you call the `Show()` method in a `.templ`
+> file. This will ensure that CSS pre-processors (such as Tailwind) will see the
+> classes and act appropriately. If you call the `Show()` method in a `.go`
+> file, your classes may not get applied correctly.
 
 ## 👋 Contributing
 
