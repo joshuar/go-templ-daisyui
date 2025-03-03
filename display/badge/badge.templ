@@ -31,7 +31,7 @@ func (badge *Props) applySize() string {
 // applyThemeColor applies a theme color to the Component.
 func (badge *Props) applyThemeColor() string {
 	themeColor := "badge-neutral"
-
+	// Add color.
 	switch badge.GetThemeColor() {
 	case color.Primary:
 		themeColor = "badge-primary"
@@ -44,9 +44,14 @@ func (badge *Props) applyThemeColor() string {
 	case color.Ghost:
 		themeColor = "badge-ghost"
 	}
-
-	if badge.OutlineTheme() {
+	// Add any styling.
+	switch badge.style {
+	case Soft:
+		themeColor = themeColor + " badge-soft"
+	case Outline:
 		themeColor = themeColor + " badge-outline"
+	case DashedOutline:
+		themeColor = themeColor + " badge-dash"
 	}
 
 	return themeColor
@@ -55,7 +60,7 @@ func (badge *Props) applyThemeColor() string {
 // applyStateColor applies a state color to the Component.
 func (badge *Props) applyStateColor() string {
 	var stateColor string
-
+	// Add color.
 	switch badge.GetStateColor() {
 	case state.Info:
 		stateColor = "badge-info"
@@ -66,9 +71,14 @@ func (badge *Props) applyStateColor() string {
 	case state.Error:
 		stateColor = "badge-error"
 	}
-
-	if badge.OutlineState() {
+	// Add any styling.
+	switch badge.style {
+	case Soft:
+		stateColor = stateColor + " badge-soft"
+	case Outline:
 		stateColor = stateColor + " badge-outline"
+	case DashedOutline:
+		stateColor = stateColor + " badge-dash"
 	}
 
 	return stateColor

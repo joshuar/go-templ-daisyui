@@ -14,6 +14,14 @@ import (
 	"github.com/joshuar/go-templ-daisyui/modifiers/size"
 )
 
+const (
+	Soft Style = iota + 1
+	Outline
+	DashedOutline
+)
+
+type Style int
+
 type Option components.Option[*Props]
 
 // BadgeProps represents the properties for a Badge.
@@ -23,6 +31,7 @@ type Props struct {
 	*color.StateColorProps
 	content templ.Component
 	*attributes.Attributes
+	style Style
 }
 
 // WithText will set the text to display within the Badge.
@@ -39,15 +48,25 @@ func WithSize(badgeSize size.ResponsiveSize) Option {
 	}
 }
 
-func WithThemeColor(themeColor color.ThemeColor, outline bool) Option {
+func WithThemeColor(themeColor color.ThemeColor) Option {
 	return func(p *Props) {
-		p.ThemeColorProps = color.NewThemeColor(themeColor, outline)
+		p.ThemeColorProps = color.NewThemeColor(themeColor, false)
 	}
 }
 
-func WithStateColor(stateColor color.StateColor, outline bool) Option {
+func WithStateColor(stateColor color.StateColor) Option {
 	return func(p *Props) {
-		p.StateColorProps = color.NewStateColor(stateColor, outline)
+		p.StateColorProps = color.NewStateColor(stateColor, false)
+	}
+}
+
+// WithStyle will set a style for a colored Badge. Styles are Soft, Outline or
+// DashedOutline.
+func WithStyle(style Style) Option {
+	return func(p *Props) {
+		if style > 0 {
+			p.style = style
+		}
 	}
 }
 
