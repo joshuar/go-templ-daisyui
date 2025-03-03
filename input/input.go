@@ -18,6 +18,7 @@ type Option components.Option[*Props]
 
 // Input is an interface to represent any type of input component.
 type Input interface {
+	GetID() string
 	SetValue(value attributes.Value)
 	SetStateColor(stateColor color.StateColor)
 	Show(classes ...string) templ.Component

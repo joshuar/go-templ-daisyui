@@ -34,7 +34,6 @@ type Props struct {
 	size size.ResponsiveSize
 	*color.ThemeColorProps
 	*color.StateColorProps
-	bordered bool
 	required bool
 	readonly bool
 }
@@ -44,13 +43,6 @@ type Props struct {
 func AsType(texttype Type) Option {
 	return func(p *Props) {
 		p.SetAttribute("type", texttype.String())
-	}
-}
-
-// Bordered will ensure the textinput has a visible border around it.
-func Bordered() Option {
-	return func(p *Props) {
-		p.bordered = true
 	}
 }
 

@@ -9,13 +9,13 @@ func (input *Props) Show(classes ...string) templ.Component {
 	switch {
 	case input.FormControl.enabled && input.HasLabels():
 		// FormControls and Labels set.
-		return input.FormControl.Show(input.Labels.Show(input.Input.Show(classes...)))
+		return input.FormControl.Show(input.Input.GetID(), input.Labels.Show(input.Input.Show(classes...)))
 	case !input.FormControl.enabled && input.HasLabels():
 		// Only Labels set.
 		return input.Labels.Show(input.Input.Show(classes...))
 	case input.FormControl.enabled && !input.HasLabels():
 		// Only FormControls set.
-		return input.FormControl.Show(input.Input.Show(classes...))
+		return input.FormControl.Show(input.Input.GetID(), input.Input.Show(classes...))
 	default:
 		// Neither FormControls nor Labels set.
 		return input.Input.Show(classes...)

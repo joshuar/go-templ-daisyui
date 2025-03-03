@@ -4,18 +4,20 @@
 package input
 
 // Show will display the given form element wrapped with the formcontrol label.
-templ (control *FormControlProps) Show(input templ.Component) {
-	<label class="form-control w-full max-w-xs">
+templ (control *FormControlProps) Show(id string, input templ.Component) {
+	<fieldset class="fieldset">
 		if control.topLeft != "" || control.topRight != "" {
-			<div class="label">
+			<div class="label flex justify-between" for={ id }>
 				<span class="label-text">{ control.topLeft }</span>
 				<span class="label-text-alt">{ control.topRight }</span>
 			</div>
 		}
 		@input
 		if control.bottomLeft != "" || control.bottomRight != "" {
-			<span class="label-text-alt">{ control.bottomLeft }</span>
-			<span class="label-text-alt">{ control.bottomRight }</span>
+			<div class="label flex justify-between" for={ id }>
+				<span class="label-text-alt">{ control.bottomLeft }</span>
+				<span class="label-text-alt">{ control.bottomRight }</span>
+			</div>
 		}
-	</label>
+	</fieldset>
 }

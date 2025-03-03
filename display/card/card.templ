@@ -25,7 +25,7 @@ templ (card *Props) Show(classes ...string) {
 	<div
 		class={ "card",
 			templ.KV(card.applyLayout(),card.layout > 0),
-			templ.KV("card-bordered",card.border),
+			templ.KV("card-border",card.border),
 			templ.KV("glass",card.glass),
 			templ.KV("image-full",card.fullImage),
 	card.baseColor.ApplyBaseColor(),

@@ -67,7 +67,6 @@ templ (input *Props) Show(classes ...string) {
 	<input
 		class={
 			"input",
-			templ.KV("input-bordered", input.bordered),
 			templ.KV(input.applySize(), input.size.Valid()),
 			templ.KV(input.applyThemeColor(), input.ValidThemeColor()),
 			templ.KV(input.applyStateColor(), input.ValidStateColor()),
