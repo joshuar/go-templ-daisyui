@@ -41,7 +41,7 @@ templ (card *Props) Show(classes ...string) {
 					@card.image.Show("rounded-xl")
 				</figure>
 			}
-			<figure class="h-48">
+			<figure class="h-48 w-1/3">
 				@card.image.Show("object-scale-down", "max-h-full", "m-auto")
 			</figure>
 		}
@@ -58,7 +58,10 @@ templ (card *Props) Show(classes ...string) {
 
 // Show will display the Card body with the given options.
 templ (body *BodyProps) Show(classes ...string) {
-	<div class={ "card-body", templ.KV(strings.Join(classes, " "),len(classes) >0) }>
+	<div
+		class={ "card-body", templ.KV(strings.Join(classes, " "),len(classes) >0) }
+		{ body.ShowAttributes()... }
+	>
 		// Display the Card title, if specified.
 		if body.title != nil {
 			<h2 class="card-title">
