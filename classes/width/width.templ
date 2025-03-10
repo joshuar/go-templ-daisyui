@@ -1,0 +1,32 @@
+// Copyright 2025 Joshua Rich <joshua.rich@gmail.com>.
+// SPDX-License-Identifier: 	AGPL-3.0-or-later
+
+// Package width provides utility classes for setting widths.
+//
+// https://tailwindcss.com/docs/width
+package width
+
+import "github.com/joshuar/go-templ-daisyui/classes"
+
+const (
+	Auto   classes.Class = "w-auto"
+	Full   classes.Class = "w-full"
+	Screen classes.Class = "w-screen"
+	Min    classes.Class = "w-min"
+	Max    classes.Class = "w-max"
+	Fit    classes.Class = "w-fit"
+
+	PX classes.Class = "w-px"
+
+	W24 classes.Class = "w-24"
+	W32 classes.Class = "w-32"
+	W40 classes.Class = "w-40"
+	W48 classes.Class = "w-48"
+	W52 classes.Class = "w-52"
+	W64 classes.Class = "w-64"
+	W80 classes.Class = "w-80"
+	W96 classes.Class = "w-96"
+)
+
+templ widthNOOP() {
+}
