@@ -39,7 +39,7 @@ templ (dropdown *Props) showAsClass(classes ...string) {
 		} else {
 			<div tabindex="0" role="button" class="btn m-1">Click</div>
 		}
-		@dropdown.content.Show("dropdown-content", "rounded-box", "z-[1]", "w-52", "p-2", "shadow")
+		@dropdown.content.Show("dropdown-content", "rounded-box", "z-[1]", "shadow")
 	</div>
 }
 
@@ -60,7 +60,7 @@ templ (dropdown *Props) showAsDetails(classes ...string) {
 		} else {
 			<summary class="btn m-1">Click</summary>
 		}
-		@dropdown.content.Show("dropdown-content", "z-[1]", "w-52", "p-2", "shadow")
+		@dropdown.content.Show("dropdown-content", "z-[1]", "shadow")
 	</details>
 }
 
