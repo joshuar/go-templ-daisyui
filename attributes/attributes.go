@@ -1,6 +1,8 @@
 // Copyright 2025 Joshua Rich <joshua.rich@gmail.com>.
 // SPDX-License-Identifier: 	AGPL-3.0-or-later
 
+// Package attributes can be inherited by components to provide the ability to
+// set custom attributes on a component.
 package attributes
 
 import (
@@ -18,20 +20,12 @@ type Attributes struct {
 
 type (
 	// ID is the id of the element.
-	ID string
+	ID = string
 	// Value is the value of the element.
-	Value string
+	Value = string
 	// Name is the name of the element.
-	Name string
+	Name = string
 )
-
-func (id ID) String() string {
-	return string(id)
-}
-
-func (value Value) String() string {
-	return string(value)
-}
 
 // SetAttribute will set the attribute with the given key to the given value.
 func (a *Attributes) GetAttribute(key string) string {
@@ -124,7 +118,3 @@ func New() *Attributes {
 		attributes: make(templ.Attributes),
 	}
 }
-
-// type Option = opts.Option[Attributes]
-
-// func WithID(id string) Option { return opts.Opt[Attributes, string]("id", id) }
