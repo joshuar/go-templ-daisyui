@@ -19,7 +19,20 @@ func applyOpenFrom(from Open) string {
 	default:
 		return "dropdown-bottom"
 	}
+}
 
+// applyOpenFrom sets how the Dropdown will open.
+func applyAlignment(align Alignment) string {
+	switch align {
+	case AlignCenter:
+		return "dropdown-center"
+	case AlignEnd:
+		return "dropdown-end"
+	case AlignStart:
+		fallthrough
+	default:
+		return "dropdown-start"
+	}
 }
 
 // showAsClass renders the Dropdown as a <div></div> element.
@@ -27,9 +40,9 @@ templ (dropdown *Props) showAsClass(classes ...string) {
 	<div
 		class={ "dropdown",
 			templ.KV(applyOpenFrom(dropdown.openProps.From), dropdown.openProps.From > 0),
+			templ.KV(applyAlignment(dropdown.openProps.Align), dropdown.openProps.Align > 0),
 			templ.KV("dropdown-hover", dropdown.openProps.Hover),
 			templ.KV("dropdown-open", dropdown.openProps.Force),
-			templ.KV("dropdown-end", dropdown.openProps.EndAlignment),
 			templ.KV(dropdown.GetHiddenBreakpoint(), dropdown.HiddenBreakpointSet()),
 			templ.KV(dropdown.GetRevealedBreakpoint(), dropdown.RevealedBreakpointSet()),
 			templ.KV(strings.Join(classes, " "), len(classes) > 0) }
@@ -48,9 +61,9 @@ templ (dropdown *Props) showAsDetails(classes ...string) {
 	<details
 		class={ "dropdown",
 			templ.KV(applyOpenFrom(dropdown.openProps.From), dropdown.openProps.From > 0),
+			templ.KV(applyAlignment(dropdown.openProps.Align), dropdown.openProps.Align > 0),
 			templ.KV("dropdown-hover", dropdown.openProps.Hover),
 			templ.KV("dropdown-open", dropdown.openProps.Force),
-			templ.KV("dropdown-end", dropdown.openProps.EndAlignment),
 			templ.KV(dropdown.GetHiddenBreakpoint(), dropdown.HiddenBreakpointSet()),
 			templ.KV(dropdown.GetRevealedBreakpoint(), dropdown.RevealedBreakpointSet()),
 			templ.KV(strings.Join(classes, " "), len(classes) > 0) }

@@ -27,6 +27,16 @@ const (
 type Open int
 
 const (
+	AlignStart Alignment = iota
+	AlignCenter
+	AlignEnd
+)
+
+// Alignment defines how the dropdown will be aligned relative to the button
+// when opened.
+type Alignment int
+
+const (
 	// Details uses a <details> element for the Dropdown.
 	//
 	// https://daisyui.com/components/dropdown/#dropdown-menu-using-details-tag
@@ -61,10 +71,10 @@ type Option components.Option[*Props]
 
 // OpenProps defines properties for how a Dropdown will open.
 type OpenProps struct {
-	From         Open
-	EndAlignment bool
-	Hover        bool
-	Force        bool
+	From  Open
+	Align Alignment
+	Hover bool
+	Force bool
 }
 
 // OpenOption is a functional option to control how a Dropdown will open.
@@ -86,10 +96,18 @@ func ForceOpen() OpenOption {
 
 // From customizes how the dropdown will open and optional alignment. By default, if this
 // option is not specified, the dropdown will open from the bottom.
-func From(from Open, alignend bool) OpenOption {
+func From(from Open) OpenOption {
 	return func(p *OpenProps) {
 		p.From = from
-		p.EndAlignment = alignend
+	}
+}
+
+// Align customizes how the dropdown content is aligned relative to the button
+// when open. By default, if this option is not specified, the dropdown content
+// will be left-aligned.
+func Align(align Alignment) OpenOption {
+	return func(p *OpenProps) {
+		p.Align = align
 	}
 }
 
