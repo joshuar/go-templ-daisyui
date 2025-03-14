@@ -1,0 +1,78 @@
+// Copyright 2025 Joshua Rich <joshua.rich@gmail.com>.
+// SPDX-License-Identifier: 	AGPL-3.0-or-later
+
+package fileinput
+
+import "strings"
+import "github.com/joshuar/go-templ-daisyui/modifiers/size"
+import "github.com/joshuar/go-templ-daisyui/modifiers/state"
+import "github.com/joshuar/go-templ-daisyui/modifiers/color"
+
+func (input *Props) applySize() string {
+	switch input.size {
+	case size.XS:
+		return "file-input-xs"
+	case size.SM:
+		return "file-input-sm"
+	case size.MD:
+		return "file-input-md"
+	case size.LG:
+		return "file-input-lg"
+	case size.XL:
+		return "file-input-xl"
+	default:
+		return "file-input-md"
+	}
+}
+
+// applyThemeColor applies a theme color to the Component.
+func (input *Props) applyThemeColor() string {
+	themeColor := "input-neutral"
+
+	switch input.themeColor {
+	case color.Primary:
+		themeColor = "file-input-primary"
+	case color.Secondary:
+		themeColor = "file-input-secondary"
+	case color.Accent:
+		themeColor = "file-input-accent"
+	case color.Neutral:
+		themeColor = "file-input-neutral"
+	case color.Ghost:
+		themeColor = "file-input-ghost"
+	}
+
+	return themeColor
+}
+
+// applyStateColor applies a state color to the Component.
+func (input *Props) applyStateColor() string {
+	var stateColor string
+
+	switch input.stateColor {
+	case state.Info:
+		stateColor = "file-input-info"
+	case state.Success:
+		stateColor = "file-input-sucess"
+	case state.Warning:
+		stateColor = "file-input-warning"
+	case state.Error:
+		stateColor = "file-input-error"
+	}
+
+	return stateColor
+}
+
+templ (input *Props) Show(classes ...string) {
+	<input
+		type="file"
+		class={
+			"file-input",
+			templ.KV(input.applySize(), input.size.Valid()),
+			templ.KV(input.applyThemeColor(), input.themeColor.Valid()),
+			templ.KV(input.applyStateColor(), input.stateColor.Valid()),
+			templ.KV(strings.Join(classes, " "), len(classes) > 0),
+		}
+		{ input.ShowAttributes()... }
+	/>
+}
