@@ -58,7 +58,7 @@ func WithName(name attributes.Name) Option {
 	}
 }
 
-func WithID(id attributes.ID) Option {
+func WithID(id string) Option {
 	return func(p *Props) {
 		p.SetID(id)
 	}

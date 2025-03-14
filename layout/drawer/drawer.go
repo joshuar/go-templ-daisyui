@@ -42,7 +42,7 @@ func Build(id string, main, side templ.Component, options ...Option) *Props {
 		Attributes:  attributes.New(),
 	}
 
-	drawer.SetID(attributes.ID(id))
+	drawer.SetID(id)
 
 	for _, option := range options {
 		option(drawer)

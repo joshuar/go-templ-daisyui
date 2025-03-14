@@ -25,7 +25,7 @@ func WithText(text string) Option {
 	}
 }
 
-func WithID(id attributes.ID) Option {
+func WithID(id string) Option {
 	return func(p *Props) {
 		p.SetID(id)
 	}

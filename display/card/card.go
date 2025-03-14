@@ -142,7 +142,7 @@ func WithName(name attributes.Name) Option {
 	}
 }
 
-func WithID(id attributes.ID) Option {
+func WithID(id string) Option {
 	return func(p *Props) {
 		p.SetID(id)
 	}
@@ -180,7 +180,7 @@ func WithActions(actions ...templ.Component) BodyOption {
 }
 
 // WithBodyID option sets the id attribute on the Card body.
-func WithBodyID(id attributes.ID) BodyOption {
+func WithBodyID(id string) BodyOption {
 	return func(p *BodyProps) {
 		p.SetID(id)
 	}

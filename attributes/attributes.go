@@ -6,6 +6,7 @@
 package attributes
 
 import (
+	"fmt"
 	"maps"
 	"sync"
 
@@ -18,9 +19,21 @@ type Attributes struct {
 	mu         sync.Mutex
 }
 
+// ID represents an id attribute in a HTML element.
+type ID string
+
+// Target returns the id attribute as a target (i.e., for htmx requests). This
+// is the base id string with a "#" prefix.
+func (a ID) Target() string {
+	return fmt.Sprintf("#%s", a)
+}
+
+// String returns the id attribute as a string.
+func (a ID) String() string {
+	return string(a)
+}
+
 type (
-	// ID is the id of the element.
-	ID = string
 	// Value is the value of the element.
 	Value = string
 	// Name is the name of the element.
@@ -83,22 +96,27 @@ func (a *Attributes) ShowAttributes() templ.Attributes {
 }
 
 // SetID will set the id attribute for the Component.
-func (a *Attributes) SetID(id ID) {
-	a.SetAttribute("id", string(id))
+func (a *Attributes) SetID(id string) {
+	a.SetAttribute("id", id)
 }
 
 func (a *Attributes) GetID() string {
 	return a.GetAttribute("id")
 }
 
+func (a *Attributes) GetIDTarget() string {
+	id := ID(a.GetAttribute("id"))
+	return id.Target()
+}
+
 // SetValue will set the value attribute for the Component.
 func (a *Attributes) SetValue(value Value) {
-	a.SetAttribute("value", string(value))
+	a.SetAttribute("value", value)
 }
 
 // SetName will set the name attribute for the Component.
 func (a *Attributes) SetName(name Name) {
-	a.SetAttribute("name", string(name))
+	a.SetAttribute("name", name)
 }
 
 // Checked will set  checked="checked" for the Component.

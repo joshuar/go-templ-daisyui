@@ -15,7 +15,7 @@ type List struct {
 	*attributes.Attributes
 }
 
-func WithID(id attributes.ID) Option {
+func WithID(id string) Option {
 	return func(l *List) {
 		l.SetID(id)
 	}

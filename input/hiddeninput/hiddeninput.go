@@ -25,7 +25,7 @@ func WithName(name attributes.Name) Option {
 }
 
 // WithID will set the id attribute of the input.
-func WithID(id attributes.ID) Option {
+func WithID(id string) Option {
 	return func(p *Props) {
 		p.SetID(id)
 	}
