@@ -1,0 +1,102 @@
+// Copyright 2025 Joshua Rich <joshua.rich@gmail.com>.
+// SPDX-License-Identifier: 	AGPL-3.0-or-later
+
+package option
+
+import "strings"
+import "github.com/joshuar/go-templ-daisyui/modifiers/size"
+import "github.com/joshuar/go-templ-daisyui/modifiers/color"
+import "github.com/joshuar/go-templ-daisyui/modifiers/state"
+
+func (input *Props) applySize() string {
+	switch input.size {
+	case size.XS:
+		return "select-xs"
+	case size.SM:
+		return "select-sm"
+	case size.MD:
+		return "select-md"
+	case size.LG:
+		return "select-lg"
+	case size.XL:
+		return "select-xl"
+	default:
+		return "select-md"
+	}
+}
+
+// applyThemeColor applies a theme color to the Component.
+func (input *Props) applyThemeColor() string {
+	themeColor := "select-neutral"
+
+	switch input.themeColor {
+	case color.Primary:
+		themeColor = "select-primary"
+	case color.Secondary:
+		themeColor = "select-secondary"
+	case color.Accent:
+		themeColor = "select-accent"
+	case color.Neutral:
+		themeColor = "select-neutral"
+	case color.Ghost:
+		themeColor = "select-ghost"
+	}
+
+	return themeColor
+}
+
+// applyStateColor applies a state color to the Component.
+func (input *Props) applyStateColor() string {
+	var stateColor string
+
+	switch input.stateColor {
+	case state.Info:
+		stateColor = "select-info"
+	case state.Success:
+		stateColor = "select-sucess"
+	case state.Warning:
+		stateColor = "select-warning"
+	case state.Error:
+		stateColor = "select-error"
+	}
+
+	return stateColor
+}
+
+templ (input *Props) Show(classes ...string) {
+	<select
+		class={
+			"select",
+			templ.KV("validator", input.Validate()),
+			templ.KV(input.applySize(), input.size.Valid()),
+			templ.KV(input.applyThemeColor(), input.themeColor.Valid()),
+			templ.KV(input.applyStateColor(), input.stateColor.Valid()),
+			templ.KV(strings.Join(classes, " "), len(classes) > 0),
+		}
+		required?={ input.Required() }
+		{ input.ShowAttributes()... }
+	>
+		// If a label is set, implemented as a disabled and selected by default option.
+		if input.label != "" {
+			<option disabled selected>{ input.label }</option>
+		}
+		// Build all options.
+		for _, option := range input.values {
+			@option.Show()
+		}
+	</select>
+	// Add the validation hint if set.
+	@input.ShowHint()
+}
+
+templ (v *Value) Show() {
+	<option
+		disabled?={ v.Disabled }
+		selected?={ v.Selected }
+		if v.Value != "" {
+			value={ v.Value }
+		}
+	>
+		{ v.Label }
+	</option>
+}
