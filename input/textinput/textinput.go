@@ -10,6 +10,7 @@ import (
 	"github.com/a-h/templ"
 	components "github.com/joshuar/go-templ-daisyui"
 	"github.com/joshuar/go-templ-daisyui/attributes"
+	"github.com/joshuar/go-templ-daisyui/input/validation"
 	"github.com/joshuar/go-templ-daisyui/modifiers/color"
 	"github.com/joshuar/go-templ-daisyui/modifiers/size"
 )
@@ -34,7 +35,7 @@ type Props struct {
 	size size.ResponsiveSize
 	*color.ThemeColorProps
 	*color.StateColorProps
-	required bool
+	*validation.Validation
 	readonly bool
 }
 
@@ -50,13 +51,26 @@ func AsType(texttype Type) Option {
 // input validation.
 func Required() Option {
 	return func(p *Props) {
-		p.required = true
+		p.SetRequired(true)
 	}
 }
 
 func ReadOnly() Option {
 	return func(p *Props) {
 		p.readonly = true
+	}
+}
+
+// Validate option ensures that HTML5 validation will be applied to the input.
+func Validate() Option {
+	return func(p *Props) {
+		p.SetValidation(true)
+	}
+}
+
+func ValidateHint(hint string) Option {
+	return func(p *Props) {
+		p.SetHint(hint)
 	}
 }
 
@@ -113,6 +127,7 @@ func WithExtraAttributes(attrs templ.Attributes) Option {
 func Build(options ...Option) *Props {
 	textinput := &Props{
 		Attributes:      attributes.New(),
+		Validation:      validation.New(),
 		ThemeColorProps: &color.ThemeColorProps{},
 		StateColorProps: &color.StateColorProps{},
 	}
