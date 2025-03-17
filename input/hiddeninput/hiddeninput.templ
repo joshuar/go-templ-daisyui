@@ -3,10 +3,15 @@
 
 package hiddeninput
 
+import "strings"
+
 // Show will render the textinput.
-templ (input *Props) Show() {
+templ (input *Props) Show(classes ...string) {
 	<input
-		class="input"
+		class={
+			"input",
+			templ.KV(strings.Join(classes, " "), len(classes) > 0),
+		}
 		{ input.ShowAttributes()... }
 	/>
 }
