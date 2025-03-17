@@ -68,11 +68,15 @@ templ (input *Props) Show(classes ...string) {
 		type="file"
 		class={
 			"file-input",
+			templ.KV("validator", input.Validate()),
 			templ.KV(input.applySize(), input.size.Valid()),
 			templ.KV(input.applyThemeColor(), input.themeColor.Valid()),
 			templ.KV(input.applyStateColor(), input.stateColor.Valid()),
 			templ.KV(strings.Join(classes, " "), len(classes) > 0),
 		}
+		required?={ input.Required() }
 		{ input.ShowAttributes()... }
 	/>
+	// Add the validation hint if set.
+	@input.ShowHint()
 }
