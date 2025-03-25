@@ -7,6 +7,7 @@ import (
 	"github.com/joshuar/go-templ-daisyui/modifiers/color"
 	"github.com/joshuar/go-templ-daisyui/modifiers/size"
 	"github.com/joshuar/go-templ-daisyui/modifiers/state"
+	"github.com/joshuar/go-templ-daisyui/modifiers/style"
 	"strings"
 )
 
@@ -95,6 +96,20 @@ func (btn *Props) applyStateColor() string {
 	return stateColor
 }
 
+// applyStyle sets a DaisyUI style for the alert.
+func (btn *Props) applyStyle() string {
+	switch btn.style {
+	case style.Soft:
+		return "btn-soft"
+	case style.Dash:
+		return "btn-dash"
+	case style.Outline:
+		return "btn-outline"
+	default:
+		return ""
+	}
+}
+
 templ (btn *Props) Show(classes ...string) {
 	<button
 		class={ "btn",
@@ -103,6 +118,7 @@ templ (btn *Props) Show(classes ...string) {
 			templ.KV(btn.applySize(),btn.size.Valid()),
 			templ.KV(btn.applyThemeColor(),btn.ValidThemeColor()),
 			templ.KV(btn.applyStateColor(),btn.ValidStateColor()),
+			templ.KV(btn.applyStyle(), btn.style.Valid()),
             templ.KV(strings.Join(classes," "),len(classes) > 0) }
 		{ btn.ShowAttributes()... }
 		autofocus?={ btn.autofocus }

@@ -4,51 +4,69 @@
 package alert
 
 import "github.com/joshuar/go-templ-daisyui/display/icon"
+import "github.com/joshuar/go-templ-daisyui/modifiers/state"
+import "github.com/joshuar/go-templ-daisyui/modifiers/style"
 
-templ (alert *Props) Alert() {
-	<div
-		role="alert"
-		class="alert"
-		{ alert.ShowAttributes()... }
-	>
-		@icon.BuildInfoIcon().Show()
-		<span>{ alert.text }</span>
-		{ children... }
-	</div>
+// applyState sets the alert state color.
+func (alert *Props) applyState() string {
+	switch alert.state {
+	case state.Info:
+		return "alert-info"
+	case state.Success:
+		return "alert-success"
+	case state.Warning:
+		return "alert-warning"
+	case state.Error:
+		return "alert-error"
+	default:
+		return "alert-success"
+	}
 }
 
-templ (alert *Props) Success() {
-	<div
-		role="alert"
-		class="alert alert-success"
-		{ alert.ShowAttributes()... }
-	>
-		@icon.BuildSuccessIcon().Show()
-		<span>{ alert.text }</span>
-		{ children... }
-	</div>
+// applyStyle sets a DaisyUI style for the alert.
+func (alert *Props) applyStyle() string {
+	switch alert.style {
+	case style.Soft:
+		return "alert-soft"
+	case style.Dash:
+		return "alert-dash"
+	case style.Outline:
+		return "alert-outline"
+	default:
+		return ""
+	}
 }
 
-templ (alert *Props) Warning() {
-	<div
-		role="alert"
-		class="alert alert-warning"
-		{ alert.ShowAttributes()... }
-	>
-		@icon.BuildWarningIcon().Show()
-		<span>{ alert.text }</span>
-		{ children... }
-	</div>
+// icon sets the icon for the alert based on the state value.
+func (alert *Props) icon() templ.Component {
+	switch alert.state {
+	case state.Info:
+		return icon.BuildInfoIcon().Show()
+	case state.Success:
+		return icon.BuildSuccessIcon().Show()
+	case state.Warning:
+		return icon.BuildWarningIcon().Show()
+	case state.Error:
+		return icon.BuildErrorIcon().Show()
+	default:
+		return icon.BuildSuccessIcon().Show()
+	}
 }
 
-templ (alert *Props) Error() {
+templ (alert *Props) Show() {
 	<div
 		role="alert"
-		class="alert alert-error"
+		class={
+			"alert",
+			templ.KV(alert.applyState(), alert.state.Valid()),
+			templ.KV(alert.applyStyle(), alert.style.Valid()),
+		}
 		{ alert.ShowAttributes()... }
 	>
-		@icon.BuildErrorIcon().Show()
-		<span>{ alert.text }</span>
+		@alert.icon()
+		if alert.text != "" {
+			<span>{ alert.text }</span>
+		}
 		{ children... }
 	</div>
 }

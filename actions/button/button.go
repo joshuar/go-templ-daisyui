@@ -9,6 +9,7 @@ import (
 	"github.com/joshuar/go-templ-daisyui/attributes"
 	"github.com/joshuar/go-templ-daisyui/modifiers/color"
 	"github.com/joshuar/go-templ-daisyui/modifiers/size"
+	"github.com/joshuar/go-templ-daisyui/modifiers/style"
 )
 
 const (
@@ -37,6 +38,7 @@ type Props struct {
 	size size.ResponsiveSize
 	*color.ThemeColorProps
 	*color.StateColorProps
+	style style.Style
 	*modifierShape
 	content          templ.Component
 	noClickAnimation bool
@@ -93,6 +95,13 @@ func WithThemeColor(themeColor color.ThemeColor, outline bool) Option {
 func WithStateColor(stateColor color.StateColor, outline bool) Option {
 	return func(p *Props) {
 		p.StateColorProps = color.NewStateColor(stateColor, outline)
+	}
+}
+
+// WithStyle will apply the given style to the component.
+func WithStyle(value style.Style) Option {
+	return func(p *Props) {
+		p.style = value
 	}
 }
 

@@ -7,7 +7,6 @@ import (
 	"github.com/a-h/templ"
 	components "github.com/joshuar/go-templ-daisyui"
 	"github.com/joshuar/go-templ-daisyui/attributes"
-	"github.com/joshuar/go-templ-daisyui/modifiers/color"
 )
 
 const (
@@ -20,7 +19,7 @@ type Option components.Option[*Props]
 type Input interface {
 	GetID() string
 	SetValue(value attributes.Value)
-	SetStateColor(stateColor color.StateColor)
+	// SetStateColor(stateColor color.StateColor)
 	Show(classes ...string) templ.Component
 }
 
