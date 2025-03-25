@@ -29,7 +29,9 @@ templ (fieldset *Props) Show(classes ...string) {
 		}
 		// Display the fields.
 		for _, field := range fieldset.fields {
-			@field.Show()
+			<div>
+				@field.Show()
+			</div>
 		}
 	</fieldset>
 }
