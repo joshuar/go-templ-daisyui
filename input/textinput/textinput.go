@@ -74,6 +74,24 @@ func ValidateHint(hint string) Option {
 	}
 }
 
+func ValidatePattern(pattern string) Option {
+	return func(p *Props) {
+		p.SetPattern(pattern)
+	}
+}
+
+func ValidateMinLength(length int) Option {
+	return func(p *Props) {
+		p.SetMinLength(length)
+	}
+}
+
+func ValidateMaxLength(length int) Option {
+	return func(p *Props) {
+		p.SetMaxLength(length)
+	}
+}
+
 // WithPlaceholder sets the placeholder text on the textinput.
 func WithPlaceholder(text string) Option {
 	return func(p *Props) {

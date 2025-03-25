@@ -75,6 +75,7 @@ templ (input *Props) Show(classes ...string) {
 		}
 		required?={ input.Required() }
 		readonly?={ input.readonly }
+		{ input.ValidationOptions()... }
 		{ input.ShowAttributes()... }
 	/>
 	// Add the validation hint if set.
