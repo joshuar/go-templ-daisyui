@@ -3,11 +3,18 @@
 
 package validation
 
+import (
+	"strconv"
+
+	"github.com/a-h/templ"
+	"github.com/joshuar/go-templ-daisyui/attributes"
+)
+
 type Validation struct {
 	required bool
 	validate bool
 	hint     string
-	pattern  string
+	*attributes.Attributes
 }
 
 func (v *Validation) SetRequired(value bool) {
@@ -23,7 +30,15 @@ func (v *Validation) SetHint(value string) {
 }
 
 func (v *Validation) SetPattern(value string) {
-	v.pattern = value
+	v.SetAttribute("pattern", value)
+}
+
+func (v *Validation) SetMinLength(minLength int) {
+	v.SetAttribute("minlength", strconv.Itoa(minLength))
+}
+
+func (v *Validation) SetMaxLength(maxLength int) {
+	v.SetAttribute("maxlength", strconv.Itoa(maxLength))
 }
 
 // Validate returns whether validation is enabled.
@@ -43,12 +58,17 @@ func (v *Validation) Hint() string {
 
 // Pattern returns the validation pattern.
 func (v *Validation) Pattern() string {
-	return v.pattern
+	return v.GetAttribute("pattern")
+}
+
+func (v *Validation) ValidationOptions() templ.Attributes {
+	return v.ShowAttributes()
 }
 
 func New() *Validation {
 	return &Validation{
-		required: true,
-		validate: true,
+		required:   false,
+		validate:   false,
+		Attributes: attributes.New(),
 	}
 }

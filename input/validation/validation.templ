@@ -6,6 +6,6 @@ package validation
 // ShowHint will show the validation hint, if set.
 templ (v *Validation) ShowHint() {
 	if v.Hint() != "" {
-		<p class="validator-hint">{ v.Hint() }</p>
+		<div class="validator-hint">{ v.Hint() }</div>
 	}
 }
