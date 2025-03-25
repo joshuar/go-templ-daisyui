@@ -109,9 +109,18 @@ func (a *Attributes) GetIDTarget() string {
 	return id.Target()
 }
 
-// SetValue will set the value attribute for the Component.
+// SetValue will set the value attribute for the Component. Passing an empty
+// string is ignored and *will not* reset/wipe an existing value. To remove an
+// existing value, call the UnsetValue method.
 func (a *Attributes) SetValue(value Value) {
-	a.SetAttribute("value", value)
+	if value != "" {
+		a.SetAttribute("value", value)
+	}
+}
+
+// UnsetValue will reset/wipe the value attribute on the Component.
+func (a *Attributes) UnsetValue() {
+	a.UnsetAttribute("value")
 }
 
 // SetName will set the name attribute for the Component.
