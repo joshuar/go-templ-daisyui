@@ -1,35 +1,60 @@
 // Copyright 2025 Joshua Rich <joshua.rich@gmail.com>.
 // SPDX-License-Identifier: 	AGPL-3.0-or-later
 
+
 package modal
 
-// Modal represents a DaisyUI Modal Component.
+import (
+	"github.com/joshuar/go-templ-daisyui/actions/button"
+	"github.com/joshuar/go-templ-daisyui/display/icon"
+	"github.com/joshuar/go-templ-daisyui/modifiers/size"
+	"slices"
+)
+
+func (modal *Props) hsCloseModalAction() string {
+	return "on click or keyup[key=='Esc'] take .modal-open from #" + modal.GetID() + " wait 200ms then remove #" + modal.GetID()
+}
+
+// Show will display a Modal with its properties.
 templ (modal *Props) Show() {
 	<dialog
-		class={
-			"modal",
-			templ.KV("modal-open", modal.openInitially),
-		}
-		{ modal.ShowAttributes()... }
+		class={ "modal", templ.KV("modal-open", modal.openInitially) }
+		id={ modal.GetID() }
+		_="on closeModal add .closing then wait for animationend then remove me"
 	>
 		<div class="modal-box">
-			if modal.closeButton != nil {
-				<div class="absolute right-2 top-2 p-2">
-					@modal.closeButton
+			// If closeButton option is set, generate a close button.
+			if modal.closeButton {
+				@modal.showCloseButton()
+			}
+			// Display the modal content.
+			{ children... }
+			// Display any action buttons.
+			if len(modal.actions) > 0 {
+				<div class="modal-action">
+					for action := range slices.Values(modal.actions) {
+						@action.Show()
+					}
 				</div>
 			}
-			{ children... }
 		</div>
+		// If closeOutside option is set, generate backdrop with close action.
 		if modal.closeOutside {
-			// <form class="modal-backdrop" _="on click trigger closeModal"><button>close</button></form>
-			// _={ "on click or keyup[key=='Esc'] take .modal-open from #" + modal.id + " wait 200ms then remove #" + modal.id }
-			<form
-				method="dialog"
-				class="modal-backdrop"
-				_="on click trigger closeModal"
-			>
-				<button>close</button>
-			</form>
+			<div class="modal-backdrop" _={ modal.hsCloseModalAction() }></div>
 		}
 	</dialog>
+}
+
+templ (modal *Props) showCloseButton() {
+	<form method="dialog">
+		@button.Build(
+			button.AsShape(button.Circle, false),
+			button.WithContent(icon.Build("fa-xmark")),
+			button.WithSize(size.SM),
+			button.WithExtraAttributes(templ.Attributes{
+				// "_": "on click trigger closeModal",
+				"_": modal.hsCloseModalAction(),
+			}),
+		).Show("absolute", "right-2", "top-2")
+	</form>
 }

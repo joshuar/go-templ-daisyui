@@ -1,6 +1,9 @@
 // Copyright 2025 Joshua Rich <joshua.rich@gmail.com>.
 // SPDX-License-Identifier: 	AGPL-3.0-or-later
 
+// Package modal represents a DaisyUI Modal component.
+//
+// https://daisyui.com/components/modal/
 package modal
 
 import (
@@ -9,8 +12,6 @@ import (
 	components "github.com/joshuar/go-templ-daisyui"
 	"github.com/joshuar/go-templ-daisyui/actions/button"
 	"github.com/joshuar/go-templ-daisyui/attributes"
-	"github.com/joshuar/go-templ-daisyui/display/icon"
-	"github.com/joshuar/go-templ-daisyui/modifiers/color"
 )
 
 type Option components.Option[*Props]
@@ -18,39 +19,38 @@ type Option components.Option[*Props]
 // Props represents the properties for a DaisyUI Modal component.
 type Props struct {
 	*attributes.Attributes
-	closeButton   templ.Component
+	closeButton   bool
 	closeOutside  bool
 	openInitially bool
+	actions       []*button.Props
 }
 
-// WithModalCloseOutside ensures the when clicked outside the modal, it will
+// WithCloseOutside option ensures the when clicked outside the modal, it will
 // close it.
-func WithModalCloseOutside() Option {
+func WithCloseOutside() Option {
 	return func(p *Props) {
 		p.closeOutside = true
 	}
 }
 
-// WithModalCloseButton inserts a button to close the modal, aligned in the
-// modal with the given alignment.
-func WithModalCloseButton() Option {
+// WithCloseButton option inserts a button to close the modal in the top-right corner.
+func WithCloseButton() Option {
 	return func(p *Props) {
-		p.closeButton = button.Build(
-			button.AsShape(button.Circle, false),
-			button.WithThemeColor(color.Accent, false),
-			button.WithContent(icon.Build("fa-xmark")),
-			button.WithExtraAttributes(templ.Attributes{
-				"_": "on click trigger closeModal",
-				// "_": "on click or keyup[key=='Esc'] take .modal-open from #" + modal.id + " wait 200ms then remove #" + modal.id,
-			}),
-			button.WithID("close"),
-		).Show()
+		p.closeButton = true
 	}
 }
 
-func OpenModalInitially() Option {
+// OpenInitially option sets the modal to be open when first shown.
+func OpenInitially() Option {
 	return func(p *Props) {
 		p.openInitially = true
+	}
+}
+
+// WithActions option adds the given buttons as actions in the Modal (displayed in the bottom right below the content).
+func WithActions(buttons ...*button.Props) Option {
+	return func(p *Props) {
+		p.actions = buttons
 	}
 }
 
@@ -72,8 +72,7 @@ func WithExtraAttributes(attrs templ.Attributes) Option {
 	}
 }
 
-// Build creates a new ModalProps from the given options. This can be used
-// to pre-build a modal that can be shown later.
+// Build generates Modal properties from the given options.
 func Build(options ...Option) *Props {
 	modal := &Props{
 		Attributes: attributes.New(),
