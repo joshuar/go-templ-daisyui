@@ -3,8 +3,29 @@
 
 package card
 
-import "strings"
-import "github.com/joshuar/go-templ-daisyui/modifiers/shadow"
+import (
+	"github.com/joshuar/go-templ-daisyui/modifiers/shadow"
+	"github.com/joshuar/go-templ-daisyui/modifiers/size"
+	"strings"
+)
+
+// size returns the size class for a Badge.
+func (card *Props) applySize() string {
+	switch card.size {
+	case size.XS:
+		return "card-xs"
+	case size.SM:
+		return "card-sm"
+	case size.MD:
+		return "card-md"
+	case size.LG:
+		return "card-lg"
+	case size.XL:
+		return "card-xl"
+	default:
+		return "card-md"
+	}
+}
 
 // applyLayout will apply the specified layout to the Card.
 func (card *Props) applyLayout() string {
@@ -59,7 +80,9 @@ templ (card *Props) Show(classes ...string) {
 // Show will display the Card body with the given options.
 templ (body *BodyProps) Show(classes ...string) {
 	<div
-		class={ "card-body", templ.KV(strings.Join(classes, " "),len(classes) >0) }
+		class={ "card-body",
+			templ.KV(body.ShowClasses(),body.HasClasses()),
+		templ.KV(strings.Join(classes, " "),len(classes) >0) }
 		{ body.ShowAttributes()... }
 	>
 		// Display the Card title, if specified.

@@ -14,6 +14,7 @@ import (
 	"github.com/joshuar/go-templ-daisyui/display/image"
 	"github.com/joshuar/go-templ-daisyui/modifiers/color"
 	"github.com/joshuar/go-templ-daisyui/modifiers/shadow"
+	"github.com/joshuar/go-templ-daisyui/modifiers/size"
 )
 
 const (
@@ -46,6 +47,7 @@ type Props struct {
 	fullImage       bool
 	image           *image.Props
 	centeredContent bool
+	size            size.ResponsiveSize
 }
 
 // BodyProps represents a Card's body properties. These are used when the Show()
@@ -55,6 +57,7 @@ type BodyProps struct {
 	content templ.Component
 	*ActionsProps
 	*attributes.Attributes
+	*classes.Classes
 }
 
 // ActionsProps is the container for Card actions.
@@ -117,6 +120,13 @@ func WithFullImage() Option {
 func WithShadow(shadowSize shadow.ShadowSize) Option {
 	return func(p *Props) {
 		p.shadow = shadowSize
+	}
+}
+
+// WithText will set the text to display within the Badge.
+func WithSize(cardSize size.ResponsiveSize) Option {
+	return func(p *Props) {
+		p.size = cardSize
 	}
 }
 
@@ -193,6 +203,14 @@ func WithBodyExtraAttributes(attrs templ.Attributes) BodyOption {
 	}
 }
 
+func WithBodyExtraClasses(extraClasses ...classes.Class) BodyOption {
+	return func(p *BodyProps) {
+		for _, class := range extraClasses {
+			p.AddClass(class)
+		}
+	}
+}
+
 // Build creates a Card component from the given options.
 func Build(options ...Option) *Props {
 	card := &Props{
@@ -212,6 +230,7 @@ func BuildBody(options ...BodyOption) *BodyProps {
 	body := &BodyProps{
 		ActionsProps: &ActionsProps{},
 		Attributes:   attributes.New(),
+		Classes:      classes.New(),
 	}
 
 	for _, option := range options {
