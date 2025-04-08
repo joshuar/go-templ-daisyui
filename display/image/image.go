@@ -5,6 +5,7 @@ package image
 
 import (
 	components "github.com/joshuar/go-templ-daisyui"
+	"github.com/joshuar/go-templ-daisyui/classes"
 	"github.com/joshuar/go-templ-daisyui/layout/mask"
 	"github.com/joshuar/go-templ-daisyui/modifiers/size"
 )
@@ -18,6 +19,7 @@ type Props struct {
 	lazyLoading bool
 	mask        mask.Mask
 	size        size.FixedSize
+	*classes.Classes
 	// modifierObjectFit
 }
 
@@ -47,10 +49,19 @@ func WithSize(imageSize size.FixedSize) Option {
 	}
 }
 
+func WithExtraClasses(extraClasses ...classes.Class) Option {
+	return func(p *Props) {
+		for _, class := range extraClasses {
+			p.AddClass(class)
+		}
+	}
+}
+
 // BuildImage creates a new ImageProps.
 func Build(url string, options ...Option) *Props {
 	image := &Props{
-		url: url,
+		url:     url,
+		Classes: classes.New(),
 	}
 
 	for _, option := range options {

@@ -17,7 +17,8 @@ templ (image *Props) Show(classes ...string) {
 		class={
 			templ.KV(image.size.ApplyFixedSize(), image.size.Valid()),
 			templ.KV(image.mask.Apply(), image.mask.Valid()),
-			templ.KV(strings.Join(classes, " "),len(classes) >0),
+			templ.KV(image.ShowClasses(), image.HasClasses()),
+			templ.KV(strings.Join(classes, " "), len(classes) > 0),
 		}
 		src={ image.url }
 		if image.alt != "" {
