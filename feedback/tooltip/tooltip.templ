@@ -1,0 +1,70 @@
+// Copyright 2025 Joshua Rich <joshua.rich@gmail.com>.
+// SPDX-License-Identifier: 	AGPL-3.0-or-later
+
+package tooltip
+
+import (
+	"github.com/joshuar/go-templ-daisyui/modifiers/color"
+	"github.com/joshuar/go-templ-daisyui/modifiers/state"
+)
+
+const (
+	// Top will make the tooltip open from the top.
+	Top OpenFrom = "tooltip-top"
+	// Bottom will make the tooltip open from the bottom.
+	Bottom OpenFrom = "tooltip-bottom"
+	// Left will make the tooltip open from the left.
+	Left OpenFrom = "tooltip-left"
+	// Right will make the tooltip open from the right.
+	Right OpenFrom = "tooltip-right"
+)
+
+// OpenFrom defines where the tooltip will open from.
+type OpenFrom string
+
+func (tooltip *Props) applyThemeColor() string {
+	switch tooltip.themeColor {
+	case color.Primary:
+		return "tooltip-primary"
+	case color.Secondary:
+		return "tooltip-secondary"
+	case color.Accent:
+		return "tooltip-accent"
+	case color.Neutral:
+		return "tooltip-neutral"
+	case color.Ghost:
+		return "tooltip-ghost"
+	default:
+		return "tooltip-neutral"
+	}
+}
+
+func (tooltip *Props) applyStateColor() string {
+	switch tooltip.stateColor {
+	case state.Info:
+		return "tooltip-info"
+	case state.Success:
+		return "tooltip-success"
+	case state.Warning:
+		return "tooltip-warning"
+	case state.Error:
+		return "tooltip-error"
+	default:
+		return "tooltip-success"
+	}
+}
+
+// Show renders the tooltip with its given properties.
+templ (tooltip *Props) Show() {
+	<div
+		class={
+			"tooltip",
+			templ.KV(tooltip.from, tooltip.from != ""),
+			templ.KV(tooltip.applyThemeColor(), tooltip.themeColor.Valid()),
+			templ.KV(tooltip.applyStateColor(), tooltip.stateColor.Valid()),
+		}
+		data-tip={ tooltip.text }
+	>
+		{ children... }
+	</div>
+}
