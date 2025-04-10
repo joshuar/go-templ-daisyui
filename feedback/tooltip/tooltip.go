@@ -48,6 +48,7 @@ func WithOpenFrom(from OpenFrom) Option {
 func Build(text string, options ...Option) *Props {
 	tooltip := &Props{
 		text: text,
+		from: Top,
 	}
 
 	for _, option := range options {

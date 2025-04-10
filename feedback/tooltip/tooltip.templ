@@ -22,6 +22,10 @@ const (
 // OpenFrom defines where the tooltip will open from.
 type OpenFrom string
 
+func (from OpenFrom) String() string {
+	return string(from)
+}
+
 func (tooltip *Props) applyThemeColor() string {
 	switch tooltip.themeColor {
 	case color.Primary:
@@ -59,7 +63,7 @@ templ (tooltip *Props) Show() {
 	<div
 		class={
 			"tooltip",
-			templ.KV(tooltip.from, tooltip.from != ""),
+			templ.KV(tooltip.from.String(), tooltip.from != ""),
 			templ.KV(tooltip.applyThemeColor(), tooltip.themeColor.Valid()),
 			templ.KV(tooltip.applyStateColor(), tooltip.stateColor.Valid()),
 		}
