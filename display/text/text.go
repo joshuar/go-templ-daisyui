@@ -6,40 +6,10 @@
 package text
 
 import (
+	"github.com/a-h/templ"
 	components "github.com/joshuar/go-templ-daisyui"
+	"github.com/joshuar/go-templ-daisyui/attributes"
 	"github.com/joshuar/go-templ-daisyui/modifiers/color"
-)
-
-const (
-	Base Size = iota
-	XS
-	SM
-	LG
-	XL
-	XLXL
-)
-
-const (
-	Normal Weight = iota
-	Thin
-	Extralight
-	Light
-	Medium
-	Semibold
-	Bold
-	Extrabold
-	Black
-)
-
-type (
-	// Text Size
-	//
-	// https://tailwindcss.com/docs/font-size
-	Size int
-	// Text Weight
-	//
-	// https://tailwindcss.com/docs/font-weight
-	Weight int
 )
 
 type Option components.Option[*Props]
@@ -51,6 +21,7 @@ type Props struct {
 	text   string
 	*color.ThemeColorProps
 	*color.StateColorProps
+	*attributes.Attributes
 }
 
 // WithTextSize option sets the font size. If this option is not specified,
@@ -93,9 +64,17 @@ func WithStateColor(stateColor color.StateColor) Option {
 	}
 }
 
+func WithAttributes(attrs templ.Attributes) Option {
+	return func(p *Props) {
+		p.AddAttributes(attrs)
+	}
+}
+
 func Build(text string, options ...Option) *Props {
 	props := &Props{
-		text: text,
+		text:       text,
+		size:       Base,
+		Attributes: attributes.New(),
 	}
 
 	for _, option := range options {
