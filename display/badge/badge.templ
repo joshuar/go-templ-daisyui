@@ -91,6 +91,7 @@ templ (badge *Props) Show(classes ...string) {
 			templ.KV(badge.applySize(), badge.size.Valid()),
 			templ.KV(badge.applyThemeColor(), badge.ValidThemeColor()),
 			templ.KV(badge.applyStateColor(), badge.ValidStateColor()),
+			templ.KV(badge.ShowClasses(), badge.HasClasses()),
 			templ.KV(strings.Join(classes, " "), len(classes) > 0),
 		}
 		{ badge.ShowAttributes()... }
