@@ -7,6 +7,7 @@ import (
 	"github.com/a-h/templ"
 	components "github.com/joshuar/go-templ-daisyui"
 	"github.com/joshuar/go-templ-daisyui/attributes"
+	"github.com/joshuar/go-templ-daisyui/classes"
 	"github.com/joshuar/go-templ-daisyui/modifiers/color"
 )
 
@@ -14,6 +15,7 @@ type Option components.Option[*Props]
 
 type Props struct {
 	*attributes.Attributes
+	*classes.Classes
 	stateColor       color.StateColor
 	themeColor       color.ThemeColor
 	content          templ.Component
@@ -50,6 +52,15 @@ func WithExtraAttributes(attrs templ.Attributes) Option {
 	}
 }
 
+// WithExtraClasses sets additional CSS classes on the component.
+func WithExtraClasses(extraClasses ...classes.Class) Option {
+	return func(p *Props) {
+		for _, class := range extraClasses {
+			p.AddClass(class)
+		}
+	}
+}
+
 // WithContent sets the content for the Button.
 func WithContent(content any) Option {
 	return func(p *Props) {
@@ -66,6 +77,7 @@ func WithUnderlineOnHover() Option {
 func Build(options ...Option) *Props {
 	link := &Props{
 		Attributes: attributes.New(),
+		Classes:    classes.New(),
 	}
 
 	for _, option := range options {

@@ -4,94 +4,50 @@
 package badge
 
 import (
-	"github.com/joshuar/go-templ-daisyui/modifiers/color"
-	"github.com/joshuar/go-templ-daisyui/modifiers/size"
-	"github.com/joshuar/go-templ-daisyui/modifiers/state"
+	"github.com/joshuar/go-templ-daisyui/modifiers"
 	"strings"
 )
 
-// size returns the size class for a Badge.
-func (badge *Props) applySize() string {
-	switch badge.size {
-	case size.XS:
-		return "badge-xs"
-	case size.SM:
-		return "badge-sm"
-	case size.MD:
-		return "badge-md"
-	case size.LG:
-		return "badge-lg"
-	case size.XL:
-		return "badge-xl"
-	default:
-		return "badge-md"
-	}
-}
+const (
+	Soft    BadgeStyle = "badge-soft"
+	Outline BadgeStyle = "badge-outline"
+	Dashed  BadgeStyle = "badge-dash"
+	Ghost   BadgeStyle = "badge-ghost"
+)
 
-// applyThemeColor applies a theme color to the Component.
-func (badge *Props) applyThemeColor() string {
-	themeColor := "badge-neutral"
-	// Add color.
-	switch badge.GetThemeColor() {
-	case color.Primary:
-		themeColor = "badge-primary"
-	case color.Secondary:
-		themeColor = "badge-secondary"
-	case color.Accent:
-		themeColor = "badge-accent"
-	case color.Neutral:
-		themeColor = "badge-neutral"
-	case color.Ghost:
-		themeColor = "badge-ghost"
-	}
-	// Add any styling.
-	switch badge.style {
-	case Soft:
-		themeColor = themeColor + " badge-soft"
-	case Outline:
-		themeColor = themeColor + " badge-outline"
-	case DashedOutline:
-		themeColor = themeColor + " badge-dash"
-	}
+type BadgeStyle = modifiers.Style
 
-	return themeColor
-}
+const (
+	Primary   BadgeColor = "badge-primary"
+	Secondary BadgeColor = "badge-secondary"
+	Accent    BadgeColor = "badge-accent"
+	Neutral   BadgeColor = "badge-neutral"
+	Info      BadgeColor = "badge-info"
+	Success   BadgeColor = "badge-success"
+	Warning   BadgeColor = "badge-warning"
+	Error     BadgeColor = "badge-error"
+)
 
-// applyStateColor applies a state color to the Component.
-func (badge *Props) applyStateColor() string {
-	var stateColor string
-	// Add color.
-	switch badge.GetStateColor() {
-	case state.Info:
-		stateColor = "badge-info"
-	case state.Success:
-		stateColor = "badge-sucess"
-	case state.Warning:
-		stateColor = "badge-warning"
-	case state.Error:
-		stateColor = "badge-error"
-	}
-	// Add any styling.
-	switch badge.style {
-	case Soft:
-		stateColor = stateColor + " badge-soft"
-	case Outline:
-		stateColor = stateColor + " badge-outline"
-	case DashedOutline:
-		stateColor = stateColor + " badge-dash"
-	}
+type BadgeColor = modifiers.Color
 
-	return stateColor
-}
+const (
+	XS BadgeSize = "badge-xs"
+	SM BadgeSize = "badge-sm"
+	MD BadgeSize = "badge-md"
+	LG BadgeSize = "badge-lg"
+	XL BadgeSize = "badge-xl"
+)
+
+type BadgeSize = modifiers.Size
 
 templ (badge *Props) Show(classes ...string) {
 	<span
 		class={
 			"badge",
-			templ.KV(badge.applySize(), badge.size.Valid()),
-			templ.KV(badge.applyThemeColor(), badge.ValidThemeColor()),
-			templ.KV(badge.applyStateColor(), badge.ValidStateColor()),
-			templ.KV(badge.ShowClasses(), badge.HasClasses()),
+			badge.size.Class(),
+			badge.color.Class(),
+			badge.style.Class(),
+			badge.ShowClasses(),
 			templ.KV(strings.Join(classes, " "), len(classes) > 0),
 		}
 		{ badge.ShowAttributes()... }

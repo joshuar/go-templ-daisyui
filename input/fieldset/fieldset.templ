@@ -18,7 +18,7 @@ templ (field *FieldProps) Show() {
 templ (fieldset *Props) Show(classes ...string) {
 	<fieldset
 		class={ "fieldset",
-			fieldset.baseColor.ApplyBaseColor(),
+			templ.KV(fieldset.baseColor.String(),fieldset.baseColor.Valid()),
             	templ.KV(fieldset.ShowClasses(),fieldset.HasClasses()),
 	templ.KV(strings.Join(classes, " "),len(classes) >0) }
 		{ fieldset.ShowAttributes()... }

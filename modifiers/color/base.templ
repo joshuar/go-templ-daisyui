@@ -1,20 +1,26 @@
 // Copyright 2025 Joshua Rich <joshua.rich@gmail.com>.
 // SPDX-License-Identifier: 	AGPL-3.0-or-later
 
+
 package color
 
-// ApplyBaseColor will return a class string appropriate for the BaseColor.
-func (base BaseColor) ApplyBaseColor() string {
-	switch base {
-	case Base300:
-		return "bg-base-300"
-	case Base200:
-		return "bg-base-200"
-	case Base100:
-		fallthrough
-	default:
-		return "bg-base-100"
-	}
+import "slices"
+
+const (
+	Base100 BaseColor = "bg-base-100"
+	Base200 BaseColor = "bg-base-200"
+	Base300 BaseColor = "bg-base-300"
+)
+
+// BaseColor represents a `bg-base-*` value.
+type BaseColor string
+
+func (c BaseColor) String() string {
+	return string(c)
+}
+
+func (c BaseColor) Valid() bool {
+	return slices.Contains([]BaseColor{Base100, Base200, Base300}, c)
 }
 
 // noop function so that templ generation doesn't report errors.

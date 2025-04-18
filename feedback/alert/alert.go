@@ -10,16 +10,14 @@ import (
 	"github.com/a-h/templ"
 	components "github.com/joshuar/go-templ-daisyui"
 	"github.com/joshuar/go-templ-daisyui/attributes"
-	"github.com/joshuar/go-templ-daisyui/modifiers/state"
-	"github.com/joshuar/go-templ-daisyui/modifiers/style"
 )
 
 type Option components.Option[*Props]
 
 type Props struct {
 	*attributes.Attributes
-	state state.State
-	style style.Style
+	state AlertState
+	style AlertStyle
 	text  string
 }
 
@@ -36,9 +34,9 @@ func WithID(id string) Option {
 }
 
 // WithStyle will apply the given style to the component.
-func WithStyle(value style.Style) Option {
+func WithStyle(style AlertStyle) Option {
 	return func(p *Props) {
-		p.style = value
+		p.style = style
 	}
 }
 
@@ -50,9 +48,9 @@ func WithExtraAttributes(attrs templ.Attributes) Option {
 
 // Build creates a new Alert without rendering it. The Alert properties can then
 // be modified before finally rendering by calling the Show() method.
-func Build(alertState state.State, options ...Option) *Props {
+func Build(state AlertState, options ...Option) *Props {
 	alert := &Props{
-		state:      alertState,
+		state:      state,
 		Attributes: attributes.New(),
 	}
 

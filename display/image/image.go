@@ -39,7 +39,7 @@ func WithAltText(alt string) Option {
 
 func WithMask(imageMask mask.Mask) Option {
 	return func(image *Props) {
-		image.mask = imageMask
+		image.AddClass(imageMask)
 	}
 }
 

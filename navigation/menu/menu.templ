@@ -43,8 +43,8 @@ templ (menu *Props) Show(classes ...string) {
 			templ.KV(menu.applySize(), menu.size.Valid()),
 			templ.KV(menu.GetHiddenBreakpoint(), menu.HiddenBreakpointSet()),
 			templ.KV(menu.GetRevealedBreakpoint(), menu.RevealedBreakpointSet()),
-			menu.baseColor.ApplyBaseColor(),
-			templ.KV(menu.ShowClasses(), menu.HasClasses()),
+			templ.KV(menu.baseColor.String(),menu.baseColor.Valid()),
+			menu.ShowClasses(),
 			templ.KV(strings.Join(classes, " "),len(classes) > 0 ) }
 		{ menu.ShowAttributes()... }
 	>

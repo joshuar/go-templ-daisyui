@@ -3,50 +3,38 @@
 
 package alert
 
-import "github.com/joshuar/go-templ-daisyui/display/icon"
-import "github.com/joshuar/go-templ-daisyui/modifiers/state"
-import "github.com/joshuar/go-templ-daisyui/modifiers/style"
+import (
+	"github.com/joshuar/go-templ-daisyui/display/icon"
+	"github.com/joshuar/go-templ-daisyui/modifiers"
+)
 
-// applyState sets the alert state color.
-func (alert *Props) applyState() string {
-	switch alert.state {
-	case state.Info:
-		return "alert-info"
-	case state.Success:
-		return "alert-success"
-	case state.Warning:
-		return "alert-warning"
-	case state.Error:
-		return "alert-error"
-	default:
-		return "alert-success"
-	}
-}
+const (
+	Info    AlertState = "alert-info"
+	Success AlertState = "alert-success"
+	Warning AlertState = "alert-warning"
+	Error   AlertState = "alert-error"
+)
 
-// applyStyle sets a DaisyUI style for the alert.
-func (alert *Props) applyStyle() string {
-	switch alert.style {
-	case style.Soft:
-		return "alert-soft"
-	case style.Dash:
-		return "alert-dash"
-	case style.Outline:
-		return "alert-outline"
-	default:
-		return ""
-	}
-}
+type AlertState = modifiers.Color
+
+const (
+	Soft    AlertStyle = "alert-soft"
+	Outline AlertStyle = "alert-outline"
+	Dashed  AlertStyle = "alert-dash"
+)
+
+type AlertStyle = modifiers.Style
 
 // icon sets the icon for the alert based on the state value.
 func (alert *Props) icon() templ.Component {
 	switch alert.state {
-	case state.Info:
+	case Info:
 		return icon.BuildInfoIcon().Show()
-	case state.Success:
+	case Success:
 		return icon.BuildSuccessIcon().Show()
-	case state.Warning:
+	case Warning:
 		return icon.BuildWarningIcon().Show()
-	case state.Error:
+	case Error:
 		return icon.BuildErrorIcon().Show()
 	default:
 		return icon.BuildSuccessIcon().Show()
@@ -58,8 +46,8 @@ templ (alert *Props) Show() {
 		role="alert"
 		class={
 			"alert",
-			templ.KV(alert.applyState(), alert.state.Valid()),
-			templ.KV(alert.applyStyle(), alert.style.Valid()),
+			templ.KV(alert.state.String(), alert.state.Valid()),
+			templ.KV(alert.style.String(), alert.style.Valid()),
 		}
 		{ alert.ShowAttributes()... }
 	>

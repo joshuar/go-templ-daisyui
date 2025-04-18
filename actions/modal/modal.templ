@@ -7,7 +7,6 @@ package modal
 import (
 	"github.com/joshuar/go-templ-daisyui/actions/button"
 	"github.com/joshuar/go-templ-daisyui/display/icon"
-	"github.com/joshuar/go-templ-daisyui/modifiers/size"
 	"slices"
 )
 
@@ -48,9 +47,9 @@ templ (modal *Props) Show() {
 templ (modal *Props) showCloseButton() {
 	<form method="dialog">
 		@button.Build(
-			button.AsShape(button.Circle, false),
+			button.AsShape(button.Circle),
 			button.WithContent(icon.Build("fa-xmark")),
-			button.WithSize(size.SM),
+			button.WithSize(button.SM),
 			button.WithExtraAttributes(templ.Attributes{
 				// "_": "on click trigger closeModal",
 				"_": modal.hsCloseModalAction(),

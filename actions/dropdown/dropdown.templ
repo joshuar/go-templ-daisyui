@@ -48,7 +48,7 @@ templ (dropdown *Props) showAsClass(classes ...string) {
 			templ.KV(strings.Join(classes, " "), len(classes) > 0) }
 	>
 		if dropdown.button != nil {
-			@dropdown.button.Show("m-1")
+			@dropdown.button.Show()
 		} else {
 			<div tabindex="0" role="button" class="btn m-1">Click</div>
 		}
@@ -69,7 +69,7 @@ templ (dropdown *Props) showAsDetails(classes ...string) {
 			templ.KV(strings.Join(classes, " "), len(classes) > 0) }
 	>
 		if dropdown.button != nil {
-			@dropdown.button.ShowAsSummary("m-1")
+			@dropdown.button.ShowAsSummary()
 		} else {
 			<summary class="btn m-1">Click</summary>
 		}

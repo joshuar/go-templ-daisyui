@@ -1,0 +1,42 @@
+// Copyright 2025 Joshua Rich <joshua.rich@gmail.com>.
+// SPDX-License-Identifier: 	AGPL-3.0-or-later
+
+package placeholder
+
+func (p *Props) applyClasses() {
+	switch p.size {
+	case SM:
+		p.AddClass("bg-neutral text-neutral-content w-8 rounded-full")
+	case LG:
+		p.AddClass("bg-neutral text-neutral-content w-16 rounded-full")
+	case XXL:
+		p.AddClass("bg-neutral text-neutral-content w-24 rounded-full")
+	case MD:
+		fallthrough
+	default:
+		p.AddClass("bg-neutral text-neutral-content w-12 rounded-full")
+	}
+}
+
+func (p *Props) applyTextSize() string {
+	switch p.size {
+	case SM:
+		return "text-xs"
+	case LG:
+		return "text-xl"
+	case XXL:
+		return "text-3xl"
+	case MD:
+		fallthrough
+	default:
+		return ""
+	}
+}
+
+templ (p *Props) Show() {
+	<div class={ "avatar", "avatar-placeholder", templ.KV(p.presence,p.presence != "") }>
+		<div class={ p.ShowClasses() }>
+			<span class={ templ.KV(p.applyTextSize(), p.applyTextSize() != "") }>{ p.value }</span>
+		</div>
+	</div>
+}

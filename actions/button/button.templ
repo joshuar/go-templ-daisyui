@@ -4,123 +4,82 @@
 package button
 
 import (
-	"github.com/joshuar/go-templ-daisyui/modifiers/color"
-	"github.com/joshuar/go-templ-daisyui/modifiers/size"
-	"github.com/joshuar/go-templ-daisyui/modifiers/state"
-	"github.com/joshuar/go-templ-daisyui/modifiers/style"
+	"github.com/joshuar/go-templ-daisyui/modifiers"
 	"strings"
 )
 
-// shape sets the shape of the Button.
-func (btn *Props) setShape() string {
-	shape := ""
-	switch btn.shape {
-	case Circle:
-		shape = "btn-circle"
-	case Square:
-		shape = "btn-square"
-	case Wide:
-		shape = "btn-wide"
-	case Block:
-		shape = "btn-block"
-	}
+const (
+	Circle Shape = "btn-circle"
+	Square Shape = "btn-square"
+	Wide   Shape = "btn-wide"
+	Block  Shape = "btn-block"
+)
 
-	if btn.shapeOutline {
-		shape = shape + " btn-outline"
-	}
+// Shape defines the shape of the button.
+type Shape string
 
-	return shape
+func (s Shape) String() string {
+	return string(s)
 }
 
-// size returns the size class of the button.
-func (btn *Props) applySize() string {
-	switch btn.size {
-	case size.XS:
-		return "btn-xs"
-	case size.SM:
-		return "btn-sm"
-	case size.MD:
-		return "btn-md"
-	case size.LG:
-		return "btn-lg"
-	case size.XL:
-		return "btn-xl"
-	default:
-		return "btn-md"
-	}
+func (s Shape) Valid() bool {
+	return s != ""
 }
 
-// applyThemeColor applies a theme color to the Component.
-func (btn *Props) applyThemeColor() string {
-	themeColor := "btn-neutral"
-
-	switch btn.GetThemeColor() {
-	case color.Primary:
-		themeColor = "btn-primary"
-	case color.Secondary:
-		themeColor = "btn-secondary"
-	case color.Accent:
-		themeColor = "btn-accent"
-	case color.Neutral:
-		themeColor = "btn-neutral"
-	case color.Ghost:
-		themeColor = "btn-ghost"
-	}
-
-	if btn.OutlineTheme() {
-		themeColor = themeColor + " btn-outline"
-	}
-
-	return themeColor
+func (s Shape) Class() templ.KeyValue[string, bool] {
+	return templ.KV(s.String(), s.Valid())
 }
 
-// applyStateColor applies a state color to the Component.
-func (btn *Props) applyStateColor() string {
-	var stateColor string
+const (
+	Soft    Style = "btn-soft"
+	Outline Style = "btn-outline"
+	Dashed  Style = "btn-dash"
+	Ghost   Style = "btn-ghost"
+	Link    Style = "btn-link"
+)
 
-	switch btn.GetStateColor() {
-	case state.Info:
-		stateColor = "btn-info"
-	case state.Success:
-		stateColor = "btn-sucess"
-	case state.Warning:
-		stateColor = "btn-warning"
-	case state.Error:
-		stateColor = "btn-error"
-	}
+// Style defines the style of the button.
+type Style = modifiers.Style
 
-	if btn.OutlineState() {
-		stateColor = stateColor + " btn-outline"
-	}
+const (
+	Primary   Color = "btn-primary"
+	Secondary Color = "btn-secondary"
+	Accent    Color = "btn-accent"
+	Neutral   Color = "btn-neutral"
+	Info      Color = "btn-info"
+	Success   Color = "btn-success"
+	Warning   Color = "btn-warning"
+	Error     Color = "btn-error"
+)
 
-	return stateColor
-}
+// Color defines the colour of the button.
+type Color = modifiers.Color
 
-// applyStyle sets a DaisyUI style for the alert.
-func (btn *Props) applyStyle() string {
-	switch btn.style {
-	case style.Soft:
-		return "btn-soft"
-	case style.Dash:
-		return "btn-dash"
-	case style.Outline:
-		return "btn-outline"
-	default:
-		return ""
-	}
-}
+const (
+	XS Size = "btn-xs"
+	SM Size = "btn-sm"
+	MD Size = "btn-md"
+	LG Size = "btn-lg"
+	XL Size = "btn-xl"
+)
+
+// Size defines the size of the button.
+type Size = modifiers.Size
 
 // Show will display a Button with its given properties.
 templ (btn *Props) Show(classes ...string) {
 	<button
-		class={ "btn",
-            templ.KV("no-animation", btn.noClickAnimation),
-            templ.KV(btn.setShape(), btn.shape > 0),
-			templ.KV(btn.applySize(),btn.size.Valid()),
-			templ.KV(btn.applyThemeColor(),btn.ValidThemeColor()),
-			templ.KV(btn.applyStateColor(),btn.ValidStateColor()),
-			templ.KV(btn.applyStyle(), btn.style.Valid()),
-            templ.KV(strings.Join(classes," "),len(classes) > 0) }
+		class={
+			"btn",
+			btn.color.Class(),
+			btn.shape.Class(),
+			btn.size.Class(),
+			btn.style.Class(),
+			templ.KV("btn-outline", btn.outline),
+			templ.KV("no-animation", btn.animated),
+			btn.ShowClasses(),
+			templ.KV(strings.Join(classes, " "), len(classes) > 0),
+		}
 		{ btn.ShowAttributes()... }
 		autofocus?={ btn.autofocus }
 	>
@@ -134,13 +93,16 @@ templ (btn *Props) Show(classes ...string) {
 // element. This is used by the DropDown component.
 templ (btn *Props) ShowAsSummary(classes ...string) {
 	<summary
-		class={ "btn",
-            templ.KV("no-animation", btn.noClickAnimation),
-            templ.KV(btn.setShape(), btn.shape > 0),
-			templ.KV(btn.applySize(),btn.size.Valid()),
-			templ.KV(btn.applyThemeColor(),btn.ValidThemeColor()),
-			templ.KV(btn.applyStateColor(),btn.ValidStateColor()),
-            templ.KV(strings.Join(classes," "),len(classes) > 0) }
+		class={
+			"btn",
+			btn.color.Class(),
+			btn.shape.Class(),
+			btn.size.Class(),
+			btn.style.Class(),
+			templ.KV("btn-outline", btn.outline),
+			templ.KV("no-animation", btn.animated),
+			templ.KV(strings.Join(classes, " "), len(classes) > 0),
+		}
 		{ btn.ShowAttributes()... }
 		autofocus?={ btn.autofocus }
 	>

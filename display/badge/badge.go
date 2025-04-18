@@ -1,7 +1,7 @@
 // Copyright 2024 Joshua Rich <joshua.rich@gmail.com>.
 // SPDX-License-Identifier: 	AGPL-3.0-or-later
 
-// Badge is a DaisyUI Badge component.
+// Package badge is a DaisyUI Badge component.
 //
 // https://daisyui.com/components/badge/
 package badge
@@ -11,28 +11,17 @@ import (
 	components "github.com/joshuar/go-templ-daisyui"
 	"github.com/joshuar/go-templ-daisyui/attributes"
 	"github.com/joshuar/go-templ-daisyui/classes"
-	"github.com/joshuar/go-templ-daisyui/modifiers/color"
-	"github.com/joshuar/go-templ-daisyui/modifiers/size"
 )
-
-const (
-	Soft Style = iota + 1
-	Outline
-	DashedOutline
-)
-
-type Style int
 
 type Option components.Option[*Props]
 
-// BadgeProps represents the properties for a Badge.
+// Props represents the properties for a Badge.
 type Props struct {
-	size size.ResponsiveSize
-	*color.ThemeColorProps
-	*color.StateColorProps
+	color   BadgeColor
+	style   BadgeStyle
+	size    BadgeSize
 	content templ.Component
 	*attributes.Attributes
-	style Style
 	*classes.Classes
 }
 
@@ -44,31 +33,23 @@ func WithContent(content any) Option {
 }
 
 // WithText will set the text to display within the Badge.
-func WithSize(badgeSize size.ResponsiveSize) Option {
+func WithSize(size BadgeSize) Option {
 	return func(p *Props) {
-		p.size = badgeSize
+		p.size = size
 	}
 }
 
-func WithThemeColor(themeColor color.ThemeColor) Option {
+func WithColor(color BadgeColor) Option {
 	return func(p *Props) {
-		p.ThemeColorProps = color.NewThemeColor(themeColor, false)
-	}
-}
-
-func WithStateColor(stateColor color.StateColor) Option {
-	return func(p *Props) {
-		p.StateColorProps = color.NewStateColor(stateColor, false)
+		p.color = color
 	}
 }
 
 // WithStyle will set a style for a colored Badge. Styles are Soft, Outline or
 // DashedOutline.
-func WithStyle(style Style) Option {
+func WithStyle(style BadgeStyle) Option {
 	return func(p *Props) {
-		if style > 0 {
-			p.style = style
-		}
+		p.style = style
 	}
 }
 
@@ -90,10 +71,8 @@ func WithExtraClasses(extraClasses ...classes.Class) Option {
 // be modified before finally rendering by calling the Show() method.
 func Build(options ...Option) *Props {
 	badge := &Props{
-		ThemeColorProps: &color.ThemeColorProps{},
-		StateColorProps: &color.StateColorProps{},
-		Attributes:      attributes.New(),
-		Classes:         classes.New(),
+		Attributes: attributes.New(),
+		Classes:    classes.New(),
 	}
 
 	for _, option := range options {

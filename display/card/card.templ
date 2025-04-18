@@ -49,9 +49,9 @@ templ (card *Props) Show(classes ...string) {
 			templ.KV("card-border",card.border),
 			templ.KV("glass",card.glass),
 			templ.KV("image-full",card.fullImage),
-	card.baseColor.ApplyBaseColor(),
+	templ.KV(card.baseColor.String(),card.baseColor.Valid()),
 	templ.KV(shadow.ApplyShadow(card.shadow),card.shadow >0),
-	templ.KV(card.ShowClasses(),card.HasClasses()),
+	card.ShowClasses(),
 	templ.KV(strings.Join(classes, " "),len(classes) >0) }
 		{ card.ShowAttributes()... }
 	>
@@ -81,7 +81,7 @@ templ (card *Props) Show(classes ...string) {
 templ (body *BodyProps) Show(classes ...string) {
 	<div
 		class={ "card-body",
-			templ.KV(body.ShowClasses(),body.HasClasses()),
+			body.ShowClasses(),
 		templ.KV(strings.Join(classes, " "),len(classes) >0) }
 		{ body.ShowAttributes()... }
 	>

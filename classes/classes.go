@@ -5,7 +5,11 @@
 // custom classes on the component.
 package classes
 
-import "strings"
+import (
+	"strings"
+
+	"github.com/a-h/templ"
+)
 
 type Class = string
 
@@ -20,8 +24,8 @@ func (c *Classes) HasClasses() bool {
 }
 
 // ShowClasses returns a space-separated string with all classes.
-func (c *Classes) ShowClasses() string {
-	return strings.Join(c.classes, " ")
+func (c *Classes) ShowClasses() templ.KeyValue[string, bool] {
+	return templ.KV(strings.Join(c.classes, " "), c.HasClasses())
 }
 
 // AddClass will add the given class to the list of classes.

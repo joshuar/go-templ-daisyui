@@ -51,6 +51,7 @@ templ (link *Props) Show(classes ...string) {
 			"link",
 			templ.KV(link.applyThemeColor(), link.themeColor.Valid()),
 			templ.KV(link.applyStateColor(), link.stateColor.Valid()),
+			link.ShowClasses(),
 			templ.KV(strings.Join(classes, " "), len(classes) > 0),
 			templ.KV("link-hover", link.underlineOnHover),
 		}

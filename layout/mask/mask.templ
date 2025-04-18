@@ -1,49 +1,38 @@
 // Copyright 2024 Joshua Rich <joshua.rich@gmail.com>.
 // SPDX-License-Identifier: 	MIT
 
+// Package mask represents a DaisyUI Mask.
+//
+// https://daisyui.com/components/mask/
 package mask
 
-// Apply returns the class values for setting the mask.
-func (mask Mask) Apply() string {
-	switch mask {
-	case MaskSquircle:
-		return "mask mask-squircle"
-	case MaskHeart:
-		return "mask mask-heart"
-	case MaskHexagon:
-		return "mask mask-hexagon"
-	case MaskHexagonAlt:
-		return "mask mask-hexagon-2"
-	case MaskDecagon:
-		return "mask mask-decagon"
-	case MaskPentagon:
-		return "mask mask-pentagon"
-	case MaskDiamond:
-		return "mask mask-diamond"
-	case MaskSquare:
-		return "mask mask-square"
-	case MaskCircle:
-		return "mask mask-circle"
-	case MaskStar:
-		return "mask mask-star"
-	case MaskStarAlt:
-		return "mask mask-star-2"
-	case MaskTriangle:
-		return "mask mask-triangle"
-	case MaskTriangleAlt1:
-		return "mask mask-triangle-2"
-	case MaskTriangleAlt2:
-		return "mask mask-triangle-3"
-	case MaskTriangleAlt3:
-		return "mask mask-triangle-4"
-	case MaskHalfLeft:
-		return "mask mask-half-1"
-	case MaskHalfRight:
-		return "mask mask-half-2"
-	default:
-		return ""
-	}
-}
+import "github.com/joshuar/go-templ-daisyui/classes"
+
+const (
+	MaskSquircle          Mask = "mask mask-squircle"
+	MaskHeart             Mask = "mask mask-heart"
+	MaskHexagon           Mask = "mask mask-hexagon"
+	MaskHexagonAlt        Mask = "mask mask-hexagon-2"
+	MaskDecagon           Mask = "mask mask-decagon"
+	MaskPentagon          Mask = "mask mask-pentagon"
+	MaskDiamond           Mask = "mask mask-diamond"
+	MaskSquare            Mask = "mask mask-square"
+	MaskCircle            Mask = "mask mask-circle"
+	MaskParallelogram     Mask = "mask mask-parallelogram"
+	MaskParallelogramAlt1 Mask = "mask mask-parallelogram-2"
+	MaskParallelogramAlt2 Mask = "mask mask-parallelogram-3"
+	MaskParallelogramAlt3 Mask = "mask mask-parallelogram-4"
+	MaskStar              Mask = "mask mask-star"
+	MaskStarAlt           Mask = "mask mask-star-2"
+	MaskTriangle          Mask = "mask mask-triangle"
+	MaskTriangleAlt1      Mask = "mask mask-triangle-2"
+	MaskTriangleAlt2      Mask = "mask mask-triangle-3"
+	MaskTriangleAlt3      Mask = "mask mask-triangle-4"
+	MaskHalfLeft          Mask = "mask mask-half-1"
+	MaskHalfRight         Mask = "mask mask-half-2"
+)
+
+type Mask = classes.Class
 
 // noop function so that templ generation doesn't report errors.
 templ maskNOOP() {

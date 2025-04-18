@@ -7,8 +7,10 @@ package navbar
 // templ.KV(navbar.setPosition(),navbar.PositionIsSet()) }
 templ (navbar *Props) Show() {
 	<div
-		class={ "navbar",
-		navbar.baseColor.ApplyBaseColor() }
+		class={
+			"navbar",
+			templ.KV(navbar.baseColor.String(), navbar.baseColor.Valid()),
+		}
 		{ navbar.ShowAttributes()... }
 	>
 		// Display NavBar components (if defined).
