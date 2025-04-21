@@ -36,7 +36,7 @@ type Option components.Option[*Props]
 // WithMask option sets a mask to apply to the avatar.
 func WithMask(m mask.Mask) Option {
 	return func(p *Props) {
-		p.AddClass(m)
+		p.AddClasses(m)
 	}
 }
 
@@ -57,9 +57,7 @@ func WithExtraAttributes(attrs templ.Attributes) Option {
 // WithExtraClasses options sets any additional classes for the component.
 func WithExtraClasses(extraClasses ...classes.Class) Option {
 	return func(p *Props) {
-		for _, class := range extraClasses {
-			p.AddClass(class)
-		}
+		p.AddClasses(extraClasses...)
 	}
 }
 

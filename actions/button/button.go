@@ -105,9 +105,7 @@ func WithExtraAttributes(attrs templ.Attributes) Option {
 
 func WithExtraClasses(extraClasses ...classes.Class) Option {
 	return func(p *Props) {
-		for _, class := range extraClasses {
-			p.AddClass(class)
-		}
+		p.AddClasses(extraClasses...)
 	}
 }
 

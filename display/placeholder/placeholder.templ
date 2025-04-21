@@ -6,15 +6,15 @@ package placeholder
 func (p *Props) applyClasses() {
 	switch p.size {
 	case SM:
-		p.AddClass("bg-neutral text-neutral-content w-8 rounded-full")
+		p.AddClasses("bg-neutral text-neutral-content w-8 rounded-full")
 	case LG:
-		p.AddClass("bg-neutral text-neutral-content w-16 rounded-full")
+		p.AddClasses("bg-neutral text-neutral-content w-16 rounded-full")
 	case XXL:
-		p.AddClass("bg-neutral text-neutral-content w-24 rounded-full")
+		p.AddClasses("bg-neutral text-neutral-content w-24 rounded-full")
 	case MD:
 		fallthrough
 	default:
-		p.AddClass("bg-neutral text-neutral-content w-12 rounded-full")
+		p.AddClasses("bg-neutral text-neutral-content w-12 rounded-full")
 	}
 }
 

@@ -4,88 +4,45 @@
 package menu
 
 import (
-	"github.com/joshuar/go-templ-daisyui/modifiers/size"
+	"github.com/joshuar/go-templ-daisyui/classes"
+	"github.com/joshuar/go-templ-daisyui/modifiers"
 	"strings"
 )
 
-// setLayout sets the layout of the Menu.
-func (menu *Props) getLayout() string {
-	switch menu.layout {
-	case Horizontal:
-		return "menu-horizontal"
-	case Vertical:
-		fallthrough
-	default:
-		return "menu-vertical"
-	}
-}
+const (
+	Horizontal Layout = "menu-horizontal"
+	Vertical   Layout = "menu-vertical"
+)
 
-// setSize sets the size modifier of the Menu.
-func (menu *Props) applySize() string {
-	switch menu.size {
-	case size.XS:
-		return "menu-xs"
-	case size.SM:
-		return "menu-sm"
-	case size.LG:
-		return "menu-lg"
-	case size.XL:
-		return "menu-xl"
-	default:
-		return "menu-md"
-	}
-}
+type Layout = classes.Class
+
+const (
+	XS Size = "menu-xs"
+	SM Size = "menu-sm"
+	MD Size = "menu-md"
+	LG Size = "menu-lg"
+	XL Size = "menu-xl"
+)
+
+// Size defines the size of the menu.
+type Size = modifiers.Size
 
 templ (menu *Props) Show(classes ...string) {
 	<ul
 		class={ "menu",
-			menu.getLayout(),
-			templ.KV(menu.applySize(), menu.size.Valid()),
+			menu.size.Class(),
 			templ.KV(menu.GetHiddenBreakpoint(), menu.HiddenBreakpointSet()),
 			templ.KV(menu.GetRevealedBreakpoint(), menu.RevealedBreakpointSet()),
 			templ.KV(menu.baseColor.String(),menu.baseColor.Valid()),
-			menu.ShowClasses(),
+			menu.Props.ShowClasses(),
 			templ.KV(strings.Join(classes, " "),len(classes) > 0 ) }
 		{ menu.ShowAttributes()... }
 	>
-		if menu.title != "" {
-			<li class="menu-title">{ menu.title }</li>
-		}
-		for _, item := range menu.GetItems() {
-			<li>
-				@item
+		if menu.title != nil {
+			<li class={ "menu-title", menu.itemClasses.ShowClasses() }>
+				@menu.title
 			</li>
 		}
+		@menu.ShowList()
 	</ul>
 }
-
-// templ (dm *DropDownMenu) Show() {
-// 	<details class="dropdown dropdown-bottom dropdown-end">
-// 		<summary
-// 			_="on click halt the event's bubbling end"
-// 			class={ "btn",
-// 				"btn-ghost",
-// 				"btn-circle",
-// 				templ.KV(dm.setHiddenBreakpoint(), dm.HiddenBreakpointIsSet()),
-// 				templ.KV(dm.setRevealedBreakpoint(),
-// 				dm.RevealedBreakpointIsSet()) }
-// 		>
-// 			@icon.Build("fa-ellipsis-vertical").Show()
-// 			@Icon("fa-ellipsis-vertical")
-// 		</summary>
-// 		<ul
-// 			class={ "menu",
-// 			templ.KV(setLayout(dm.layout),dm.LayoutIsSet()),
-// 		templ.KV(dm.setSize(),dm.SizeIsSet()),
-// 			 "dropdown-content",
-// 			  dm.setBaseColor(),
-// 			  "rounded-box",
-// 			  "z-[1]",
-// 			   "m-2",
-// 		"p-2",
-// 		"shadow" }
-// 		>
-// 			@dm.ShowItems()
-// 		</ul>
-// 	</details>
-// }

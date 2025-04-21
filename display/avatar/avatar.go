@@ -31,14 +31,14 @@ type Option components.Option[*Props]
 // WithWidth sets a width class for the avatar, which can control its size.
 func WithWidth(w classes.Class) Option {
 	return func(p *Props) {
-		p.AddClass(w)
+		p.AddClasses(w)
 	}
 }
 
 // WithMask option sets a mask to apply to the avatar.
 func WithMask(m mask.Mask) Option {
 	return func(p *Props) {
-		p.AddClass(m)
+		p.AddClasses(m)
 	}
 }
 
@@ -66,9 +66,7 @@ func WithExtraAttributes(attrs templ.Attributes) Option {
 // WithExtraClasses options sets any additional classes for the component.
 func WithExtraClasses(extraClasses ...classes.Class) Option {
 	return func(p *Props) {
-		for _, class := range extraClasses {
-			p.AddClass(class)
-		}
+		p.AddClasses(extraClasses...)
 	}
 }
 
@@ -87,7 +85,7 @@ func Build(url string, options ...Option) *Props {
 	// Set some default class values if none specified.
 	if !avatar.HasClasses() {
 		WithWidth(width.W24)(avatar)
-		avatar.AddClass("rounded")
+		avatar.AddClasses("rounded")
 	}
 
 	return avatar

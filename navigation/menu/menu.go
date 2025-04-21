@@ -1,12 +1,14 @@
 // Copyright 2025 Joshua Rich <joshua.rich@gmail.com>.
 // SPDX-License-Identifier: 	AGPL-3.0-or-later
 
+// Package menu represents a DaisyUI Menu component.
+//
+// https://daisyui.com/components/menu/
 package menu
 
 import (
 	"github.com/a-h/templ"
 	components "github.com/joshuar/go-templ-daisyui"
-	"github.com/joshuar/go-templ-daisyui/attributes"
 	"github.com/joshuar/go-templ-daisyui/classes"
 	"github.com/joshuar/go-templ-daisyui/items"
 	"github.com/joshuar/go-templ-daisyui/modifiers/breakpoints"
@@ -14,37 +16,24 @@ import (
 	"github.com/joshuar/go-templ-daisyui/modifiers/size"
 )
 
-const (
-	Vertical Layout = iota
-	Horizontal
-)
+// Props represents the properties for a DaisyUI menu component.
+type Props struct {
+	*components.Props
+	title     templ.Component
+	size      Size
+	baseColor color.BaseColor
+	breakpoints.Breakpoints
+	*items.Items
+	itemClasses *classes.Classes
+}
 
-type Layout int
-
-type (
-	Option components.Option[*Props]
-	Props  struct {
-		title  string
-		layout Layout
-		*attributes.Attributes
-		*classes.Classes
-		size      size.ResponsiveSize
-		baseColor color.BaseColor
-		breakpoints.Breakpoints
-		*items.Items
-		// components.componentItems
-		// componentHiddenBreakpoint
-		// componentRevealedBreakpoint
-		// modifierResponsiveSize
-		// modifierLayout
-		// modifierBaseColor
-	}
-)
+// Option is a functional option to apply menu properties.
+type Option components.Option[*Props]
 
 // WithMenuTitle sets the menu title.
-func WithMenuTitle(title string) Option {
+func WithMenuTitle(title any) Option {
 	return func(p *Props) {
-		p.title = title
+		p.title = components.SetContent(title)
 	}
 }
 
@@ -52,7 +41,7 @@ func WithMenuTitle(title string) Option {
 // this option is not specified, the menu will default to a vertical layout.
 func WithLayout(layout Layout) Option {
 	return func(p *Props) {
-		p.layout = layout
+		p.Props.AddClasses(layout)
 	}
 }
 
@@ -68,7 +57,7 @@ func WithRevealedBreakpoint(from size.ResponsiveSize) Option {
 	}
 }
 
-func WithSize(menuSize size.ResponsiveSize) Option {
+func WithSize(menuSize Size) Option {
 	return func(p *Props) {
 		p.size = menuSize
 	}
@@ -88,6 +77,13 @@ func WithItems(listItems ...templ.Component) Option {
 	}
 }
 
+// WithItemExtraClasses assigns additional classes to each item of the menu.
+func WithExtraItemClasses(extraClasses ...classes.Class) Option {
+	return func(p *Props) {
+		p.Items.SetClasses(extraClasses...)
+	}
+}
+
 func WithID(id string) Option {
 	return func(p *Props) {
 		p.SetID(id)
@@ -103,18 +99,16 @@ func WithExtraAttributes(attrs templ.Attributes) Option {
 // WithExtraClasses assigns additional classes to the Component.
 func WithExtraClasses(extraClasses ...classes.Class) Option {
 	return func(p *Props) {
-		for _, class := range extraClasses {
-			p.AddClass(class)
-		}
+		p.Props.AddClasses(extraClasses...)
 	}
 }
 
-// NewMenu creates a new menu with the given options.
+// Build generates menu properties with the given options.
 func Build(options ...Option) *Props {
 	menu := &Props{
-		Attributes: attributes.New(),
-		Classes:    classes.New(),
-		Items:      items.New(),
+		Items:       items.New(),
+		Props:       components.InitProps(),
+		itemClasses: classes.New(),
 	}
 
 	for _, option := range options {

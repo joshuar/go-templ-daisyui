@@ -6,13 +6,12 @@ package list
 import (
 	"github.com/a-h/templ"
 	components "github.com/joshuar/go-templ-daisyui"
-	"github.com/joshuar/go-templ-daisyui/attributes"
 )
 
 type Option components.Option[*List]
 
 type List struct {
-	*attributes.Attributes
+	*components.Props
 }
 
 func WithID(id string) Option {
@@ -38,7 +37,7 @@ type UnorderedListProps struct {
 func BuildOrdered(options ...Option) *OrderedListProps {
 	ol := &OrderedListProps{
 		list: &List{
-			Attributes: attributes.New(),
+			Props: components.InitProps(),
 		},
 	}
 
@@ -52,7 +51,7 @@ func BuildOrdered(options ...Option) *OrderedListProps {
 func BuildUnordered(options ...Option) *UnorderedListProps {
 	ul := &UnorderedListProps{
 		list: &List{
-			Attributes: attributes.New(),
+			Props: components.InitProps(),
 		},
 	}
 

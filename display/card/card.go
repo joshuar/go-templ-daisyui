@@ -166,9 +166,7 @@ func WithExtraAttributes(attrs templ.Attributes) Option {
 
 func WithExtraClasses(extraClasses ...classes.Class) Option {
 	return func(p *Props) {
-		for _, class := range extraClasses {
-			p.AddClass(class)
-		}
+		p.AddClasses(extraClasses...)
 	}
 }
 
@@ -205,9 +203,7 @@ func WithBodyExtraAttributes(attrs templ.Attributes) BodyOption {
 
 func WithBodyExtraClasses(extraClasses ...classes.Class) BodyOption {
 	return func(p *BodyProps) {
-		for _, class := range extraClasses {
-			p.AddClass(class)
-		}
+		p.AddClasses(extraClasses...)
 	}
 }
 

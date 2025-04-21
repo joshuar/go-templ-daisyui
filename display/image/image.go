@@ -39,7 +39,7 @@ func WithAltText(alt string) Option {
 
 func WithMask(imageMask mask.Mask) Option {
 	return func(image *Props) {
-		image.AddClass(imageMask)
+		image.AddClasses(imageMask)
 	}
 }
 
@@ -51,9 +51,7 @@ func WithSize(imageSize size.FixedSize) Option {
 
 func WithExtraClasses(extraClasses ...classes.Class) Option {
 	return func(p *Props) {
-		for _, class := range extraClasses {
-			p.AddClass(class)
-		}
+		p.AddClasses(extraClasses...)
 	}
 }
 

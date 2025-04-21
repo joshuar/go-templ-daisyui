@@ -90,9 +90,7 @@ func WithExtraAttributes(attrs templ.Attributes) Option {
 // WithExtraClasses option assigns additional classes to the component.
 func WithExtraClasses(extraClasses ...classes.Class) Option {
 	return func(input *Props) {
-		for _, class := range extraClasses {
-			input.AddClass(class)
-		}
+		input.AddClasses(extraClasses...)
 	}
 }
 

@@ -29,8 +29,8 @@ func (c *Classes) ShowClasses() templ.KeyValue[string, bool] {
 }
 
 // AddClass will add the given class to the list of classes.
-func (c *Classes) AddClass(class Class) {
-	c.classes = append(c.classes, class)
+func (c *Classes) AddClasses(class ...Class) {
+	c.classes = append(c.classes, class...)
 }
 
 // New initializes a Classes object for use in a Component.
