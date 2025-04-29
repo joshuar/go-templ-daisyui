@@ -6,10 +6,10 @@
 // https://tailwindcss.com/docs/opacity
 package opacity
 
-import "github.com/joshuar/go-templ-daisyui/classes"
+import "github.com/joshuar/go-templ-daisyui"
 
 // Apply will generate a class string for the given opacity amount.
-func Apply(opacity int) classes.Class {
+func Apply(opacity int) components.Class {
 	switch opacity {
 	case 25:
 		return "opacity-25"
