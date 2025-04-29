@@ -3,7 +3,10 @@
 
 package text
 
-import "strings"
+import (
+	"github.com/joshuar/go-templ-daisyui"
+	"strings"
+)
 
 const (
 	Base Size = "text-base"
@@ -17,7 +20,7 @@ const (
 // Text Size
 //
 // https://tailwindcss.com/docs/font-size
-type Size string
+type Size = components.Class
 
 const (
 	Normal     Weight = "font-normal"
@@ -34,26 +37,26 @@ const (
 // Text Weight
 //
 // https://tailwindcss.com/docs/font-weight
-type Weight string
+type Weight = components.Class
 
-func (text *Props) applySize() string {
-	return string(text.size)
-}
+const (
+	Primary   Color = "primary-content"
+	Secondary Color = "secondary-content"
+	Accent    Color = "accent-content"
+	Neutral   Color = "neutral-content"
+	Info      Color = "info-content"
+	Success   Color = "success-content"
+	Warning   Color = "warning-content"
+	Error     Color = "error-content"
+)
 
-func (text *Props) applyWeight() string {
-	return string(text.weight)
-}
+type Color = components.Class
 
 templ (text *Props) Show(classes ...string) {
 	<p
-		class={
-			text.applySize(),
-			text.applyWeight(),
-			templ.KV("italic", text.italic),
-			templ.KV(strings.Join(classes, " "), len(classes) > 0),
-		}
+		class={ text.classes.Show(), templ.KV(strings.Join(classes, " "), len(classes) > 0) }
 		{ text.ShowAttributes()... }
 	>
-		{ text.text }
+		@components.SetContent(text.text)
 	</p>
 }

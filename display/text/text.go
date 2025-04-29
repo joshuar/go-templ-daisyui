@@ -9,19 +9,14 @@ import (
 	"github.com/a-h/templ"
 	components "github.com/joshuar/go-templ-daisyui"
 	"github.com/joshuar/go-templ-daisyui/attributes"
-	"github.com/joshuar/go-templ-daisyui/modifiers/color"
 )
 
 type Option components.Option[*Props]
 
 type Props struct {
-	size   Size
-	weight Weight
-	italic bool
-	text   string
-	*color.ThemeColorProps
-	*color.StateColorProps
+	text any
 	*attributes.Attributes
+	classes *components.Classes
 }
 
 // WithTextSize option sets the font size. If this option is not specified,
@@ -30,7 +25,7 @@ type Props struct {
 // https://tailwindcss.com/docs/font-size
 func WithTextSize(size Size) Option {
 	return func(text *Props) {
-		text.size = size
+		text.classes.Add(size)
 	}
 }
 
@@ -39,7 +34,7 @@ func WithTextSize(size Size) Option {
 // https://tailwindcss.com/docs/font-weight
 func WithTextWeight(weight Weight) Option {
 	return func(text *Props) {
-		text.weight = weight
+		text.classes.Add(weight)
 	}
 }
 
@@ -48,19 +43,14 @@ func WithTextWeight(weight Weight) Option {
 // https://tailwindcss.com/docs/font-style
 func AsItalicText() Option {
 	return func(text *Props) {
-		text.italic = true
+		text.classes.Add("italic")
 	}
 }
 
-func WithThemeColor(themeColor color.ThemeColor) Option {
-	return func(p *Props) {
-		p.ThemeColorProps = color.NewThemeColor(themeColor, false)
-	}
-}
-
-func WithStateColor(stateColor color.StateColor) Option {
-	return func(p *Props) {
-		p.StateColorProps = color.NewStateColor(stateColor, false)
+// WithTextColor will add a DaisUI color class to the text. This sets the "content" color.
+func WithTextColor(color Color) Option {
+	return func(text *Props) {
+		text.classes.Add(color)
 	}
 }
 
@@ -70,11 +60,17 @@ func WithAttributes(attrs templ.Attributes) Option {
 	}
 }
 
-func Build(text string, options ...Option) *Props {
+func WithExtraClasses(extraClasses ...components.Class) Option {
+	return func(p *Props) {
+		p.classes.Add(extraClasses...)
+	}
+}
+
+func Build(text any, options ...Option) *Props {
 	props := &Props{
 		text:       text,
-		size:       Base,
 		Attributes: attributes.New(),
+		classes:    components.NewClasses(),
 	}
 
 	for _, option := range options {
