@@ -9,6 +9,13 @@ import (
 )
 
 const (
+	Italic Style = "italic"
+)
+
+// Text Style.
+type Style = components.Class
+
+const (
 	Base Size = "text-base"
 	XS   Size = "text-xs"
 	SM   Size = "text-sm"
@@ -17,7 +24,7 @@ const (
 	XLXL Size = "text-xlxl"
 )
 
-// Text Size
+// Text Size.
 //
 // https://tailwindcss.com/docs/font-size
 type Size = components.Class
@@ -34,7 +41,7 @@ const (
 	Black      Weight = "font-black"
 )
 
-// Text Weight
+// Text Weight.
 //
 // https://tailwindcss.com/docs/font-weight
 type Weight = components.Class
@@ -50,6 +57,7 @@ const (
 	Error     Color = "error-content"
 )
 
+// Text Color.
 type Color = components.Class
 
 templ (text *Props) Show(classes ...string) {

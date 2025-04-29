@@ -11,7 +11,7 @@ import (
 type Option components.Option[*List]
 
 type List struct {
-	*components.Props
+	*components.Property
 }
 
 func WithID(id string) Option {
@@ -37,7 +37,7 @@ type UnorderedListProps struct {
 func BuildOrdered(options ...Option) *OrderedListProps {
 	ol := &OrderedListProps{
 		list: &List{
-			Props: components.InitProps(),
+			Property: components.InitProperty(),
 		},
 	}
 
@@ -51,7 +51,7 @@ func BuildOrdered(options ...Option) *OrderedListProps {
 func BuildUnordered(options ...Option) *UnorderedListProps {
 	ul := &UnorderedListProps{
 		list: &List{
-			Props: components.InitProps(),
+			Property: components.InitProperty(),
 		},
 	}
 

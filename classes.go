@@ -17,6 +17,11 @@ func (c Class) String() string {
 	return string(c)
 }
 
+// Show returns a templ.KV that will conditionally render the class if it is not an empty string.
+func (c Class) Show() templ.KeyValue[string, bool] {
+	return templ.KV(c.String(), c != "")
+}
+
 // Classes holds custom classes for a component.
 type Classes struct {
 	values []Class

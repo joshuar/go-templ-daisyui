@@ -136,8 +136,8 @@ func WithButton(options ...button.Option) Option {
 // dropdown menu.
 func WithMenuContent(options ...menu.Option) Option {
 	return func(p *Props) {
+		options = append(options, menu.WithExtraAttributes(templ.Attributes{"tabindex": 0}))
 		menu := menu.Build(options...)
-		menu.SetAttribute("tabindex", 0)
 		p.content = menu
 	}
 }

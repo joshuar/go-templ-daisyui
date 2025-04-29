@@ -9,7 +9,6 @@ package badge
 import (
 	"github.com/a-h/templ"
 	components "github.com/joshuar/go-templ-daisyui"
-	"github.com/joshuar/go-templ-daisyui/attributes"
 	"github.com/joshuar/go-templ-daisyui/classes"
 )
 
@@ -21,8 +20,7 @@ type Props struct {
 	style   BadgeStyle
 	size    BadgeSize
 	content templ.Component
-	*attributes.Attributes
-	*classes.Classes
+	*components.Property
 }
 
 // WithText will set the text to display within the Badge.
@@ -69,8 +67,7 @@ func WithExtraClasses(extraClasses ...classes.Class) Option {
 // be modified before finally rendering by calling the Show() method.
 func Build(options ...Option) *Props {
 	badge := &Props{
-		Attributes: attributes.New(),
-		Classes:    classes.New(),
+		Property: components.InitProperty(),
 	}
 
 	for _, option := range options {

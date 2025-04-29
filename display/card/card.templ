@@ -58,10 +58,9 @@ templ (card *Props) Show(classes ...string) {
 				<figure class="px-10 pt-10">
 					@card.image.Show("rounded-xl")
 				</figure>
+			} else {
+				@card.image.ShowAsFigure()
 			}
-			<figure>
-				@card.image.Show()
-			</figure>
 		}
 		// Show the Card body, if specified.
 		if card.body != nil {

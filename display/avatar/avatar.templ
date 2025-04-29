@@ -4,6 +4,14 @@
 package avatar
 
 import "github.com/joshuar/go-templ-daisyui/display/image"
+import "github.com/joshuar/go-templ-daisyui"
+
+const (
+	Rounded Style = "rounded"
+)
+
+// Style represents a style class for the avatar.
+type Style = components.Class
 
 const (
 	Online  Presence = "avatar-online"
@@ -11,11 +19,11 @@ const (
 )
 
 // Presence sets a presence indicator for the avatar.
-type Presence = string
+type Presence = components.Class
 
 templ (avatar *Props) Show() {
-	<div class={ "avatar", templ.KV(avatar.presence,avatar.presence != "") }>
-		<div class={ avatar.ShowClasses() }>
+	<div class={ "avatar", avatar.presence.Show() }>
+		<div class={ avatar.classes.Show() }>
 			@image.Build(avatar.imageURL, avatar.imageOptions...).Show()
 		</div>
 	</div>

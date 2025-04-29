@@ -5,28 +5,24 @@ package image
 
 import (
 	components "github.com/joshuar/go-templ-daisyui"
-	"github.com/joshuar/go-templ-daisyui/classes"
+	"github.com/joshuar/go-templ-daisyui/attributes"
 	"github.com/joshuar/go-templ-daisyui/layout/mask"
-	"github.com/joshuar/go-templ-daisyui/modifiers/size"
 )
 
 type Option components.Option[*Props]
 
 // Props represents the properties for an image.
 type Props struct {
-	url         string
-	alt         string
-	lazyLoading bool
-	mask        mask.Mask
-	size        size.FixedSize
-	*classes.Classes
-	// modifierObjectFit
+	url        string
+	alt        string
+	classes    *components.Classes
+	attributes *attributes.Attributes
 }
 
 // WithLazyLoading will add the `loading="lazy"` attribute to the image.
 func WithLazyLoading() Option {
 	return func(image *Props) {
-		image.lazyLoading = true
+		image.attributes.SetAttribute("loading", "lazy")
 	}
 }
 
@@ -39,27 +35,22 @@ func WithAltText(alt string) Option {
 
 func WithMask(imageMask mask.Mask) Option {
 	return func(image *Props) {
-		image.AddClasses(imageMask)
+		image.classes.Add(imageMask)
 	}
 }
 
-func WithSize(imageSize size.FixedSize) Option {
+func WithExtraClasses(extraClasses ...components.Class) Option {
 	return func(p *Props) {
-		p.size = imageSize
+		p.classes.Add(extraClasses...)
 	}
 }
 
-func WithExtraClasses(extraClasses ...classes.Class) Option {
-	return func(p *Props) {
-		p.AddClasses(extraClasses...)
-	}
-}
-
-// BuildImage creates a new ImageProps.
+// Build creates a new image with the given URL and options.
 func Build(url string, options ...Option) *Props {
 	image := &Props{
-		url:     url,
-		Classes: classes.New(),
+		url:        url,
+		classes:    components.NewClasses(),
+		attributes: attributes.New(),
 	}
 
 	for _, option := range options {

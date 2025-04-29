@@ -19,10 +19,10 @@ type Option components.Option[*Props]
 // Props represents the properties for a DaisyUI Modal component.
 type Props struct {
 	*attributes.Attributes
-	closeButton   bool
-	closeOutside  bool
-	openInitially bool
-	actions       []*button.Props
+	closeButton  bool
+	closeOutside bool
+	actions      []*button.Props
+	classes      *components.Classes
 }
 
 // WithCloseOutside option ensures the when clicked outside the modal, it will
@@ -37,13 +37,6 @@ func WithCloseOutside() Option {
 func WithCloseButton() Option {
 	return func(p *Props) {
 		p.closeButton = true
-	}
-}
-
-// OpenInitially option sets the modal to be open when first shown.
-func OpenInitially() Option {
-	return func(p *Props) {
-		p.openInitially = true
 	}
 }
 
@@ -72,10 +65,17 @@ func WithExtraAttributes(attrs templ.Attributes) Option {
 	}
 }
 
+func WithExtraClasses(classes ...components.Class) Option {
+	return func(p *Props) {
+		p.classes.Add(classes...)
+	}
+}
+
 // Build generates Modal properties from the given options.
 func Build(options ...Option) *Props {
 	modal := &Props{
 		Attributes: attributes.New(),
+		classes:    components.NewClasses(),
 	}
 
 	for _, option := range options {

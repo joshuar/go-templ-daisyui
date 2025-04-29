@@ -4,17 +4,19 @@
 package menu
 
 import (
-	"github.com/joshuar/go-templ-daisyui/classes"
-	"github.com/joshuar/go-templ-daisyui/modifiers"
+	"github.com/joshuar/go-templ-daisyui"
 	"strings"
 )
 
 const (
+	// Horizontal menu.
 	Horizontal Layout = "menu-horizontal"
-	Vertical   Layout = "menu-vertical"
+	// Vertical menu (default if not specified).
+	Vertical Layout = "menu-vertical"
 )
 
-type Layout = classes.Class
+// Layout represents how the menu will be displayed, with either Horizontal or Vertical `items.
+type Layout = components.Class
 
 const (
 	XS Size = "menu-xs"
@@ -25,21 +27,20 @@ const (
 )
 
 // Size defines the size of the menu.
-type Size = modifiers.Size
+type Size = components.Class
 
 templ (menu *Props) Show(classes ...string) {
 	<ul
 		class={ "menu",
-			menu.size.Class(),
 			templ.KV(menu.GetHiddenBreakpoint(), menu.HiddenBreakpointSet()),
 			templ.KV(menu.GetRevealedBreakpoint(), menu.RevealedBreakpointSet()),
 			templ.KV(menu.baseColor.String(),menu.baseColor.Valid()),
-			menu.Props.ShowClasses(),
+			menu.classes.Show(),
 			templ.KV(strings.Join(classes, " "),len(classes) > 0 ) }
-		{ menu.ShowAttributes()... }
+		{ menu.attributes.ShowAttributes()... }
 	>
 		if menu.title != nil {
-			<li class={ "menu-title", menu.itemClasses.ShowClasses() }>
+			<li class={ "menu-title", menu.itemClasses.Show() }>
 				@menu.title
 			</li>
 		}

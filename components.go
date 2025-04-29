@@ -17,14 +17,15 @@ type Component interface {
 	Show(classes ...string) templ.Component
 }
 
-// Props represents the common properties of a component.
-type Props struct {
+// Property represents the properties of any component.
+type Property struct {
 	*classes.Classes
 	*attributes.Attributes
 }
 
-func InitProps() *Props {
-	return &Props{
+// InitProperty returns a properly initialised Props object.
+func InitProperty() *Property {
+	return &Property{
 		Attributes: attributes.New(),
 		Classes:    classes.New(),
 	}

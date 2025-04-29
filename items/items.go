@@ -9,13 +9,13 @@ import (
 	"slices"
 
 	"github.com/a-h/templ"
-	"github.com/joshuar/go-templ-daisyui/classes"
+	components "github.com/joshuar/go-templ-daisyui"
 )
 
 // Items represents children of a Component, such as list items or badges.
 type Items struct {
-	Items []templ.Component
-	*classes.Classes
+	Items   []templ.Component
+	classes *components.Classes
 }
 
 // AppendItem will append the given item to the list of existing items.
@@ -39,14 +39,14 @@ func (i *Items) GetItems() []templ.Component {
 }
 
 // SetClasses sets the classes specified on each item.
-func (i *Items) SetClasses(classes ...classes.Class) {
-	i.AddClasses(classes...)
+func (i *Items) SetClasses(classes ...components.Class) {
+	i.classes.Add(classes...)
 }
 
 // New initializes and returns an Attributes struct that can be embedded in
 // other components.
 func New() *Items {
 	return &Items{
-		Classes: classes.New(),
+		classes: components.NewClasses(),
 	}
 }

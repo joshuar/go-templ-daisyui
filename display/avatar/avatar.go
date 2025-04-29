@@ -10,7 +10,6 @@ import (
 	"github.com/a-h/templ"
 	components "github.com/joshuar/go-templ-daisyui"
 	"github.com/joshuar/go-templ-daisyui/attributes"
-	"github.com/joshuar/go-templ-daisyui/classes"
 	"github.com/joshuar/go-templ-daisyui/classes/width"
 	"github.com/joshuar/go-templ-daisyui/display/image"
 	"github.com/joshuar/go-templ-daisyui/layout/mask"
@@ -18,27 +17,27 @@ import (
 
 // Props are the avatar properties.
 type Props struct {
-	*attributes.Attributes
-	*classes.Classes
+	attributes   *attributes.Attributes
+	classes      *components.Classes
 	imageURL     string
 	imageOptions []image.Option
-	presence     Presence
+	presence     components.Class
 }
 
 // Option is a functional option to apply to an avatar component.
 type Option components.Option[*Props]
 
 // WithWidth sets a width class for the avatar, which can control its size.
-func WithWidth(w classes.Class) Option {
+func WithWidth(w components.Class) Option {
 	return func(p *Props) {
-		p.AddClasses(w)
+		p.classes.Add(w)
 	}
 }
 
 // WithMask option sets a mask to apply to the avatar.
 func WithMask(m mask.Mask) Option {
 	return func(p *Props) {
-		p.AddClasses(m)
+		p.classes.Add(m)
 	}
 }
 
@@ -59,22 +58,22 @@ func WithImageOptions(options ...image.Option) Option {
 // WithExtraAttributes options sets any additional attributes for the component.
 func WithExtraAttributes(attrs templ.Attributes) Option {
 	return func(p *Props) {
-		p.AddAttributes(attrs)
+		p.attributes.AddAttributes(attrs)
 	}
 }
 
 // WithExtraClasses options sets any additional classes for the component.
-func WithExtraClasses(extraClasses ...classes.Class) Option {
+func WithExtraClasses(extraClasses ...components.Class) Option {
 	return func(p *Props) {
-		p.AddClasses(extraClasses...)
+		p.classes.Add(extraClasses...)
 	}
 }
 
 // Build creates an avatar from the given url and options.
 func Build(url string, options ...Option) *Props {
 	avatar := &Props{
-		Attributes: attributes.New(),
-		Classes:    classes.New(),
+		attributes: attributes.New(),
+		classes:    components.NewClasses(),
 		imageURL:   url,
 	}
 
@@ -83,9 +82,9 @@ func Build(url string, options ...Option) *Props {
 	}
 
 	// Set some default class values if none specified.
-	if !avatar.HasClasses() {
+	if !avatar.classes.HasClasses() {
 		WithWidth(width.W24)(avatar)
-		avatar.AddClasses("rounded")
+		avatar.classes.Add(Rounded)
 	}
 
 	return avatar

@@ -6,7 +6,7 @@
 // https://daisyui.com/components/mask/
 package mask
 
-import "github.com/joshuar/go-templ-daisyui/classes"
+import "github.com/joshuar/go-templ-daisyui"
 
 const (
 	MaskSquircle          Mask = "mask mask-squircle"
@@ -32,7 +32,7 @@ const (
 	MaskHalfRight         Mask = "mask mask-half-2"
 )
 
-type Mask = classes.Class
+type Mask = components.Class
 
 // noop function so that templ generation doesn't report errors.
 templ maskNOOP() {

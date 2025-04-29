@@ -43,7 +43,7 @@ func WithTextWeight(weight Weight) Option {
 // https://tailwindcss.com/docs/font-style
 func AsItalicText() Option {
 	return func(text *Props) {
-		text.classes.Add("italic")
+		text.classes.Add(Italic)
 	}
 }
 

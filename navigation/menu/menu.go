@@ -9,7 +9,7 @@ package menu
 import (
 	"github.com/a-h/templ"
 	components "github.com/joshuar/go-templ-daisyui"
-	"github.com/joshuar/go-templ-daisyui/classes"
+	"github.com/joshuar/go-templ-daisyui/attributes"
 	"github.com/joshuar/go-templ-daisyui/items"
 	"github.com/joshuar/go-templ-daisyui/modifiers/breakpoints"
 	"github.com/joshuar/go-templ-daisyui/modifiers/color"
@@ -18,13 +18,14 @@ import (
 
 // Props represents the properties for a DaisyUI menu component.
 type Props struct {
-	*components.Props
-	title     templ.Component
-	size      Size
-	baseColor color.BaseColor
+	attributes *attributes.Attributes
+	classes    *components.Classes
+	title      templ.Component
+	size       Size
+	baseColor  color.BaseColor
 	breakpoints.Breakpoints
 	*items.Items
-	itemClasses *classes.Classes
+	itemClasses *components.Classes
 }
 
 // Option is a functional option to apply menu properties.
@@ -41,7 +42,7 @@ func WithMenuTitle(title any) Option {
 // this option is not specified, the menu will default to a vertical layout.
 func WithLayout(layout Layout) Option {
 	return func(p *Props) {
-		p.Props.AddClasses(layout)
+		p.classes.Add(layout)
 	}
 }
 
@@ -78,7 +79,7 @@ func WithItems(listItems ...templ.Component) Option {
 }
 
 // WithItemExtraClasses assigns additional classes to each item of the menu.
-func WithExtraItemClasses(extraClasses ...classes.Class) Option {
+func WithExtraItemClasses(extraClasses ...components.Class) Option {
 	return func(p *Props) {
 		p.Items.SetClasses(extraClasses...)
 	}
@@ -86,20 +87,20 @@ func WithExtraItemClasses(extraClasses ...classes.Class) Option {
 
 func WithID(id string) Option {
 	return func(p *Props) {
-		p.SetID(id)
+		p.attributes.SetID(id)
 	}
 }
 
 func WithExtraAttributes(attrs templ.Attributes) Option {
 	return func(p *Props) {
-		p.AddAttributes(attrs)
+		p.attributes.AddAttributes(attrs)
 	}
 }
 
 // WithExtraClasses assigns additional classes to the Component.
-func WithExtraClasses(extraClasses ...classes.Class) Option {
+func WithExtraClasses(extraClasses ...components.Class) Option {
 	return func(p *Props) {
-		p.Props.AddClasses(extraClasses...)
+		p.classes.Add(extraClasses...)
 	}
 }
 
@@ -107,8 +108,9 @@ func WithExtraClasses(extraClasses ...classes.Class) Option {
 func Build(options ...Option) *Props {
 	menu := &Props{
 		Items:       items.New(),
-		Props:       components.InitProps(),
-		itemClasses: classes.New(),
+		attributes:  attributes.New(),
+		classes:     components.NewClasses(),
+		itemClasses: components.NewClasses(),
 	}
 
 	for _, option := range options {

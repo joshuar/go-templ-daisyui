@@ -8,7 +8,7 @@ import "slices"
 // ShowList will list all items wrapped in <li></li> with any optional classes set.
 templ (i *Items) ShowList() {
 	for item := range slices.Values(i.GetItems()) {
-		<li class={ i.ShowClasses() }>
+		<li class={ i.classes.Show() }>
 			@item
 		</li>
 	}

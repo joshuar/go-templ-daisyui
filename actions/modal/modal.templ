@@ -17,7 +17,7 @@ func (modal *Props) hsCloseModalAction() string {
 // Show will display a Modal with its properties.
 templ (modal *Props) Show() {
 	<dialog
-		class={ "modal", templ.KV("modal-open", modal.openInitially) }
+		class={ "modal", modal.classes.Show() }
 		id={ modal.GetID() }
 		_="on closeModal add .closing then wait for animationend then remove me"
 	>
