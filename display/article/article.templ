@@ -4,37 +4,28 @@
 package article
 
 import "strings"
+import "github.com/joshuar/go-templ-daisyui"
 
-func (article *Props) setGrayscale() string {
-	switch article.grayscale {
-	case Gray:
-		return "prose-gray"
-	case Slate:
-		return "prose-slate"
-	case Zinc:
-		return "prose-zinc"
-	case Stone:
-		return "prose-stone"
-	default:
-		return "prose-neutral"
-	}
-}
+const (
+	Gray    GrayScale = "prose-gray"
+	Slate   GrayScale = "prose-slate"
+	Zinc    GrayScale = "prose-zinc"
+	Neutral GrayScale = "prose-neutral"
+	Stone   GrayScale = "prose-stone"
+)
 
-// Article represents an article component, using Tailwind's typography plugin
-// and "prose" class.
-//
-// https://daisyui.com/docs/layout-and-typography/#-1
+// Grayscale sets the grayscale class of the article text.
+type GrayScale = components.Class
+
+// Show renders the article component.
 templ (article *Props) Show(classes ...string) {
 	<article
-		class={
-			"prose",
-			"dark:prose-invert",
-			templ.KV(article.setGrayscale(), article.grayscale > 0),
-			article.ShowClasses(),
-			templ.KV(strings.Join(classes, " "), len(classes) > 0),
-		}
+		class={ "prose",
+		"dark:prose-invert",
+		article.classes.Show(),
+		templ.KV(strings.Join(classes, " "), len(classes) > 0) }
 		{ article.ShowAttributes()... }
 	>
-		@article.content
+		{ children... }
 	</article>
 }

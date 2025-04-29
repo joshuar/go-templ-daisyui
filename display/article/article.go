@@ -1,39 +1,32 @@
 // Copyright 2025 Joshua Rich <joshua.rich@gmail.com>.
 // SPDX-License-Identifier: 	AGPL-3.0-or-later
 
+// Package article represents an article component, using Tailwind's typography plugin
+// and "prose" class.
+//
+// https://daisyui.com/docs/layout-and-typography/#-1
 package article
 
 import (
 	"github.com/a-h/templ"
 	components "github.com/joshuar/go-templ-daisyui"
 	"github.com/joshuar/go-templ-daisyui/attributes"
-	"github.com/joshuar/go-templ-daisyui/classes"
 )
 
-const (
-	Gray    ProseGrayScale = iota + 1 // prose-gray
-	Slate                             // prose-slate
-	Zinc                              // prose-zinc
-	Neutral                           // prose-neutral
-	Stone                             // prose-stone
-)
-
-type ProseGrayScale int
-
+// Option is a functional option to set a property of an article.
 type Option components.Option[*Props]
 
+// Props are the properties of an article component.
 type Props struct {
-	grayscale ProseGrayScale
-	content   templ.Component
 	*attributes.Attributes
-	*classes.Classes
+	classes *components.Classes
 }
 
 // WithGrayScale adds optional gray scale scheme to the prose.
 // https://github.com/tailwindlabs/tailwindcss-typography/blob/main/README.md#choosing-a-gray-scale
-func WithGrayScale(scale ProseGrayScale) Option {
+func WithGrayScale(scale GrayScale) Option {
 	return func(a *Props) {
-		a.grayscale = scale
+		a.classes.Add(scale)
 	}
 }
 
@@ -45,19 +38,17 @@ func WithExtraAttributes(attrs templ.Attributes) Option {
 }
 
 // WithExtraClasses assigns additional classes to the Component.
-func WithExtraClasses(extraClasses ...classes.Class) Option {
+func WithExtraClasses(extraClasses ...components.Class) Option {
 	return func(p *Props) {
-		p.AddClasses(extraClasses...)
+		p.classes.Add(extraClasses...)
 	}
 }
 
-// BuildArticle creates a new article component with the given title, content and
-// options. Title is optional.
-func Build(content templ.Component, options ...Option) *Props {
+// Build creates a new article component with the given options.
+func Build(options ...Option) *Props {
 	article := &Props{
-		content:    content,
 		Attributes: attributes.New(),
-		Classes:    classes.New(),
+		classes:    components.NewClasses(),
 	}
 
 	for _, option := range options {
