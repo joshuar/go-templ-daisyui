@@ -4,54 +4,51 @@
 package card
 
 import (
-	"github.com/joshuar/go-templ-daisyui/modifiers/shadow"
-	"github.com/joshuar/go-templ-daisyui/modifiers/size"
+	"github.com/joshuar/go-templ-daisyui"
 	"strings"
 )
 
-// size returns the size class for a Badge.
-func (card *Props) applySize() string {
-	switch card.size {
-	case size.XS:
-		return "card-xs"
-	case size.SM:
-		return "card-sm"
-	case size.MD:
-		return "card-md"
-	case size.LG:
-		return "card-lg"
-	case size.XL:
-		return "card-xl"
-	default:
-		return "card-md"
-	}
-}
+const (
+	// Border adds a solid border around the card.
+	Border Style = "card-border"
+	// Dash adds a dashed border around the card.
+	Dash Style = "card-dash"
+	// FullImage sets any image as the background of the card.
+	FullImage Style = "image-full"
+)
 
-// applyLayout will apply the specified layout to the Card.
-func (card *Props) applyLayout() string {
-	switch card.layout {
-	case LayoutNormal:
-		return "card-normal"
-	case LayoutSide:
-		return "card-side"
-	case LayoutCompact:
-		return "card-compact"
-	}
+// Style defines a style class for the card component.
+type Style = components.Class
 
-	return ""
-}
+const (
+	// LayoutNormal is the default layout. This does not need to be specified.
+	LayoutNormal Layout = "card-normal"
+	// LayoutCompact uses a more compact layout.
+	LayoutCompact Layout = "card-compact"
+	// LayoutSide will place any card image at the side.
+	LayoutSide Layout = "card-side"
+)
+
+// Layout defines the layout of a card component.
+type Layout = components.Class
+
+const (
+	XS Size = "card-xs"
+	SM Size = "card-sm"
+	MD Size = "card-md"
+	LG Size = "card-lg"
+	XL Size = "card-xl"
+)
+
+// Size defines the size of a card component.
+type Size = components.Class
 
 // Show will display a Card with the given options.
 templ (card *Props) Show(classes ...string) {
 	<div
 		class={ "card",
-			templ.KV(card.applyLayout(),card.layout > 0),
-			templ.KV("card-border",card.border),
-			templ.KV("glass",card.glass),
-			templ.KV("image-full",card.fullImage),
 	templ.KV(card.baseColor.String(),card.baseColor.Valid()),
-	templ.KV(shadow.ApplyShadow(card.shadow),card.shadow >0),
-	card.ShowClasses(),
+	card.classes.Show(),
 	templ.KV(strings.Join(classes, " "),len(classes) >0) }
 		{ card.ShowAttributes()... }
 	>
@@ -62,8 +59,8 @@ templ (card *Props) Show(classes ...string) {
 					@card.image.Show("rounded-xl")
 				</figure>
 			}
-			<figure class="h-48 w-1/3">
-				@card.image.Show("object-scale-down", "max-h-full", "m-auto")
+			<figure>
+				@card.image.Show()
 			</figure>
 		}
 		// Show the Card body, if specified.
@@ -81,7 +78,7 @@ templ (card *Props) Show(classes ...string) {
 templ (body *BodyProps) Show(classes ...string) {
 	<div
 		class={ "card-body",
-			body.ShowClasses(),
+			body.classes.Show(),
 		templ.KV(strings.Join(classes, " "),len(classes) >0) }
 		{ body.ShowAttributes()... }
 	>

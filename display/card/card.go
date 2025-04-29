@@ -7,24 +7,15 @@
 package card
 
 import (
+	"slices"
+
 	"github.com/a-h/templ"
 	components "github.com/joshuar/go-templ-daisyui"
 	"github.com/joshuar/go-templ-daisyui/attributes"
-	"github.com/joshuar/go-templ-daisyui/classes"
+	"github.com/joshuar/go-templ-daisyui/classes/shadow"
 	"github.com/joshuar/go-templ-daisyui/display/image"
 	"github.com/joshuar/go-templ-daisyui/modifiers/color"
-	"github.com/joshuar/go-templ-daisyui/modifiers/shadow"
-	"github.com/joshuar/go-templ-daisyui/modifiers/size"
 )
-
-const (
-	LayoutNormal  Layout = iota + 1 // card-normal
-	LayoutCompact                   // card-compact
-	LayoutSide                      // card-side
-)
-
-// Layout defines a Card layout.
-type Layout int
 
 type (
 	// Option is a functional option for a Card component.
@@ -37,17 +28,11 @@ type (
 // is called to render the Card.
 type Props struct {
 	*attributes.Attributes
-	*classes.Classes
+	classes         *components.Classes
 	body            *BodyProps
-	border          bool
-	glass           bool
-	layout          Layout
 	baseColor       color.BaseColor
-	shadow          shadow.ShadowSize
-	fullImage       bool
 	image           *image.Props
 	centeredContent bool
-	size            size.ResponsiveSize
 }
 
 // BodyProps represents a Card's body properties. These are used when the Show()
@@ -57,7 +42,7 @@ type BodyProps struct {
 	content templ.Component
 	*ActionsProps
 	*attributes.Attributes
-	*classes.Classes
+	classes *components.Classes
 }
 
 // ActionsProps is the container for Card actions.
@@ -65,17 +50,17 @@ type ActionsProps struct {
 	actions []templ.Component
 }
 
-// Bordered option will ensure the Card has a border.
-func Bordered() Option {
+// WithStyle option adds the given style class to the card.
+func WithStyle(style Style) Option {
 	return func(p *Props) {
-		p.border = true
+		p.classes.Add(style)
 	}
 }
 
-// Glass option will ensure the Card is displayed with a glass background.
-func Glass() Option {
+// WithShadow option will apply a shadow of the given size to the Card.
+func WithShadow(shadow shadow.Shadow) Option {
 	return func(p *Props) {
-		p.glass = true
+		p.classes.Add(shadow)
 	}
 }
 
@@ -89,7 +74,7 @@ func WithBaseColor(baseColor color.BaseColor) Option {
 // WithLayout option sets a card layout option.
 func WithLayout(layout Layout) Option {
 	return func(p *Props) {
-		p.layout = layout
+		p.classes.Add(layout)
 	}
 }
 
@@ -103,30 +88,17 @@ func WithCenteredContent() Option {
 // WithImage option sets the image to be displayed in the Card.
 func WithImage(url string, options ...image.Option) Option {
 	return func(p *Props) {
+		if url == "" {
+			return
+		}
 		p.image = image.Build(url, options...)
 	}
 }
 
-// WithImageBackground option will set the image as the background of the Card.
-// Using this option implies usage of WithImage option to specify the image,
-// else it will have no effect.
-func WithFullImage() Option {
+// WithSize option sets the size class of the card component.
+func WithSize(cardSize Size) Option {
 	return func(p *Props) {
-		p.fullImage = true
-	}
-}
-
-// WithShadow option will apply a shadow of the given size to the Card.
-func WithShadow(shadowSize shadow.ShadowSize) Option {
-	return func(p *Props) {
-		p.shadow = shadowSize
-	}
-}
-
-// WithText will set the text to display within the Badge.
-func WithSize(cardSize size.ResponsiveSize) Option {
-	return func(p *Props) {
-		p.size = cardSize
+		p.classes.Add(cardSize)
 	}
 }
 
@@ -164,9 +136,9 @@ func WithExtraAttributes(attrs templ.Attributes) Option {
 	}
 }
 
-func WithExtraClasses(extraClasses ...classes.Class) Option {
+func WithExtraClasses(extraClasses ...components.Class) Option {
 	return func(p *Props) {
-		p.AddClasses(extraClasses...)
+		p.classes.Add(extraClasses...)
 	}
 }
 
@@ -201,9 +173,9 @@ func WithBodyExtraAttributes(attrs templ.Attributes) BodyOption {
 	}
 }
 
-func WithBodyExtraClasses(extraClasses ...classes.Class) BodyOption {
+func WithBodyExtraClasses(extraClasses ...components.Class) BodyOption {
 	return func(p *BodyProps) {
-		p.AddClasses(extraClasses...)
+		p.classes.Add(extraClasses...)
 	}
 }
 
@@ -211,11 +183,13 @@ func WithBodyExtraClasses(extraClasses ...classes.Class) BodyOption {
 func Build(options ...Option) *Props {
 	card := &Props{
 		Attributes: attributes.New(),
-		Classes:    classes.New(),
+		classes:    components.NewClasses(),
 	}
 
-	for _, option := range options {
-		option(card)
+	for option := range slices.Values(options) {
+		if option != nil {
+			option(card)
+		}
 	}
 
 	return card
@@ -226,7 +200,7 @@ func BuildBody(options ...BodyOption) *BodyProps {
 	body := &BodyProps{
 		ActionsProps: &ActionsProps{},
 		Attributes:   attributes.New(),
-		Classes:      classes.New(),
+		classes:      components.NewClasses(),
 	}
 
 	for _, option := range options {
