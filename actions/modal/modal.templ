@@ -11,7 +11,7 @@ import (
 )
 
 func (modal *Props) hsCloseModalAction() string {
-	return "on click or keyup[key=='Esc'] take .modal-open from #" + modal.GetID() + " wait 200ms then remove #" + modal.GetID()
+	return "on click or keyup[key=='Esc'] remove @open from #" + modal.GetID()
 }
 
 // Show will display a Modal with its properties.
@@ -19,7 +19,7 @@ templ (modal *Props) Show() {
 	<dialog
 		class={ "modal", modal.classes.Show() }
 		id={ modal.GetID() }
-		_="on closeModal add .closing then wait for animationend then remove me"
+		_="on closeModal add .closing then wait for animationend"
 	>
 		<div class="modal-box">
 			// If closeButton option is set, generate a close button.
@@ -30,11 +30,13 @@ templ (modal *Props) Show() {
 			{ children... }
 			// Display any action buttons.
 			if len(modal.actions) > 0 {
-				<div class="modal-action">
-					for action := range slices.Values(modal.actions) {
-						@action.Show()
-					}
-				</div>
+				<form method="dialog">
+					<div class="modal-action">
+						for action := range slices.Values(modal.actions) {
+							@action.Show()
+						}
+					</div>
+				</form>
 			}
 		</div>
 		// If closeOutside option is set, generate backdrop with close action.
