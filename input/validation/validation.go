@@ -18,6 +18,7 @@ type Validation struct {
 }
 
 func (v *Validation) SetRequired(value bool) {
+	v.validate = true
 	v.required = value
 }
 
