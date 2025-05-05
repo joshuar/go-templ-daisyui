@@ -11,28 +11,30 @@ import (
 	"github.com/joshuar/go-templ-daisyui/attributes"
 )
 
+// Option is a functional option to set text properties.
 type Option components.Option[*Props]
 
+// Props represents the properties of the text.
 type Props struct {
-	text any
-	*attributes.Attributes
-	classes *components.Classes
+	value      any
+	attributes *attributes.Attributes
+	classes    *components.Classes
 }
 
-// WithTextSize option sets the font size. If this option is not specified,
+// WithSize option sets the font size. If this option is not specified,
 // 'text-base' is used.
 //
 // https://tailwindcss.com/docs/font-size
-func WithTextSize(size Size) Option {
-	return func(text *Props) {
-		text.classes.Add(size)
+func WithSize(size Size) Option {
+	return func(p *Props) {
+		p.classes.Add(size)
 	}
 }
 
-// WithTextWeight option sets the font weight.
+// WithWeight option sets the font weight.
 //
 // https://tailwindcss.com/docs/font-weight
-func WithTextWeight(weight Weight) Option {
+func WithWeight(weight Weight) Option {
 	return func(text *Props) {
 		text.classes.Add(weight)
 	}
@@ -47,8 +49,8 @@ func AsItalicText() Option {
 	}
 }
 
-// WithTextColor will add a DaisUI color class to the text. This sets the "content" color.
-func WithTextColor(color Color) Option {
+// WithColor will add a DaisUI color class to the text. This sets the "content" color.
+func WithColor(color Color) Option {
 	return func(text *Props) {
 		text.classes.Add(color)
 	}
@@ -56,7 +58,7 @@ func WithTextColor(color Color) Option {
 
 func WithAttributes(attrs templ.Attributes) Option {
 	return func(p *Props) {
-		p.AddAttributes(attrs)
+		p.attributes.AddAttributes(attrs)
 	}
 }
 
@@ -68,8 +70,8 @@ func WithExtraClasses(extraClasses ...components.Class) Option {
 
 func Build(text any, options ...Option) *Props {
 	props := &Props{
-		text:       text,
-		Attributes: attributes.New(),
+		value:      text,
+		attributes: attributes.New(),
 		classes:    components.NewClasses(),
 	}
 

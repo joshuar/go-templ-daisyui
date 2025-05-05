@@ -3,10 +3,7 @@
 
 package text
 
-import (
-	"github.com/joshuar/go-templ-daisyui"
-	"strings"
-)
+import "github.com/joshuar/go-templ-daisyui"
 
 const (
 	Italic Style = "italic"
@@ -61,10 +58,7 @@ const (
 type Color = components.Class
 
 templ (text *Props) Show(classes ...string) {
-	<p
-		class={ text.classes.Show(), templ.KV(strings.Join(classes, " "), len(classes) > 0) }
-		{ text.ShowAttributes()... }
-	>
-		@components.SetContent(text.text)
+	<p class={ text.classes.Show() } { text.attributes.ShowAttributes()... }>
+		@components.SetContent(text.value)
 	</p>
 }
