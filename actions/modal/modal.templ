@@ -20,6 +20,7 @@ templ (modal *Props) Show() {
 		class={ "modal", modal.classes.Show() }
 		id={ modal.GetID() }
 		_="on closeModal add .closing then wait for animationend"
+		{ modal.ShowAttributes()... }
 	>
 		<div class="modal-box">
 			// If closeButton option is set, generate a close button.
