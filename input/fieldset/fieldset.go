@@ -7,7 +7,6 @@ import (
 	"github.com/a-h/templ"
 	components "github.com/joshuar/go-templ-daisyui"
 	"github.com/joshuar/go-templ-daisyui/attributes"
-	"github.com/joshuar/go-templ-daisyui/classes"
 	"github.com/joshuar/go-templ-daisyui/input"
 	"github.com/joshuar/go-templ-daisyui/modifiers/color"
 )
@@ -20,11 +19,11 @@ type FieldProps struct {
 
 // Props represents a fieldset.
 type Props struct {
-	legend    string
-	fields    []*FieldProps
-	baseColor color.BaseColor
-	*attributes.Attributes
-	*classes.Classes
+	legend     string
+	fields     []*FieldProps
+	baseColor  color.BaseColor
+	attributes *attributes.Attributes
+	classes    *components.Classes
 }
 
 type Option components.Option[*Props]
@@ -47,21 +46,21 @@ func WithField(label string, field input.Input) Option {
 // WithID option sets the id attribute on the component.
 func WithID(id string) Option {
 	return func(fieldset *Props) {
-		fieldset.SetID(id)
+		fieldset.attributes.SetID(id)
 	}
 }
 
 // WithExtraAttributes option sets additional attributes on the component.
 func WithExtraAttributes(attrs templ.Attributes) Option {
 	return func(fieldset *Props) {
-		fieldset.AddAttributes(attrs)
+		fieldset.attributes.AddAttributes(attrs)
 	}
 }
 
 // WithExtraClasses option assigns additional classes to the component.
-func WithExtraClasses(extraClasses ...classes.Class) Option {
+func WithExtraClasses(extraClasses ...components.Class) Option {
 	return func(fieldset *Props) {
-		fieldset.AddClasses(extraClasses...)
+		fieldset.classes.Add(extraClasses...)
 	}
 }
 
@@ -74,8 +73,8 @@ func WithBaseColor(baseColor color.BaseColor) Option {
 
 func Build(options ...Option) *Props {
 	props := &Props{
-		Attributes: attributes.New(),
-		Classes:    classes.New(),
+		attributes: attributes.New(),
+		classes:    components.NewClasses(),
 	}
 
 	for _, option := range options {

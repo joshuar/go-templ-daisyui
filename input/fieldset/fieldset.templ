@@ -19,9 +19,9 @@ templ (fieldset *Props) Show(classes ...string) {
 	<fieldset
 		class={ "fieldset",
 			templ.KV(fieldset.baseColor.String(),fieldset.baseColor.Valid()),
-            	templ.KV(fieldset.ShowClasses(),fieldset.HasClasses()),
+			fieldset.classes.Show(),
 	templ.KV(strings.Join(classes, " "),len(classes) >0) }
-		{ fieldset.ShowAttributes()... }
+		{ fieldset.attributes.ShowAttributes()... }
 	>
 		// Display the fieldset legend if set.
 		if fieldset.legend != "" {

@@ -3,75 +3,56 @@
 
 package textinput
 
-import "strings"
-import "github.com/joshuar/go-templ-daisyui/modifiers/size"
-import "github.com/joshuar/go-templ-daisyui/modifiers/color"
-import "github.com/joshuar/go-templ-daisyui/modifiers/state"
+import "github.com/joshuar/go-templ-daisyui"
 
-func (input *Props) applySize() string {
-	switch input.size {
-	case size.XS:
-		return "input-xs"
-	case size.SM:
-		return "input-sm"
-	case size.MD:
-		return "input-md"
-	case size.LG:
-		return "input-lg"
-	case size.XL:
-		return "input-xl"
-	default:
-		return "input-md"
-	}
-}
+const (
+	Text     Type = "text"
+	Password Type = "password"
+	Email    Type = "email"
+	URL      Type = "url"
+)
 
-// applyThemeColor applies a theme color to the Component.
-func (input *Props) applyThemeColor() string {
-	themeColor := "input-neutral"
+// Type is the type of input (e.g., password, email, url, etc.)
+type Type string
 
-	switch input.GetThemeColor() {
-	case color.Primary:
-		themeColor = "input-primary"
-	case color.Secondary:
-		themeColor = "input-secondary"
-	case color.Accent:
-		themeColor = "input-accent"
-	case color.Neutral:
-		themeColor = "input-neutral"
-	case color.Ghost:
-		themeColor = "input-ghost"
-	}
+const (
+	Ghost Style = "input-ghost"
+)
 
-	return themeColor
-}
+// Style is the style to apply to the input.
+type Style = components.Class
 
-// applyStateColor applies a state color to the Component.
-func (input *Props) applyStateColor() string {
-	var stateColor string
+const (
+	Primary   Color = "input-primary"
+	Secondary Color = "input-secondary"
+	Accent    Color = "input-accent"
+	Neutral   Color = "input-neutral"
+	Info      Color = "input-info"
+	Success   Color = "input-success"
+	Warning   Color = "input-warning"
+	Error     Color = "input-error"
+)
 
-	switch input.GetStateColor() {
-	case state.Info:
-		stateColor = "input-info"
-	case state.Success:
-		stateColor = "input-sucess"
-	case state.Warning:
-		stateColor = "input-warning"
-	case state.Error:
-		stateColor = "input-error"
-	}
+// Color is the color to apply to the input.
+type Color = components.Class
 
-	return stateColor
-}
+const (
+	XS Size = "input-xs"
+	SM Size = "input-sm"
+	MD Size = "input-md"
+	LG Size = "input-lg"
+	XL Size = "input-xl"
+)
+
+// Size is the size to apply to the input.
+type Size = components.Class
 
 templ (input *Props) Show(classes ...string) {
 	<input
 		class={
 			"input",
 			templ.KV("validator", input.Validate()),
-			templ.KV(input.applySize(), input.size.Valid()),
-			templ.KV(input.applyThemeColor(), input.ValidThemeColor()),
-			templ.KV(input.applyStateColor(), input.ValidStateColor()),
-			templ.KV(strings.Join(classes, " "), len(classes) > 0),
+			input.classes.Show(),
 		}
 		required?={ input.Required() }
 		readonly?={ input.readonly }
