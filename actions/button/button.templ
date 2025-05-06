@@ -4,7 +4,7 @@
 package button
 
 import (
-	"github.com/joshuar/go-templ-daisyui/modifiers"
+	"github.com/joshuar/go-templ-daisyui"
 	"strings"
 )
 
@@ -16,19 +16,7 @@ const (
 )
 
 // Shape defines the shape of the button.
-type Shape string
-
-func (s Shape) String() string {
-	return string(s)
-}
-
-func (s Shape) Valid() bool {
-	return s != ""
-}
-
-func (s Shape) Class() templ.KeyValue[string, bool] {
-	return templ.KV(s.String(), s.Valid())
-}
+type Shape = components.Class
 
 const (
 	Soft    Style = "btn-soft"
@@ -39,7 +27,7 @@ const (
 )
 
 // Style defines the style of the button.
-type Style = modifiers.Style
+type Style = components.Class
 
 const (
 	Primary   Color = "btn-primary"
@@ -53,7 +41,7 @@ const (
 )
 
 // Color defines the colour of the button.
-type Color = modifiers.Color
+type Color = components.Class
 
 const (
 	XS Size = "btn-xs"
@@ -64,23 +52,19 @@ const (
 )
 
 // Size defines the size of the button.
-type Size = modifiers.Size
+type Size = components.Class
 
 // Show will display a Button with its given properties.
 templ (btn *Props) Show(classes ...string) {
 	<button
 		class={
 			"btn",
-			btn.color.Class(),
-			btn.shape.Class(),
-			btn.size.Class(),
-			btn.style.Class(),
 			templ.KV("btn-outline", btn.outline),
 			templ.KV("no-animation", btn.animated),
-			btn.ShowClasses(),
+			btn.classes.Show(),
 			templ.KV(strings.Join(classes, " "), len(classes) > 0),
 		}
-		{ btn.ShowAttributes()... }
+		{ btn.attributes.ShowAttributes()... }
 		autofocus?={ btn.autofocus }
 	>
 		if btn.content != nil {
@@ -95,15 +79,12 @@ templ (btn *Props) ShowAsSummary(classes ...string) {
 	<summary
 		class={
 			"btn",
-			btn.color.Class(),
-			btn.shape.Class(),
-			btn.size.Class(),
-			btn.style.Class(),
+			btn.classes.Show(),
 			templ.KV("btn-outline", btn.outline),
 			templ.KV("no-animation", btn.animated),
 			templ.KV(strings.Join(classes, " "), len(classes) > 0),
 		}
-		{ btn.ShowAttributes()... }
+		{ btn.attributes.ShowAttributes()... }
 		autofocus?={ btn.autofocus }
 	>
 		if btn.content != nil {

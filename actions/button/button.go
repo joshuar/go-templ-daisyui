@@ -10,7 +10,6 @@ import (
 	"github.com/a-h/templ"
 	components "github.com/joshuar/go-templ-daisyui"
 	"github.com/joshuar/go-templ-daisyui/attributes"
-	"github.com/joshuar/go-templ-daisyui/classes"
 )
 
 // Option is a functional option for a Button.
@@ -18,16 +17,20 @@ type Option components.Option[*Props]
 
 // Props represents the properties for a DaisyUI Button component.
 type Props struct {
-	*attributes.Attributes
-	*classes.Classes
-	style     Style
-	shape     Shape
-	size      Size
-	color     Color
-	content   templ.Component
-	animated  bool
-	autofocus bool
-	outline   bool
+	attributes *attributes.Attributes
+	classes    *components.Classes
+	content    templ.Component
+	animated   bool
+	autofocus  bool
+	outline    bool
+}
+
+func (p *Props) GetID() string {
+	return p.attributes.GetID()
+}
+
+func (p *Props) SetValue(value attributes.Value) {
+	p.attributes.SetValue(value)
 }
 
 // WithContent sets the content for the Button.
@@ -52,15 +55,15 @@ func WithoutClickAnimation() Option {
 }
 
 // WithText will set the text to display within the Badge.
-func WithSize(btnSize Size) Option {
+func WithSize(size Size) Option {
 	return func(btn *Props) {
-		btn.size = btnSize
+		btn.classes.Add(size)
 	}
 }
 
 func WithColor(color Color) Option {
 	return func(btn *Props) {
-		btn.color = color
+		btn.classes.Add(color)
 	}
 }
 
@@ -68,52 +71,52 @@ func WithColor(color Color) Option {
 // is not used, the button will be a regular button.
 func AsShape(shape Shape) Option {
 	return func(btn *Props) {
-		btn.shape = shape
+		btn.classes.Add(shape)
 	}
 }
 
 // WithStyle will apply the given style to the component.
-func WithStyle(value Style) Option {
+func WithStyle(style Style) Option {
 	return func(btn *Props) {
-		btn.style = value
+		btn.classes.Add(style)
 	}
 }
 
 func WithName(name attributes.Name) Option {
 	return func(btn *Props) {
-		btn.SetName(name)
+		btn.attributes.SetName(name)
 	}
 }
 
 func WithID(id string) Option {
 	return func(btn *Props) {
-		btn.SetID(id)
+		btn.attributes.SetID(id)
 	}
 }
 
 func WithValue(value attributes.Value) Option {
 	return func(btn *Props) {
-		btn.SetValue(value)
+		btn.attributes.SetValue(value)
 	}
 }
 
 func WithExtraAttributes(attrs templ.Attributes) Option {
 	return func(btn *Props) {
-		btn.AddAttributes(attrs)
+		btn.attributes.AddAttributes(attrs)
 	}
 }
 
-func WithExtraClasses(extraClasses ...classes.Class) Option {
+func WithExtraClasses(extraClasses ...components.Class) Option {
 	return func(p *Props) {
-		p.AddClasses(extraClasses...)
+		p.classes.Add(extraClasses...)
 	}
 }
 
 // Build generates Button properties from the given options.
 func Build(options ...Option) *Props {
 	btn := &Props{
-		Attributes: attributes.New(),
-		Classes:    classes.New(),
+		attributes: attributes.New(),
+		classes:    components.NewClasses(),
 		animated:   true,
 	}
 
