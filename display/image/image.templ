@@ -19,7 +19,7 @@ templ (image *Props) Show(classes ...string) {
 }
 
 templ (image *Props) ShowAsFigure() {
-	<figure>
+	<figure class={ image.classes.Show() }>
 		@image.Show()
 	</figure>
 }
