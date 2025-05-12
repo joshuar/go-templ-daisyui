@@ -59,24 +59,28 @@ func WithButtonContent(content any) Option {
 	}
 }
 
+// WithButtonClasses option adds additional class values to the dropdown button.
 func WithButtonClasses(extraClasses ...components.Class) Option {
 	return func(p *Props) {
 		p.btnClasses.Add(extraClasses...)
 	}
 }
 
+// WithMenuClasses option adds additional class values to the dropdown menu.
 func WithMenuClasses(extraClasses ...components.Class) Option {
 	return func(p *Props) {
 		p.menuClasses.Add(extraClasses...)
 	}
 }
 
+// WithExtraAttributes adds additional attributes to the component.
 func WithExtraAttributes(attrs templ.Attributes) Option {
 	return func(btn *Props) {
 		btn.attributes.AddAttributes(attrs)
 	}
 }
 
+// WithExtraClasses adds additional classesto the component.
 func WithExtraClasses(extraClasses ...components.Class) Option {
 	return func(p *Props) {
 		p.classes.Add(extraClasses...)
