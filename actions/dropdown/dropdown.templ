@@ -3,87 +3,48 @@
 
 package dropdown
 
-import "strings"
+import "github.com/joshuar/go-templ-daisyui"
 
-// applyOpenFrom sets how the Dropdown will open.
-func applyOpenFrom(from Open) string {
-	switch from {
-	case OpenBottom:
-		return "dropdown-bottom"
-	case OpenTop:
-		return "dropdown-top"
-	case OpenLeft:
-		return "dropdown-left"
-	case OpenRight:
-		return "dropdown-right"
-	default:
-		return "dropdown-bottom"
-	}
-}
+const (
+	AlignStart  Alignment = "dropdown-start"
+	AlignCenter Alignment = "dropdown-center"
+	AlignEnd    Alignment = "dropdown-end"
+)
 
-// applyOpenFrom sets how the Dropdown will open.
-func applyAlignment(align Alignment) string {
-	switch align {
-	case AlignCenter:
-		return "dropdown-center"
-	case AlignEnd:
-		return "dropdown-end"
-	case AlignStart:
-		fallthrough
-	default:
-		return "dropdown-start"
-	}
-}
+// Alignment defines how the dropdown will be aligned relative to the button.
+type Alignment = components.Class
 
-// showAsClass renders the Dropdown as a <div></div> element.
-templ (dropdown *Props) showAsClass(classes ...string) {
-	<div
-		class={ "dropdown",
-			templ.KV(applyOpenFrom(dropdown.openProps.From), dropdown.openProps.From > 0),
-			templ.KV(applyAlignment(dropdown.openProps.Align), dropdown.openProps.Align > 0),
-			templ.KV("dropdown-hover", dropdown.openProps.Hover),
-			templ.KV("dropdown-open", dropdown.openProps.Force),
-			templ.KV(dropdown.GetHiddenBreakpoint(), dropdown.HiddenBreakpointSet()),
-			templ.KV(dropdown.GetRevealedBreakpoint(), dropdown.RevealedBreakpointSet()),
-			templ.KV(strings.Join(classes, " "), len(classes) > 0) }
-	>
-		if dropdown.button != nil {
-			@dropdown.button.Show()
-		} else {
-			<div tabindex="0" role="button" class="btn m-1">Click</div>
-		}
-		@dropdown.content.Show("dropdown-content", "rounded-box", "z-[1]", "shadow")
+const (
+	OpenTop    Open = "dropdown-top"
+	OpenBottom Open = "dropdown-bottom"
+	OpenLeft   Open = "dropdown-left"
+	OpenRight  Open = "dropdown-right"
+)
+
+// Open defines from where the dropdown will open relative to the button.
+type Open = components.Class
+
+const (
+	ForceOpen   Modifier = "dropdown-open"
+	OpenOnHover Modifier = "dropdown-hover"
+)
+
+// Modifier defines a modifier class that changes the dropdown behaviour.
+type Modifier = components.Class
+
+templ (p *Props) Show() {
+	<div class={ "dropdown", p.classes.Show() }>
+		<div tabindex="0" role="button" class={ "btn", p.btnClasses.Show() }>
+			if p.btnContent != nil {
+				@components.SetContent(p.btnContent)
+			} else {
+				{ "Click" }
+			}
+		</div>
+		<ul tabindex="0" class={ "dropdown-content", "menu", "bg-base-100", "rounded-box", "z-1", "shadow-sm", p.menuClasses.Show() }>
+			{ children... }
+		</ul>
 	</div>
 }
 
-// showAsDetails renders the Dropdown as a <details></details> element.
-templ (dropdown *Props) showAsDetails(classes ...string) {
-	<details
-		class={ "dropdown",
-			templ.KV(applyOpenFrom(dropdown.openProps.From), dropdown.openProps.From > 0),
-			templ.KV(applyAlignment(dropdown.openProps.Align), dropdown.openProps.Align > 0),
-			templ.KV("dropdown-hover", dropdown.openProps.Hover),
-			templ.KV("dropdown-open", dropdown.openProps.Force),
-			templ.KV(dropdown.GetHiddenBreakpoint(), dropdown.HiddenBreakpointSet()),
-			templ.KV(dropdown.GetRevealedBreakpoint(), dropdown.RevealedBreakpointSet()),
-			templ.KV(strings.Join(classes, " "), len(classes) > 0) }
-	>
-		if dropdown.button != nil {
-			@dropdown.button.ShowAsSummary()
-		} else {
-			<summary class="btn m-1">Click</summary>
-		}
-		@dropdown.content.Show("dropdown-content", "z-[1]", "shadow")
-	</details>
-}
-
-// Show will render the Dropdown with the given style option supplied. If no
-// style option was supplied, it will default to using a <details></details> element.
-templ (dropdown *Props) Show(classes ...string) {
-	switch dropdown.style {
-		case Class:
-			@dropdown.showAsClass(classes...)
-		default:
-			@dropdown.showAsDetails(classes...)
-	}
-}
+//bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm

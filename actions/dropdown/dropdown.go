@@ -9,173 +9,87 @@ package dropdown
 import (
 	"github.com/a-h/templ"
 	components "github.com/joshuar/go-templ-daisyui"
-	"github.com/joshuar/go-templ-daisyui/actions/button"
-	"github.com/joshuar/go-templ-daisyui/display/card"
-	"github.com/joshuar/go-templ-daisyui/modifiers/breakpoints"
-	"github.com/joshuar/go-templ-daisyui/modifiers/size"
-	"github.com/joshuar/go-templ-daisyui/navigation/menu"
+	"github.com/joshuar/go-templ-daisyui/attributes"
 )
-
-const (
-	OpenTop Open = iota + 1
-	OpenBottom
-	OpenLeft
-	OpenRight
-)
-
-// Open defines where the Dropdown will open from.
-type Open int
-
-const (
-	AlignStart Alignment = iota
-	AlignCenter
-	AlignEnd
-)
-
-// Alignment defines how the dropdown will be aligned relative to the button
-// when opened.
-type Alignment int
-
-const (
-	// Details uses a <details> element for the Dropdown.
-	//
-	// https://daisyui.com/components/dropdown/#dropdown-menu-using-details-tag
-	Details Style = iota
-	// Class uses a <div> element for the Dropdown.
-	//
-	// https://daisyui.com/components/dropdown/#dropdown-menu
-	Class
-)
-
-// Style defines what type of Dropdown to use. This can be either Details (using
-// a <details> element) or Class (using a <div> element).
-type Style int
-
-// Content is an interface to represent any type of Component that can be set as
-// the Dropdown content.
-type Content interface {
-	Show(classes ...string) templ.Component
-}
 
 // Props holds common properties for all types of Dropdown components.
 type Props struct {
-	style     Style
-	openProps *OpenProps
-	button    *button.Props
-	*breakpoints.Breakpoints
-	content Content
+	classes     *components.Classes
+	attributes  *attributes.Attributes
+	btnClasses  *components.Classes
+	btnContent  any
+	menuClasses *components.Classes
 }
 
 // Option is a functional option to apply to a Dropdown.
 type Option components.Option[*Props]
 
-// OpenProps defines properties for how a Dropdown will open.
-type OpenProps struct {
-	From  Open
-	Align Alignment
-	Hover bool
-	Force bool
-}
-
-// OpenOption is a functional option to control how a Dropdown will open.
-type OpenOption components.Option[*OpenProps]
-
-// OnHover option will ensure the Dropdown will open on hover.
-func OnHover() OpenOption {
-	return func(p *OpenProps) {
-		p.Hover = true
-	}
-}
-
-// ForceOpen option will ensure the Dropdown will be open by default.
-func ForceOpen() OpenOption {
-	return func(p *OpenProps) {
-		p.Force = true
-	}
-}
-
-// From customizes how the dropdown will open and optional alignment. By default, if this
-// option is not specified, the dropdown will open from the bottom.
-func From(from Open) OpenOption {
-	return func(p *OpenProps) {
-		p.From = from
-	}
-}
-
-// Align customizes how the dropdown content is aligned relative to the button
-// when open. By default, if this option is not specified, the dropdown content
-// will be left-aligned.
-func Align(align Alignment) OpenOption {
-	return func(p *OpenProps) {
-		p.Align = align
-	}
-}
-
-// WithOpenOptions option sets the options for how the Dropdown will open.
-func WithOpenOptions(options ...OpenOption) Option {
+// WithForceOpen option will ensure the dropdown will be open by default.
+func WithForceOpen() Option {
 	return func(p *Props) {
-		for _, option := range options {
-			option(p.openProps)
-		}
+		p.classes.Add(ForceOpen)
 	}
 }
 
-// WithButton option sets the options for the dropdown button. If not specified,
-// a default button will be used with minimal styling and the text "Click" inside.
-func WithButton(options ...button.Option) Option {
+// WithHoverOpen option will ensure the dropdown will open on hover.
+func WithHoverOpen() Option {
 	return func(p *Props) {
-		p.button = button.Build(options...)
-		button.WithExtraAttributes(templ.Attributes{
-			"tabindex": 0,
-		})(p.button)
+		p.classes.Add(OpenOnHover)
 	}
 }
 
-// WithMenuOptions option sets the options for the dropdown menu. Use this
-// option to set optional menu styling and to define the list of items for the
-// dropdown menu.
-func WithMenuContent(options ...menu.Option) Option {
+// WithOpenFrom option sets from where the dropdown will open.
+func WithOpenFrom(open Open) Option {
 	return func(p *Props) {
-		options = append(options, menu.WithExtraAttributes(templ.Attributes{"tabindex": 0}))
-		menu := menu.Build(options...)
-		p.content = menu
+		p.classes.Add(open)
 	}
 }
 
-// WithCardContent option sets the options for a Card component as the Dropdown
-// content.. Use this option to set the Card content and optional styling.
-func WithCardContent(options ...card.Option) Option {
+// WithOpenAlignment option sets how the dropdown will be aligned when opened.
+func WithOpenAlignment(align Alignment) Option {
 	return func(p *Props) {
-		card := card.Build(options...)
-		p.content = card
+		p.classes.Add(align)
 	}
 }
 
-func WithHiddenBreakpoint(from size.ResponsiveSize) Option {
+// WithButtonContent option sets the content inside the button. If not specified a default text will be used.
+func WithButtonContent(content any) Option {
 	return func(p *Props) {
-		p.SetHiddenBreakpoint(from)
+		p.btnContent = content
 	}
 }
 
-func WithRevealedBreakpoint(from size.ResponsiveSize) Option {
+func WithButtonClasses(extraClasses ...components.Class) Option {
 	return func(p *Props) {
-		p.SetRevealedBreakpoint(from)
+		p.btnClasses.Add(extraClasses...)
 	}
 }
 
-// AsStyle option sets the style of the Dropdown component.
-func AsStyle(style Style) Option {
+func WithMenuClasses(extraClasses ...components.Class) Option {
 	return func(p *Props) {
-		p.style = style
+		p.menuClasses.Add(extraClasses...)
 	}
 }
 
-// BuildDropdown builds a DropdownProps from the given options. Use this to
-// pre-build a Dropdown Component before rendering.
+func WithExtraAttributes(attrs templ.Attributes) Option {
+	return func(btn *Props) {
+		btn.attributes.AddAttributes(attrs)
+	}
+}
+
+func WithExtraClasses(extraClasses ...components.Class) Option {
+	return func(p *Props) {
+		p.classes.Add(extraClasses...)
+	}
+}
+
+// Build will generate and set the properties of a dropdown with the given options.
 func Build(options ...Option) *Props {
 	dropdown := &Props{
-		openProps:   &OpenProps{},
-		Breakpoints: &breakpoints.Breakpoints{},
+		classes:     components.NewClasses(),
+		btnClasses:  components.NewClasses(),
+		menuClasses: components.NewClasses(),
+		attributes:  attributes.New(),
 	}
 
 	for _, option := range options {
