@@ -6,21 +6,17 @@ package join
 // Vertically joins items vertically.
 //
 // https://daisyui.com/components/join/
-templ Vertically(items ...templ.Component) {
+templ Vertically() {
 	<div class="join join-vertical">
-		for _, item := range items {
-			@item
-		}
+		{ children... }
 	</div>
 }
 
 // Horizontally joins items horizontally.
 //
 // https://daisyui.com/components/join/
-templ Horizontally(items ...templ.Component) {
+templ Horizontally() {
 	<div class="join">
-		for _, item := range items {
-			@item
-		}
+		{ children... }
 	</div>
 }
