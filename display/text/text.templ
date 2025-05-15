@@ -21,7 +21,7 @@ const (
 	XLXL Size = "text-xlxl"
 )
 
-// Text Size.
+// Size controls the font size of the text.
 //
 // https://tailwindcss.com/docs/font-size
 type Size = components.Class
@@ -38,7 +38,7 @@ const (
 	Black      Weight = "font-black"
 )
 
-// Text Weight.
+// Weight controls the font weight of the text.
 //
 // https://tailwindcss.com/docs/font-weight
 type Weight = components.Class
@@ -54,8 +54,19 @@ const (
 	Error     Color = "text-error"
 )
 
-// Text Color.
+// Color controls the text color.
 type Color = components.Class
+
+const (
+	Truncate Overflow = "truncate"
+	Ellipsis Overflow = "text-ellipsis"
+	Clip     Overflow = "text-clip"
+)
+
+// Overflow controls how the text will overflow.
+//
+// https://tailwindcss.com/docs/text-overflow
+type Overflow = components.Class
 
 templ (text *Props) Show(classes ...string) {
 	<p class={ text.classes.Show() } { text.attributes.ShowAttributes()... }>

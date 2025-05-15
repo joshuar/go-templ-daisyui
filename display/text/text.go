@@ -23,8 +23,6 @@ type Props struct {
 
 // WithSize option sets the font size. If this option is not specified,
 // 'text-base' is used.
-//
-// https://tailwindcss.com/docs/font-size
 func WithSize(size Size) Option {
 	return func(p *Props) {
 		p.classes.Add(size)
@@ -32,8 +30,6 @@ func WithSize(size Size) Option {
 }
 
 // WithWeight option sets the font weight.
-//
-// https://tailwindcss.com/docs/font-weight
 func WithWeight(weight Weight) Option {
 	return func(text *Props) {
 		text.classes.Add(weight)
@@ -41,8 +37,6 @@ func WithWeight(weight Weight) Option {
 }
 
 // AsItalicText option will render the text as italic.
-//
-// https://tailwindcss.com/docs/font-style
 func AsItalicText() Option {
 	return func(text *Props) {
 		text.classes.Add(Italic)
@@ -53,6 +47,13 @@ func AsItalicText() Option {
 func WithColor(color Color) Option {
 	return func(text *Props) {
 		text.classes.Add(color)
+	}
+}
+
+// WithOverflow option adds the given overflow class to the text.
+func WithOverflow(flow Overflow) Option {
+	return func(text *Props) {
+		text.classes.Add(flow)
 	}
 }
 
