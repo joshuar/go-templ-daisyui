@@ -19,7 +19,6 @@ func (modal *Props) hsCloseModalAction() string {
 templ (modal *Props) Show() {
 	<dialog
 		class={ "modal", modal.classes.Show() }
-		id={ modal.GetID() }
 		_="on closeModal add .closing then wait for animationend"
 		{ modal.ShowAttributes()... }
 	>
