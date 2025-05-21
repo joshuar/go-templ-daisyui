@@ -4,8 +4,8 @@
 package alert
 
 import (
-	"github.com/joshuar/go-templ-daisyui/display/icon"
 	"github.com/joshuar/go-templ-daisyui/modifiers"
+	"github.com/sebasvil20/templicons/tabler"
 )
 
 const (
@@ -29,15 +29,15 @@ type AlertStyle = modifiers.Style
 func (alert *Props) icon() templ.Component {
 	switch alert.state {
 	case Info:
-		return icon.BuildInfoIcon().Show()
-	case Success:
-		return icon.BuildSuccessIcon().Show()
+		return tabler.InfoCircle()
 	case Warning:
-		return icon.BuildWarningIcon().Show()
+		return tabler.AlertTriangle()
 	case Error:
-		return icon.BuildErrorIcon().Show()
+		return tabler.ExclamationCircle()
+	case Success:
+		fallthrough
 	default:
-		return icon.BuildSuccessIcon().Show()
+		return tabler.CircleCheck()
 	}
 }
 
