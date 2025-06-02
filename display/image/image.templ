@@ -17,9 +17,3 @@ templ (image *Props) Show(classes ...string) {
 		{ image.attributes.ShowAttributes()... }
 	/>
 }
-
-templ (image *Props) ShowAsFigure() {
-	<figure class={ image.classes.Show() }>
-		@image.Show()
-	</figure>
-}
