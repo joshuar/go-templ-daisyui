@@ -56,10 +56,10 @@ templ (card *Props) Show(classes ...string) {
 		if card.image != nil {
 			if card.centeredContent {
 				<figure class="px-10 pt-10">
-					@card.image.Show("rounded-xl")
+					@card.image.Show()
 				</figure>
 			} else {
-				@card.image.ShowAsFigure()
+				@card.image.Show()
 			}
 		}
 		// Show the Card body, if specified.
@@ -83,9 +83,7 @@ templ (body *BodyProps) Show(classes ...string) {
 	>
 		// Display the Card title, if specified.
 		if body.title != nil {
-			<h2 class="card-title">
-				@body.title
-			</h2>
+			@body.title.Show()
 		}
 		// Display the Card body content, if specified.
 		if body.content != nil {
@@ -100,4 +98,11 @@ templ (body *BodyProps) Show(classes ...string) {
 			</div>
 		}
 	</div>
+}
+
+// Show generates the card title from the properties.
+templ (title *TitleProps) Show() {
+	<h2 class={ "card-title", title.classes.Show() } { title.attributes.ShowAttributes()... }>
+		@title.content
+	</h2>
 }

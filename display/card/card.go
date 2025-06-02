@@ -13,6 +13,7 @@ import (
 	components "github.com/joshuar/go-templ-daisyui"
 	"github.com/joshuar/go-templ-daisyui/attributes"
 	"github.com/joshuar/go-templ-daisyui/classes/shadow"
+	"github.com/joshuar/go-templ-daisyui/display/figure"
 	"github.com/joshuar/go-templ-daisyui/display/image"
 	"github.com/joshuar/go-templ-daisyui/modifiers/color"
 )
@@ -31,14 +32,14 @@ type Props struct {
 	classes         *components.Classes
 	body            *BodyProps
 	baseColor       color.BaseColor
-	image           *image.Props
+	image           *figure.Props
 	centeredContent bool
 }
 
 // BodyProps represents a Card's body properties. These are used when the Show()
 // method is called to render the Card body.
 type BodyProps struct {
-	title   templ.Component
+	title   *TitleProps
 	content templ.Component
 	*ActionsProps
 	*attributes.Attributes
@@ -48,6 +49,49 @@ type BodyProps struct {
 // ActionsProps is the container for Card actions.
 type ActionsProps struct {
 	actions []templ.Component
+}
+
+// TitleProps are the properties of the card title.
+type TitleProps struct {
+	classes    *components.Classes
+	attributes *attributes.Attributes
+	content    templ.Component
+}
+
+// TitleOption is a functional option for the card title.
+type TitleOption components.Option[*TitleProps]
+
+// WithTitle option sets a title in the Card body. This can be text, another DaisyUI
+// component or a custom templ.Component. Other values are ignored and will
+// result in an empty title.
+func WithTitle(title any, options ...TitleOption) BodyOption {
+	return func(body *BodyProps) {
+		title := &TitleProps{
+			content:    components.SetContent(title),
+			classes:    components.NewClasses(),
+			attributes: attributes.New(),
+		}
+
+		for option := range slices.Values(options) {
+			option(title)
+		}
+
+		body.title = title
+	}
+}
+
+// WithTitleAttributes optiopn sets additional attributes on the card title.
+func WithTitleAttributes(attrs templ.Attributes) TitleOption {
+	return func(title *TitleProps) {
+		title.attributes.AddAttributes(attrs)
+	}
+}
+
+// WithTitleClasses optiopn sets additional classes on the card title.
+func WithTitleClasses(extraClasses ...components.Class) TitleOption {
+	return func(title *TitleProps) {
+		title.classes.Add(extraClasses...)
+	}
 }
 
 // WithStyle option adds the given style class to the card.
@@ -86,12 +130,12 @@ func WithCenteredContent() Option {
 }
 
 // WithImage option sets the image to be displayed in the Card.
-func WithImage(url string, options ...image.Option) Option {
+func WithImage(img *image.Props, options ...figure.Option) Option {
 	return func(p *Props) {
-		if url == "" {
+		if img == nil {
 			return
 		}
-		p.image = image.Build(url, options...)
+		p.image = figure.Build(img, options...)
 	}
 }
 
@@ -106,15 +150,6 @@ func WithSize(cardSize Size) Option {
 func WithBodyOptions(options ...BodyOption) Option {
 	return func(p *Props) {
 		p.body = BuildBody(options...)
-	}
-}
-
-// WithTitle option sets a title in the Card body. This can be text, another DaisyUI
-// component or a custom templ.Component. Other values are ignored and will
-// result in an empty title.
-func WithTitle(title any) BodyOption {
-	return func(p *BodyProps) {
-		p.title = components.SetContent(title)
 	}
 }
 
