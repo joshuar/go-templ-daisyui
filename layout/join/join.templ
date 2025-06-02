@@ -3,20 +3,38 @@
 
 package join
 
+import "slices"
+
 // Vertically joins items vertically.
 //
 // https://daisyui.com/components/join/
-templ Vertically() {
+templ Vertically(parts ...templ.Component) {
 	<div class="join join-vertical">
-		{ children... }
+		if parts != nil {
+			for part := range slices.Values(parts) {
+				<div class="join-item">
+					@part
+				</div>
+			}
+		} else {
+			{ children... }
+		}
 	</div>
 }
 
 // Horizontally joins items horizontally.
 //
 // https://daisyui.com/components/join/
-templ Horizontally() {
+templ Horizontally(parts ...templ.Component) {
 	<div class="join">
-		{ children... }
+		if parts != nil {
+			for part := range slices.Values(parts) {
+				<div class="join-item">
+					@part
+				</div>
+			}
+		} else {
+			{ children... }
+		}
 	</div>
 }
