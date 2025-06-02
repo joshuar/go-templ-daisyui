@@ -9,7 +9,6 @@ import "strings"
 // content on which to set the indicator).
 templ (ind *BadgeIndicatorProps) Show(content templ.Component, classes ...string) {
 	<div class={ "indicator", templ.KV(strings.Join(classes," "),len(classes) >0) }>
-		@ind.badge.Show("indicator-item")
 		if content != nil {
 			@content
 		} else {

@@ -56,6 +56,7 @@ templ (modal *Props) showCloseButton() {
 			button.WithExtraAttributes(templ.Attributes{
 				"_": modal.hsCloseModalAction(),
 			}),
-		).Show("absolute", "right-2", "top-2")
+			button.WithExtraClasses("absolute", "right-2", "top-2"),
+		).Show()
 	</form>
 }

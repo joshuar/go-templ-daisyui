@@ -75,6 +75,11 @@ func (a *Attributes) UnsetAttribute(key string) {
 // AddAttributes will ensure the component has the given attributes. Any
 // existing attributes are merged with the given set of attributes.
 func (a *Attributes) AddAttributes(attrs templ.Attributes) {
+	// Ignore if no attributes are passed in.
+	if attrs == nil {
+		return
+	}
+
 	a.mu.Lock()
 	defer a.mu.Unlock()
 

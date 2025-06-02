@@ -30,5 +30,7 @@ func BuildBadgeIndicator(options ...Option) *BadgeIndicatorProps {
 		option(alert)
 	}
 
+	badge.WithExtraClasses("indicator-item")(alert.badge)
+
 	return alert
 }

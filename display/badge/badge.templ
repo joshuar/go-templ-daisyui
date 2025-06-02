@@ -3,10 +3,7 @@
 
 package badge
 
-import (
-	"github.com/joshuar/go-templ-daisyui/modifiers"
-	"strings"
-)
+import "github.com/joshuar/go-templ-daisyui/modifiers"
 
 const (
 	Soft    BadgeStyle = "badge-soft"
@@ -40,7 +37,7 @@ const (
 
 type BadgeSize = modifiers.Size
 
-templ (badge *Props) Show(classes ...string) {
+templ (badge *Props) Show() {
 	<span
 		class={
 			"badge",
@@ -48,7 +45,6 @@ templ (badge *Props) Show(classes ...string) {
 			badge.color.Class(),
 			badge.style.Class(),
 			badge.ShowClasses(),
-			templ.KV(strings.Join(classes, " "), len(classes) > 0),
 		}
 		{ badge.ShowAttributes()... }
 	>
