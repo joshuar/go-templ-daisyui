@@ -60,15 +60,16 @@ templ (btn *Props) Show(classes ...string) {
 		class={
 			"btn",
 			templ.KV("btn-outline", btn.outline),
-			templ.KV("no-animation", btn.animated),
+			templ.KV("no-animation", !btn.animated),
 			btn.classes.Show(),
-			templ.KV(strings.Join(classes, " "), len(classes) > 0),
 		}
 		{ btn.attributes.ShowAttributes()... }
 		autofocus?={ btn.autofocus }
 	>
 		if btn.content != nil {
 			@btn.content
+		} else {
+			{ children... }
 		}
 	</button>
 }
