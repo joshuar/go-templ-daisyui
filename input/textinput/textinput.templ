@@ -3,7 +3,10 @@
 
 package textinput
 
-import "github.com/joshuar/go-templ-daisyui"
+import (
+	"github.com/joshuar/go-templ-daisyui"
+	"github.com/yassinebenaid/godump"
+)
 
 const (
 	Text     Type = "text"
@@ -48,17 +51,16 @@ const (
 type Size = components.Class
 
 templ (input *Props) Show(classes ...string) {
+	{{ godump.Dump(input.attributes.ShowAttributes()) }}
 	<input
 		class={
 			"input",
-			templ.KV("validator", input.Validate()),
+			templ.KV("validator", input.validation.Validate()),
 			input.classes.Show(),
 		}
-		required?={ input.Required() }
-		readonly?={ input.readonly }
-		{ input.ValidationOptions()... }
-		{ input.ShowAttributes()... }
+		{ input.validation.ValidationOptions()... }
+		{ input.attributes.ShowAttributes()... }
 	/>
 	// Add the validation hint if set.
-	@input.ShowHint()
+	@input.validation.ShowHint()
 }

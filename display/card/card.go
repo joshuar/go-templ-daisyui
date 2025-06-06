@@ -29,11 +29,10 @@ type (
 // is called to render the Card.
 type Props struct {
 	*attributes.Attributes
-	classes         *components.Classes
-	body            *BodyProps
-	baseColor       color.BaseColor
-	image           *figure.Props
-	centeredContent bool
+	classes   *components.Classes
+	body      *BodyProps
+	baseColor color.BaseColor
+	image     *figure.Props
 }
 
 // BodyProps represents a Card's body properties. These are used when the Show()
@@ -122,13 +121,6 @@ func WithLayout(layout Layout) Option {
 	}
 }
 
-// WithCenteredContent option aligns the content in the Card as centered.
-func WithCenteredContent() Option {
-	return func(p *Props) {
-		p.centeredContent = true
-	}
-}
-
 // WithImage option sets the image to be displayed in the Card.
 func WithImage(img *image.Props, options ...figure.Option) Option {
 	return func(p *Props) {
@@ -211,6 +203,13 @@ func WithBodyExtraAttributes(attrs templ.Attributes) BodyOption {
 func WithBodyExtraClasses(extraClasses ...components.Class) BodyOption {
 	return func(p *BodyProps) {
 		p.classes.Add(extraClasses...)
+	}
+}
+
+// WithCenteredContent option aligns the content in the Card as centered.
+func WithCenteredContent() BodyOption {
+	return func(p *BodyProps) {
+		p.classes.Add("items-center", "text-center")
 	}
 }
 

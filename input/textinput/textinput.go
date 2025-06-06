@@ -20,15 +20,14 @@ type Option components.Option[*Props]
 type Props struct {
 	attributes *attributes.Attributes
 	classes    *components.Classes
-	*validation.Validation
-	readonly bool
+	validation *validation.Validation
 }
 
 // AsType sets the type of textinput, such as password or email. If this option
 // is not used, the textinput will default to type "text".
 func AsType(inputType Type) Option {
 	return func(p *Props) {
-		p.SetAttribute("type", inputType)
+		p.attributes.SetAttribute("type", string(inputType))
 	}
 }
 
@@ -36,52 +35,52 @@ func AsType(inputType Type) Option {
 // input validation.
 func Required() Option {
 	return func(p *Props) {
-		p.SetRequired(true)
+		p.validation.SetRequired(true)
 	}
 }
 
 // ReadOnly option makes the text input readonly.
 func ReadOnly() Option {
 	return func(p *Props) {
-		p.readonly = true
+		p.attributes.SetAttribute("readonly", true)
 	}
 }
 
 // Validate option ensures that HTML5 validation will be applied to the input.
 func Validate() Option {
 	return func(p *Props) {
-		p.SetValidation(true)
+		p.validation.SetValidation(true)
 	}
 }
 
 func ValidateHint(hint string) Option {
 	return func(p *Props) {
-		p.SetHint(hint)
+		p.validation.SetHint(hint)
 	}
 }
 
 func ValidatePattern(pattern string) Option {
 	return func(p *Props) {
-		p.SetPattern(pattern)
+		p.validation.SetPattern(pattern)
 	}
 }
 
 func ValidateMinLength(length int) Option {
 	return func(p *Props) {
-		p.SetMinLength(length)
+		p.validation.SetMinLength(length)
 	}
 }
 
 func ValidateMaxLength(length int) Option {
 	return func(p *Props) {
-		p.SetMaxLength(length)
+		p.validation.SetMaxLength(length)
 	}
 }
 
 // WithPlaceholder sets the placeholder text on the textinput.
 func WithPlaceholder(text string) Option {
 	return func(p *Props) {
-		p.SetAttribute("placeholder", text)
+		p.validation.SetAttribute("placeholder", text)
 	}
 }
 
@@ -99,25 +98,25 @@ func WithColor(c Color) Option {
 
 func WithName(name attributes.Name) Option {
 	return func(p *Props) {
-		p.SetName(name)
+		p.attributes.SetName(name)
 	}
 }
 
 func WithID(id string) Option {
 	return func(p *Props) {
-		p.SetID(id)
+		p.attributes.SetID(id)
 	}
 }
 
 func WithValue(value attributes.Value) Option {
 	return func(p *Props) {
-		p.SetValue(value)
+		p.attributes.SetValue(value)
 	}
 }
 
 func WithExtraAttributes(attrs templ.Attributes) Option {
 	return func(p *Props) {
-		p.AddAttributes(attrs)
+		p.attributes.AddAttributes(attrs)
 	}
 }
 
@@ -131,7 +130,7 @@ func Build(options ...Option) *Props {
 	textinput := &Props{
 		attributes: attributes.New(),
 		classes:    components.NewClasses(),
-		Validation: validation.New(),
+		validation: validation.New(),
 	}
 
 	for _, option := range options {
@@ -139,4 +138,12 @@ func Build(options ...Option) *Props {
 	}
 
 	return textinput
+}
+
+func (i *Props) GetID() string {
+	return i.attributes.GetID()
+}
+
+func (i *Props) SetValue(value attributes.Value) {
+	i.attributes.SetValue(value)
 }

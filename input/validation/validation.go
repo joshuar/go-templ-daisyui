@@ -11,15 +11,16 @@ import (
 )
 
 type Validation struct {
-	required bool
 	validate bool
 	hint     string
 	*attributes.Attributes
 }
 
 func (v *Validation) SetRequired(value bool) {
-	v.validate = true
-	v.required = value
+	if value {
+		v.SetValidation(true)
+	}
+	v.SetAttribute("required", value)
 }
 
 func (v *Validation) SetValidation(value bool) {
@@ -68,7 +69,6 @@ func (v *Validation) ValidationOptions() templ.Attributes {
 
 func New() *Validation {
 	return &Validation{
-		required:   false,
 		validate:   false,
 		Attributes: attributes.New(),
 	}

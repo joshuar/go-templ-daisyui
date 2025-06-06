@@ -54,49 +54,37 @@ templ (card *Props) Show(classes ...string) {
 	>
 		// Show the Card image, if specified.
 		if card.image != nil {
-			if card.centeredContent {
-				<figure class="px-10 pt-10">
-					@card.image.Show()
-				</figure>
-			} else {
-				@card.image.Show()
-			}
+			@card.image.Show()
 		}
 		// Show the Card body, if specified.
-		if card.body != nil {
-			if card.centeredContent {
-				@card.body.Show("items-center text-center")
-			} else {
-				@card.body.Show()
-			}
+		@ShowBody(card.body) {
+			{ children... }
 		}
 	</div>
 }
 
 // Show will display the Card body with the given options.
-templ (body *BodyProps) Show(classes ...string) {
-	<div
-		class={ "card-body",
-			body.classes.Show(),
-		templ.KV(strings.Join(classes, " "),len(classes) >0) }
-		{ body.ShowAttributes()... }
-	>
-		// Display the Card title, if specified.
-		if body.title != nil {
-			@body.title.Show()
+templ ShowBody(body *BodyProps) {
+	<div class={ "card-body", body.classes.Show() } { body.ShowAttributes()... }>
+		if body != nil {
+			// Display the Card title, if specified.
+			if body.title != nil {
+				@body.title.Show()
+			}
+			// Display the Card body content, if specified.
+			if body.content != nil {
+				@body.content
+			}
+			// Display any specified Card actions.
+			if len(body.actions) >0 {
+				<div class="card-actions justify-end">
+					for _, action := range body.actions {
+						@action
+					}
+				</div>
+			}
 		}
-		// Display the Card body content, if specified.
-		if body.content != nil {
-			@body.content
-		}
-		// Display any specified Card actions.
-		if len(body.actions) >0 {
-			<div class="card-actions justify-end">
-				for _, action := range body.actions {
-					@action
-				}
-			</div>
-		}
+		{ children... }
 	</div>
 }
 
