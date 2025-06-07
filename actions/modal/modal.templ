@@ -11,15 +11,11 @@ import (
 	"slices"
 )
 
-func (modal *Props) hsCloseModalAction() string {
-	return "on click or keyup[key=='Esc'] remove @open from #" + modal.GetID()
-}
-
 // Show will display a Modal with its properties.
 templ (modal *Props) Show() {
 	<dialog
 		class={ "modal", modal.classes.Show() }
-		_="on closeModal add .closing then wait for animationend"
+		_="init add @open to me end"
 		{ modal.ShowAttributes()... }
 	>
 		<div class="modal-box">
@@ -42,7 +38,7 @@ templ (modal *Props) Show() {
 		</div>
 		// If closeOutside option is set, generate backdrop with close action.
 		if modal.closeOutside {
-			<div class="modal-backdrop" _={ modal.hsCloseModalAction() }></div>
+			<div class="modal-backdrop" _={ "on click or keyup[key=='Esc'] remove @open from " + modal.GetID() + " then remove " + modal.GetID() }></div>
 		}
 	</dialog>
 }
@@ -54,7 +50,7 @@ templ (modal *Props) showCloseButton() {
 			button.WithContent(tabler.X(i.Props{Size: i.SizeXS})),
 			button.WithSize(button.SM),
 			button.WithExtraAttributes(templ.Attributes{
-				"_": modal.hsCloseModalAction(),
+				"_": "on click or keyup[key=='Esc'] remove @open from " + modal.GetID() + " then remove " + modal.GetID(),
 			}),
 			button.WithExtraClasses("absolute", "right-2", "top-2"),
 		).Show()
