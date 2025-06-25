@@ -54,7 +54,7 @@ templ (card *Props) Show(classes ...string) {
 	>
 		// Show the Card image, if specified.
 		if card.image != nil {
-			@card.image.Show()
+			@card.image
 		}
 		// Show the Card body, if specified.
 		@ShowBody(card.body) {

@@ -32,7 +32,7 @@ type Props struct {
 	classes   *components.Classes
 	body      *BodyProps
 	baseColor color.BaseColor
-	image     *figure.Props
+	image     templ.Component
 }
 
 // BodyProps represents a Card's body properties. These are used when the Show()
@@ -122,12 +122,16 @@ func WithLayout(layout Layout) Option {
 }
 
 // WithImage option sets the image to be displayed in the Card.
-func WithImage(img *image.Props, options ...figure.Option) Option {
-	return func(p *Props) {
-		if img == nil {
-			return
+func WithImage(img any, options ...figure.Option) Option {
+	return func(card *Props) {
+		switch value := img.(type) {
+		case *image.Props:
+			card.image = figure.Build(value, options...).Show()
+		case *figure.Props:
+			card.image = value.Show()
+		case templ.Component:
+			card.image = value
 		}
-		p.image = figure.Build(img, options...)
 	}
 }
 
