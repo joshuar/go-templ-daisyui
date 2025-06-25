@@ -75,6 +75,18 @@ func AsShape(shape Shape) Option {
 	}
 }
 
+func AsSubmit() Option {
+	return func(p *Props) {
+		p.attributes.SetAttribute("type", "submit")
+	}
+}
+
+func AsReset() Option {
+	return func(p *Props) {
+		p.attributes.SetAttribute("type", "reset")
+	}
+}
+
 // WithStyle will apply the given style to the component.
 func WithStyle(style Style) Option {
 	return func(btn *Props) {
