@@ -15,7 +15,7 @@ import (
 templ (modal *Props) Show() {
 	<dialog
 		class={ "modal", modal.classes.Show() }
-		_="init add @open to me end"
+		_="init add @open to me end on removeModal remove me"
 		{ modal.ShowAttributes()... }
 	>
 		<div class="modal-box">
@@ -38,7 +38,7 @@ templ (modal *Props) Show() {
 		</div>
 		// If closeOutside option is set, generate backdrop with close action.
 		if modal.closeOutside {
-			<div class="modal-backdrop" _={ "on click or keyup[key=='Esc'] remove @open from " + modal.GetID() + " then remove " + modal.GetID() }></div>
+			<div class="modal-backdrop" _={ "on click or keyup[key=='Esc'] remove @open from " + modal.GetID() + " then send removeModal" }></div>
 		}
 	</dialog>
 }
@@ -50,7 +50,7 @@ templ (modal *Props) showCloseButton() {
 			button.WithContent(tabler.X(i.Props{Size: i.SizeXS})),
 			button.WithSize(button.SM),
 			button.WithExtraAttributes(templ.Attributes{
-				"_": "on click or keyup[key=='Esc'] remove @open from " + modal.GetID() + " then remove " + modal.GetID(),
+				"_": "on click or keyup[key=='Esc'] remove @open from " + modal.GetID() + " then send removeModal",
 			}),
 			button.WithExtraClasses("absolute", "right-2", "top-2"),
 		).Show()
