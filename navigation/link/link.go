@@ -48,7 +48,9 @@ func WithID(id string) Option {
 
 func WithExtraAttributes(attrs templ.Attributes) Option {
 	return func(p *Props) {
-		p.AddAttributes(attrs)
+		if attrs != nil {
+			p.AddAttributes(attrs)
+		}
 	}
 }
 

@@ -57,6 +57,9 @@ templ (link *Props) Show(classes ...string) {
 		}
 		{ link.ShowAttributes()... }
 	>
-		@link.content
+		if link.content != nil {
+			@link.content
+		}
+		{ children... }
 	</a>
 }
