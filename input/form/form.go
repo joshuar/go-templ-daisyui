@@ -40,7 +40,7 @@ func WithElements(elements ...templ.Component) Option {
 
 // Build creates a new Form without rendering it. The Form properties can then
 // be modified before finally rendering by calling the Show() method.
-func BuildForm(options ...Option) *Props {
+func Build(options ...Option) *Props {
 	alert := &Props{
 		Attributes: attributes.New(),
 	}
