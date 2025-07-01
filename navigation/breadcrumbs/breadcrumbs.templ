@@ -3,22 +3,16 @@
 
 package breadcrumbs
 
-import "strings"
-
-templ (breadcrumbs *Props) Show(classes ...string) {
+templ (breadcrumbs *Props) Show() {
 	<div
 		class={
 			"breadcrumbs",
-			templ.KV(strings.Join(classes, " "), len(classes) > 0),
+			breadcrumbs.classes.Show(),
 		}
-		{ breadcrumbs.ShowAttributes()... }
+		{ breadcrumbs.attributes.ShowAttributes()... }
 	>
 		<ul>
-			for _, crumb := range breadcrumbs.GetItems() {
-				<li>
-					@crumb
-				</li>
-			}
+			@breadcrumbs.ShowList()
 		</ul>
 	</div>
 }

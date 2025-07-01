@@ -13,19 +13,26 @@ import (
 type Option components.Option[*Props]
 
 type Props struct {
-	*attributes.Attributes
+	attributes *attributes.Attributes
+	classes    *components.Classes
 	*items.Items
 }
 
 func WithID(id string) Option {
 	return func(p *Props) {
-		p.SetID(id)
+		p.attributes.SetID(id)
 	}
 }
 
 func WithExtraAttributes(attrs templ.Attributes) Option {
 	return func(p *Props) {
-		p.AddAttributes(attrs)
+		p.attributes.AddAttributes(attrs)
+	}
+}
+
+func WithClasses(classes ...components.Class) Option {
+	return func(p *Props) {
+		p.classes.Add(classes...)
 	}
 }
 
@@ -37,7 +44,8 @@ func WithCrumbs(crumbs ...templ.Component) Option {
 
 func Build(options ...Option) *Props {
 	link := &Props{
-		Attributes: attributes.New(),
+		attributes: attributes.New(),
+		classes:    components.NewClasses(),
 		Items:      items.New(),
 	}
 
