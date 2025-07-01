@@ -3,10 +3,7 @@
 
 package textinput
 
-import (
-	"github.com/joshuar/go-templ-daisyui"
-	"github.com/yassinebenaid/godump"
-)
+import "github.com/joshuar/go-templ-daisyui"
 
 const (
 	Text     Type = "text"
@@ -51,7 +48,6 @@ const (
 type Size = components.Class
 
 templ (input *Props) Show(classes ...string) {
-	{{ godump.Dump(input.attributes.ShowAttributes()) }}
 	<input
 		class={
 			"input",
