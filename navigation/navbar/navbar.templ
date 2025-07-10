@@ -3,43 +3,38 @@
 
 package navbar
 
-templ (navbar *Props) Show() {
+import (
+	"context"
+	"io"
+)
+
+templ (navbar *Props) template() {
 	<div
-		class={
-			"navbar",
-			templ.KV(navbar.baseColor.String(), navbar.baseColor.Valid()),
-		}
-		{ navbar.ShowAttributes()... }
+		class={ "navbar", navbar.classes.Show() }
+		{ navbar.attributes.ShowAttributes()... }
 	>
-		// Display NavBar components (if defined).
-		@navbar.Start()
-		@navbar.Center()
-		@navbar.End()
-		// Support displaying custom NavBar content.
 		{ children... }
 	</div>
 }
 
-templ (navbar *Props) Start() {
-	if navbar.start != nil {
-		<div class="navbar-start">
-			@navbar.start
-		</div>
-	}
+func (navbar *Props) Render(ctx context.Context, w io.Writer) error {
+	return navbar.template().Render(ctx, w)
 }
 
-templ (navbar *Props) Center() {
-	if navbar.center != nil {
-		<div class="navbar-center">
-			@navbar.center
-		</div>
-	}
+templ Start() {
+	<div class="navbar-start">
+		{ children... }
+	</div>
 }
 
-templ (navbar *Props) End() {
-	if navbar.end != nil {
-		<div class="navbar-end">
-			@navbar.end
-		</div>
-	}
+templ Center() {
+	<div class="navbar-center">
+		{ children... }
+	</div>
+}
+
+templ End() {
+	<div class="navbar-end">
+		{ children... }
+	</div>
 }

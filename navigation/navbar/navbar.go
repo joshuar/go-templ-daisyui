@@ -10,62 +10,37 @@ import (
 	"github.com/a-h/templ"
 	components "github.com/joshuar/go-templ-daisyui"
 	"github.com/joshuar/go-templ-daisyui/attributes"
-	"github.com/joshuar/go-templ-daisyui/modifiers/color"
 )
 
 type Option components.Option[*Props]
 
 type Props struct {
-	*attributes.Attributes
-	baseColor color.BaseColor
-	// modifierZIndex
-	// modifierPosition
-	// modifierBaseColor
-	// HtmlAttrID
-	start  templ.Component
-	center templ.Component
-	end    templ.Component
-}
-
-func NavBarStart(component templ.Component) Option {
-	return func(navbar *Props) {
-		navbar.start = component
-	}
-}
-
-func NavBarCenter(component templ.Component) Option {
-	return func(navbar *Props) {
-		navbar.center = component
-	}
-}
-
-func NavBarEnd(component templ.Component) Option {
-	return func(navbar *Props) {
-		navbar.end = component
-	}
+	attributes *attributes.Attributes
+	classes    *components.Classes
 }
 
 func WithID(id string) Option {
 	return func(p *Props) {
-		p.SetID(id)
+		p.attributes.SetID(id)
 	}
 }
 
-func WithExtraAttributes(attrs templ.Attributes) Option {
+func WithAttributes(attrs templ.Attributes) Option {
 	return func(p *Props) {
-		p.AddAttributes(attrs)
+		p.attributes.AddAttributes(attrs)
 	}
 }
 
-func WithBaseColor(base color.BaseColor) Option {
+func WithClasses(extraClasses ...components.Class) Option {
 	return func(p *Props) {
-		p.baseColor = base
+		p.classes.Add(extraClasses...)
 	}
 }
 
 func Build(options ...Option) *Props {
 	navbar := &Props{
-		Attributes: attributes.New(),
+		attributes: attributes.New(),
+		classes:    components.NewClasses(),
 	}
 
 	for _, option := range options {
