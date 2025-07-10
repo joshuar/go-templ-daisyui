@@ -7,64 +7,34 @@ import (
 	"github.com/a-h/templ"
 	components "github.com/joshuar/go-templ-daisyui"
 	"github.com/joshuar/go-templ-daisyui/attributes"
-	"github.com/joshuar/go-templ-daisyui/classes"
-	"github.com/joshuar/go-templ-daisyui/modifiers/color"
 )
 
 type Option components.Option[*Props]
 
 type Props struct {
-	*attributes.Attributes
-	*classes.Classes
-	stateColor       color.StateColor
-	themeColor       color.ThemeColor
-	content          templ.Component
+	attributes       *attributes.Attributes
+	classes          *components.Classes
 	underlineOnHover bool
 }
 
-func WithThemeColor(themeColor color.ThemeColor) Option {
+func With(color components.Class) Option {
 	return func(p *Props) {
-		p.themeColor = themeColor
+		p.classes.Add(color)
 	}
 }
 
-func WithStateColor(stateColor color.StateColor) Option {
-	return func(p *Props) {
-		p.stateColor = stateColor
-	}
-}
-
-func WithName(name attributes.Name) Option {
-	return func(p *Props) {
-		p.SetName(name)
-	}
-}
-
-func WithID(id string) Option {
-	return func(p *Props) {
-		p.SetID(id)
-	}
-}
-
-func WithExtraAttributes(attrs templ.Attributes) Option {
+func WithAttributes(attrs templ.Attributes) Option {
 	return func(p *Props) {
 		if attrs != nil {
-			p.AddAttributes(attrs)
+			p.attributes.AddAttributes(attrs)
 		}
 	}
 }
 
 // WithExtraClasses sets additional CSS classes on the component.
-func WithExtraClasses(extraClasses ...classes.Class) Option {
+func WithClasses(extraClasses ...components.Class) Option {
 	return func(p *Props) {
-		p.AddClasses(extraClasses...)
-	}
-}
-
-// WithContent sets the content for the Button.
-func WithContent(content any) Option {
-	return func(p *Props) {
-		p.content = components.SetContent(content)
+		p.classes.Add(extraClasses...)
 	}
 }
 
@@ -76,8 +46,8 @@ func WithUnderlineOnHover() Option {
 
 func Build(options ...Option) *Props {
 	link := &Props{
-		Attributes: attributes.New(),
-		Classes:    classes.New(),
+		attributes: attributes.New(),
+		classes:    components.NewClasses(),
 	}
 
 	for _, option := range options {

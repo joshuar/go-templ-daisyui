@@ -3,63 +3,35 @@
 
 package link
 
-import "strings"
-import "github.com/joshuar/go-templ-daisyui/modifiers/state"
-import "github.com/joshuar/go-templ-daisyui/modifiers/color"
+import (
+	"context"
+	"github.com/joshuar/go-templ-daisyui"
+	"io"
+)
 
-// applyThemeColor applies a theme color to the Component.
-func (link *Props) applyThemeColor() string {
-	themeColor := "link-neutral"
+const (
+	Primary   Color = "link-primary"
+	Secondary Color = "link-secondary"
+	Accent    Color = "link-accent"
+	Neutral   Color = "link-neutral"
+	Info      Color = "link-info"
+	Success   Color = "link-success"
+	Warning   Color = "link-warning"
+	Error     Color = "link-error"
+)
 
-	switch link.themeColor {
-	case color.Primary:
-		themeColor = "link-primary"
-	case color.Secondary:
-		themeColor = "link-secondary"
-	case color.Accent:
-		themeColor = "link-accent"
-	case color.Neutral:
-		themeColor = "link-neutral"
-	case color.Ghost:
-		themeColor = "link-ghost"
-	}
+// Color defines the colour of the button.
+type Color = components.Class
 
-	return themeColor
-}
-
-// applyStateColor applies a state color to the Component.
-func (link *Props) applyStateColor() string {
-	var stateColor string
-
-	switch link.stateColor {
-	case state.Info:
-		stateColor = "link-info"
-	case state.Success:
-		stateColor = "link-sucess"
-	case state.Warning:
-		stateColor = "link-warning"
-	case state.Error:
-		stateColor = "link-error"
-	}
-
-	return stateColor
-}
-
-templ (link *Props) Show(classes ...string) {
+templ (link *Props) template() {
 	<a
-		class={
-			"link",
-			templ.KV(link.applyThemeColor(), link.themeColor.Valid()),
-			templ.KV(link.applyStateColor(), link.stateColor.Valid()),
-			link.ShowClasses(),
-			templ.KV(strings.Join(classes, " "), len(classes) > 0),
-			templ.KV("link-hover", link.underlineOnHover),
-		}
-		{ link.ShowAttributes()... }
+		class={ "link", link.classes.Show(), templ.KV("link-hover", link.underlineOnHover) }
+		{ link.attributes.ShowAttributes()... }
 	>
-		if link.content != nil {
-			@link.content
-		}
 		{ children... }
 	</a>
+}
+
+func (link *Props) Render(ctx context.Context, w io.Writer) error {
+	return link.template().Render(ctx, w)
 }
