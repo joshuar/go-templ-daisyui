@@ -4,8 +4,9 @@
 package card
 
 import (
+	"context"
 	"github.com/joshuar/go-templ-daisyui"
-	"strings"
+	"io"
 )
 
 const (
@@ -43,54 +44,35 @@ const (
 // Size defines the size of a card component.
 type Size = components.Class
 
-// Show will display a Card with the given options.
-templ (card *Props) Show(classes ...string) {
-	<div
-		class={ "card",
-	templ.KV(card.baseColor.String(),card.baseColor.Valid()),
-	card.classes.Show(),
-	templ.KV(strings.Join(classes, " "),len(classes) >0) }
-		{ card.ShowAttributes()... }
-	>
-		// Show the Card image, if specified.
-		if card.image != nil {
-			@card.image
-		}
-		// Show the Card body, if specified.
-		@ShowBody(card.body) {
-			{ children... }
-		}
-	</div>
+func (card *Props) Render(ctx context.Context, w io.Writer) error {
+	return card.template().Render(ctx, w)
 }
 
-// Show will display the Card body with the given options.
-templ ShowBody(body *BodyProps) {
-	<div class={ "card-body", body.classes.Show() } { body.ShowAttributes()... }>
-		if body != nil {
-			// Display the Card title, if specified.
-			if body.title != nil {
-				@body.title.Show()
-			}
-			// Display the Card body content, if specified.
-			if body.content != nil {
-				@body.content
-			}
-			// Display any specified Card actions.
-			if len(body.actions) >0 {
-				<div class="card-actions justify-end">
-					for _, action := range body.actions {
-						@action
-					}
-				</div>
-			}
-		}
+// Show will display a Card with the given options.
+templ (card *Props) template() {
+	<div class={ "card", card.classes.Show() } { card.attributes.ShowAttributes()... }>
 		{ children... }
 	</div>
 }
 
-// Show generates the card title from the properties.
-templ (title *TitleProps) Show() {
-	<h2 class={ "card-title", title.classes.Show() } { title.attributes.ShowAttributes()... }>
-		@title.content
-	</h2>
+func (card *BodyProps) Render(ctx context.Context, w io.Writer) error {
+	return card.template().Render(ctx, w)
+}
+
+templ (body *BodyProps) template() {
+	<div class={ "card-body", body.classes.Show() } { body.attributes.ShowAttributes()... }>
+		{ children... }
+	</div>
+}
+
+// Title will display a string with the card title styles applied.
+templ Title(title string) {
+	<h2 class="card-title">{ title }</h2>
+}
+
+// Actions will display the given children wrapped in the card actions style.
+templ Actions() {
+	<div class="card-actions justify-end">
+		{ children... }
+	</div>
 }
