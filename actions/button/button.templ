@@ -4,8 +4,9 @@
 package button
 
 import (
+	"context"
 	"github.com/joshuar/go-templ-daisyui"
-	"strings"
+	"io"
 )
 
 const (
@@ -19,11 +20,13 @@ const (
 type Shape = components.Class
 
 const (
-	Soft    Style = "btn-soft"
-	Outline Style = "btn-outline"
-	Dashed  Style = "btn-dash"
-	Ghost   Style = "btn-ghost"
-	Link    Style = "btn-link"
+	Soft     Style = "btn-soft"
+	Outline  Style = "btn-outline"
+	Dashed   Style = "btn-dash"
+	Ghost    Style = "btn-ghost"
+	Link     Style = "btn-link"
+	Active   Style = "btn-active"
+	Disabled Style = "btn-disabled"
 )
 
 // Style defines the style of the button.
@@ -55,41 +58,12 @@ const (
 type Size = components.Class
 
 // Show will display a Button with its given properties.
-templ (btn *Props) Show(classes ...string) {
-	<button
-		class={
-			"btn",
-			templ.KV("btn-outline", btn.outline),
-			templ.KV("no-animation", !btn.animated),
-			btn.classes.Show(),
-		}
-		{ btn.attributes.ShowAttributes()... }
-		autofocus?={ btn.autofocus }
-	>
-		if btn.content != nil {
-			@btn.content
-		} else {
-			{ children... }
-		}
+templ (btn *Props) template(classes ...string) {
+	<button class={ "btn", btn.classes.Show() } { btn.attributes.ShowAttributes()... }>
+		{ children... }
 	</button>
 }
 
-// ShowAsSummary renders a Button component styled as a <summary></summary>
-// element. This is used by the DropDown component.
-templ (btn *Props) ShowAsSummary(classes ...string) {
-	<summary
-		class={
-			"btn",
-			btn.classes.Show(),
-			templ.KV("btn-outline", btn.outline),
-			templ.KV("no-animation", btn.animated),
-			templ.KV(strings.Join(classes, " "), len(classes) > 0),
-		}
-		{ btn.attributes.ShowAttributes()... }
-		autofocus?={ btn.autofocus }
-	>
-		if btn.content != nil {
-			@btn.content
-		}
-	</summary>
+func (btn *Props) Render(ctx context.Context, w io.Writer) error {
+	return btn.template().Render(ctx, w)
 }
