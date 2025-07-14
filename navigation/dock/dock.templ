@@ -3,10 +3,7 @@
 
 package dock
 
-import (
-	"github.com/joshuar/go-templ-daisyui"
-	"slices"
-)
+import "github.com/joshuar/go-templ-daisyui"
 
 const (
 	XS Size = "dock-xs"
@@ -21,14 +18,6 @@ type Size = components.Class
 
 templ (dock *Props) Show() {
 	<div class={ "dock", dock.classes.Show() } { dock.attributes.ShowAttributes()... }>
-		for btn := range slices.Values(dock.buttons) {
-			@btn.Show()
-		}
 		{ children... }
 	</div>
-}
-
-templ dockButtonContent(icon templ.Component, label string) {
-	@icon
-	<span class="dock-label">{ label }</span>
 }

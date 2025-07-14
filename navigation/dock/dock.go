@@ -33,21 +33,6 @@ func Build(options ...Option) *Props {
 
 type Option components.Option[*Props]
 
-func WithButton(icon templ.Component, label string, attributes templ.Attributes) Option {
-	return func(p *Props) {
-		p.buttons = append(p.buttons, button.Build(
-			button.WithContent(dockButtonContent(icon, label)),
-			button.WithExtraAttributes(attributes),
-		))
-	}
-}
-
-func WithSize(size Size) Option {
-	return func(p *Props) {
-		p.classes.Add(size)
-	}
-}
-
 func WithAttributes(attrs templ.Attributes) Option {
 	return func(p *Props) {
 		p.attributes.AddAttributes(attrs)
