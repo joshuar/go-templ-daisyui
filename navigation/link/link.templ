@@ -24,10 +24,7 @@ const (
 type Color = components.Class
 
 templ (link *Props) template() {
-	<a
-		class={ "link", link.classes.Show(), templ.KV("link-hover", link.underlineOnHover) }
-		{ link.attributes.ShowAttributes()... }
-	>
+	<a class={ "link", "link-hover", link.classes.Show() } { link.attributes.ShowAttributes()... }>
 		{ children... }
 	</a>
 }

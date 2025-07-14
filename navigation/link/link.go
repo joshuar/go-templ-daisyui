@@ -17,9 +17,15 @@ type Props struct {
 	underlineOnHover bool
 }
 
-func With(color components.Class) Option {
+func WithColor(color components.Class) Option {
 	return func(p *Props) {
 		p.classes.Add(color)
+	}
+}
+
+func WithHref(href string) Option {
+	return func(p *Props) {
+		p.attributes.SetAttribute("href", href)
 	}
 }
 
@@ -35,12 +41,6 @@ func WithAttributes(attrs templ.Attributes) Option {
 func WithClasses(extraClasses ...components.Class) Option {
 	return func(p *Props) {
 		p.classes.Add(extraClasses...)
-	}
-}
-
-func WithUnderlineOnHover() Option {
-	return func(p *Props) {
-		p.underlineOnHover = true
 	}
 }
 
