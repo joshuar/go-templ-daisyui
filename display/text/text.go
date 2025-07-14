@@ -16,7 +16,6 @@ type Option components.Option[*Props]
 
 // Props represents the properties of the text.
 type Props struct {
-	value      any
 	attributes *attributes.Attributes
 	classes    *components.Classes
 }
@@ -69,9 +68,8 @@ func WithExtraClasses(extraClasses ...components.Class) Option {
 	}
 }
 
-func Build(text any, options ...Option) *Props {
+func Build(options ...Option) *Props {
 	props := &Props{
-		value:      text,
 		attributes: attributes.New(),
 		classes:    components.NewClasses(),
 	}

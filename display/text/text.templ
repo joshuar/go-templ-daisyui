@@ -3,7 +3,11 @@
 
 package text
 
-import "github.com/joshuar/go-templ-daisyui"
+import (
+	"context"
+	"github.com/joshuar/go-templ-daisyui"
+	"io"
+)
 
 const (
 	Italic Style = "italic"
@@ -68,8 +72,12 @@ const (
 // https://tailwindcss.com/docs/text-overflow
 type Overflow = components.Class
 
-templ (text *Props) Show(classes ...string) {
+templ (text *Props) template() {
 	<p class={ text.classes.Show() } { text.attributes.ShowAttributes()... }>
-		@components.SetContent(text.value)
+		{ children... }
 	</p>
+}
+
+func (text *Props) Render(ctx context.Context, w io.Writer) error {
+	return text.template().Render(ctx, w)
 }
