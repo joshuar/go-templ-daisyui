@@ -18,7 +18,7 @@ templ (modal *Props) Show() {
 		_="init add @open to me end on removeModal remove me"
 		{ modal.ShowAttributes()... }
 	>
-		<div class="modal-box">
+		<div class="modal-box bg-base-200">
 			// If closeButton option is set, generate a close button.
 			if modal.closeButton {
 				@modal.showCloseButton()
@@ -30,7 +30,7 @@ templ (modal *Props) Show() {
 				<form method="dialog">
 					<div class="modal-action">
 						for action := range slices.Values(modal.actions) {
-							@action.Show()
+							@action
 						}
 					</div>
 				</form>
@@ -46,13 +46,12 @@ templ (modal *Props) Show() {
 templ (modal *Props) showCloseButton() {
 	<form method="dialog">
 		@button.Build(
-			button.AsShape(button.Circle),
-			button.WithContent(tabler.X(i.Props{Size: i.SizeXS})),
-			button.WithSize(button.SM),
-			button.WithExtraAttributes(templ.Attributes{
+			button.WithClasses(button.Circle, button.SM, "absolute", "right-2", "top-2"),
+			button.WithAttributes(templ.Attributes{
 				"_": "on click or keyup[key=='Esc'] remove @open from " + modal.GetID() + " then send removeModal",
 			}),
-			button.WithExtraClasses("absolute", "right-2", "top-2"),
-		).Show()
+		) {
+			@tabler.X(i.Props{Size: i.SizeXS})
+		}
 	</form>
 }
