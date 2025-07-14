@@ -3,7 +3,10 @@
 
 package fieldset
 
-import "strings"
+import (
+	"context"
+	"io"
+)
 
 // Show will display the input field.
 templ (field *FieldProps) Show() {
@@ -15,23 +18,15 @@ templ (field *FieldProps) Show() {
 }
 
 // Show will display the fieldset.
-templ (fieldset *Props) Show(classes ...string) {
-	<fieldset
-		class={ "fieldset",
-			templ.KV(fieldset.baseColor.String(),fieldset.baseColor.Valid()),
-			fieldset.classes.Show(),
-	templ.KV(strings.Join(classes, " "),len(classes) >0) }
-		{ fieldset.attributes.ShowAttributes()... }
-	>
-		// Display the fieldset legend if set.
+templ (fieldset *Props) template() {
+	<fieldset class={ "fieldset", fieldset.classes.Show() } { fieldset.attributes.ShowAttributes()... }>
 		if fieldset.legend != "" {
 			<legend class="fieldset-legend">{ fieldset.legend }</legend>
 		}
-		// Display the fields.
-		for _, field := range fieldset.fields {
-			<div>
-				@field.Show()
-			</div>
-		}
+		{ children... }
 	</fieldset>
+}
+
+func (fieldset *Props) Render(ctx context.Context, w io.Writer) error {
+	return fieldset.template().Render(ctx, w)
 }

@@ -5,12 +5,7 @@ package form
 
 // Show will render the form.
 templ (form *Props) Show() {
-	<form
-		{ form.ShowAttributes()... }
-	>
-		for _, element := range form.Elements {
-			@element
-		}
+	<form { form.ShowAttributes()... }>
 		{ children... }
 	</form>
 }
