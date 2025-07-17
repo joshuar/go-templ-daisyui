@@ -3,15 +3,17 @@
 
 package hiddeninput
 
-import "strings"
+import (
+	"context"
+	"io"
+)
 
-// Show will render the textinput.
-templ (input *Props) Show(classes ...string) {
-	<input
-		class={
-			"input",
-			templ.KV(strings.Join(classes, " "), len(classes) > 0),
-		}
-		{ input.ShowAttributes()... }
-	/>
+// Show will render the input.
+templ (input *Props) template() {
+	<input class={ "input" } { input.attributes.ShowAttributes()... }/>
+}
+
+// Render will display the input with its options. Satisfies templ.Component.
+func (input *Props) Render(ctx context.Context, w io.Writer) error {
+	return input.template().Render(ctx, w)
 }

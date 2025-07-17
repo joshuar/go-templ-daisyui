@@ -14,43 +14,43 @@ import (
 type Option components.Option[*Props]
 
 type Props struct {
-	*attributes.Attributes
+	attributes *attributes.Attributes
 }
 
 // WithName will set the name attribute of the input.
 func WithName(name attributes.Name) Option {
 	return func(p *Props) {
-		p.SetName(name)
+		p.attributes.SetName(name)
 	}
 }
 
 // WithID will set the id attribute of the input.
 func WithID(id string) Option {
 	return func(p *Props) {
-		p.SetID(id)
+		p.attributes.SetID(id)
 	}
 }
 
 // WithValue will set the value attribute of the input.
 func WithValue(value attributes.Value) Option {
 	return func(p *Props) {
-		p.SetValue(value)
+		p.attributes.SetValue(value)
 	}
 }
 
 // WithExtraAttributes will set additional attributes on the input.
-func WithExtraAttributes(attrs templ.Attributes) Option {
+func WithAttributes(attrs templ.Attributes) Option {
 	return func(p *Props) {
-		p.AddAttributes(attrs)
+		p.attributes.AddAttributes(attrs)
 	}
 }
 
 func Build(options ...Option) *Props {
 	hiddeninput := &Props{
-		Attributes: attributes.New(),
+		attributes: attributes.New(),
 	}
 
-	hiddeninput.SetAttribute(input.AttrType, "hidden")
+	hiddeninput.attributes.SetAttribute(input.AttrType, "hidden")
 
 	for _, option := range options {
 		option(hiddeninput)
