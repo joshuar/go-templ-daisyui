@@ -13,28 +13,20 @@ import (
 type Option components.Option[*Props]
 
 type Props struct {
-	*attributes.Attributes
-	Elements []templ.Component
+	attributes *attributes.Attributes
 }
 
 // WithID will set the id attribute on the form.
 func WithID(id string) Option {
 	return func(p *Props) {
-		p.SetID(id)
+		p.attributes.SetID(id)
 	}
 }
 
 // WithExtraAttributes will add the given attributes to the form.
-func WithExtraAttributes(attrs templ.Attributes) Option {
+func WithAttributes(attrs templ.Attributes) Option {
 	return func(p *Props) {
-		p.AddAttributes(attrs)
-	}
-}
-
-// WithElements are the elements/components to show in the form.
-func WithElements(elements ...templ.Component) Option {
-	return func(p *Props) {
-		p.Elements = elements
+		p.attributes.AddAttributes(attrs)
 	}
 }
 
@@ -42,7 +34,7 @@ func WithElements(elements ...templ.Component) Option {
 // be modified before finally rendering by calling the Show() method.
 func Build(options ...Option) *Props {
 	alert := &Props{
-		Attributes: attributes.New(),
+		attributes: attributes.New(),
 	}
 
 	for _, option := range options {

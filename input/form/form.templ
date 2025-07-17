@@ -3,9 +3,19 @@
 
 package form
 
-// Show will render the form.
-templ (form *Props) Show() {
-	<form { form.ShowAttributes()... }>
+import (
+	"context"
+	"io"
+)
+
+// template is the form templ.Component.
+templ (form *Props) template() {
+	<form { form.attributes.ShowAttributes()... }>
 		{ children... }
 	</form>
+}
+
+// Render will display the form with its options. Satisfies templ.Component.
+func (form *Props) Render(ctx context.Context, w io.Writer) error {
+	return form.template().Render(ctx, w)
 }
