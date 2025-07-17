@@ -4,8 +4,9 @@
 package menu
 
 import (
+	"context"
 	"github.com/joshuar/go-templ-daisyui"
-	"strings"
+	"io"
 )
 
 const (
@@ -29,21 +30,12 @@ const (
 // Size defines the size of the menu.
 type Size = components.Class
 
-templ (menu *Props) Show(classes ...string) {
-	<ul
-		class={ "menu",
-			templ.KV(menu.GetHiddenBreakpoint(), menu.HiddenBreakpointSet()),
-			templ.KV(menu.GetRevealedBreakpoint(), menu.RevealedBreakpointSet()),
-			templ.KV(menu.baseColor.String(),menu.baseColor.Valid()),
-			menu.classes.Show(),
-			templ.KV(strings.Join(classes, " "),len(classes) > 0 ) }
-		{ menu.attributes.ShowAttributes()... }
-	>
-		if menu.title != nil {
-			<li class={ "menu-title", menu.itemClasses.Show() }>
-				@menu.title
-			</li>
-		}
-		@menu.ShowList()
+templ (menu *Props) template() {
+	<ul class={ "menu",  menu.classes.Show() } { menu.attributes.ShowAttributes()... }>
+		{ children... }
 	</ul>
+}
+
+func (menu *Props) Render(ctx context.Context, w io.Writer) error {
+	return menu.template().Render(ctx, w)
 }
