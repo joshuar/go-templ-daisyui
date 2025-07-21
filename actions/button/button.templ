@@ -58,7 +58,7 @@ const (
 type Size = components.Class
 
 // Show will display a Button with its given properties.
-templ (btn *Props) template(classes ...string) {
+templ (btn *Props) template() {
 	<button class={ "btn", btn.classes.Show() } { btn.attributes.ShowAttributes()... }>
 		{ children... }
 	</button>
