@@ -4,8 +4,9 @@
 package tooltip
 
 import (
-	"github.com/joshuar/go-templ-daisyui/modifiers/color"
-	"github.com/joshuar/go-templ-daisyui/modifiers/state"
+	"context"
+	"github.com/joshuar/go-templ-daisyui"
+	"io"
 )
 
 const (
@@ -20,55 +21,34 @@ const (
 )
 
 // OpenFrom defines where the tooltip will open from.
-type OpenFrom string
+type OpenFrom = components.Class
 
-func (from OpenFrom) String() string {
-	return string(from)
-}
+const (
+	TooltipPrimary   Color = "tooltip-primary"
+	TooltipSecondary Color = "tooltip-secondary"
+	TooltipAccent    Color = "tooltip-accent"
+	TooltipNeutral   Color = "tooltip-neutral"
+	TooltipGhost     Color = "tooltip-ghost"
+	TooltipInfo      Color = "tooltip-info"
+	TooltipSuccess   Color = "tooltip-success"
+	TooltipWarning   Color = "tooltip-warning"
+	TooltipError     Color = "tooltip-error"
+)
 
-func (tooltip *Props) applyThemeColor() string {
-	switch tooltip.themeColor {
-	case color.Primary:
-		return "tooltip-primary"
-	case color.Secondary:
-		return "tooltip-secondary"
-	case color.Accent:
-		return "tooltip-accent"
-	case color.Neutral:
-		return "tooltip-neutral"
-	case color.Ghost:
-		return "tooltip-ghost"
-	default:
-		return "tooltip-neutral"
-	}
-}
-
-func (tooltip *Props) applyStateColor() string {
-	switch tooltip.stateColor {
-	case state.Info:
-		return "tooltip-info"
-	case state.Success:
-		return "tooltip-success"
-	case state.Warning:
-		return "tooltip-warning"
-	case state.Error:
-		return "tooltip-error"
-	default:
-		return "tooltip-success"
-	}
-}
+// Color is a DaisyUI color class to apply to the tooltip.
+type Color = components.Class
 
 // Show renders the tooltip with its given properties.
-templ (tooltip *Props) Show() {
+templ (tooltip *Props) template() {
 	<div
-		class={
-			"tooltip",
-			templ.KV(tooltip.from.String(), tooltip.from != ""),
-			templ.KV(tooltip.applyThemeColor(), tooltip.themeColor.Valid()),
-			templ.KV(tooltip.applyStateColor(), tooltip.stateColor.Valid()),
-		}
-		data-tip={ tooltip.text }
+		class={ "tooltip", tooltip.classes.Show() }
+		{ tooltip.attributes.ShowAttributes()... }
+		data-tip={ tooltip.tip }
 	>
 		{ children... }
 	</div>
+}
+
+func (tooltip *Props) Render(ctx context.Context, w io.Writer) error {
+	return tooltip.template().Render(ctx, w)
 }

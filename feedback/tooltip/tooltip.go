@@ -7,8 +7,9 @@
 package tooltip
 
 import (
+	"github.com/a-h/templ"
 	components "github.com/joshuar/go-templ-daisyui"
-	"github.com/joshuar/go-templ-daisyui/modifiers/color"
+	"github.com/joshuar/go-templ-daisyui/attributes"
 )
 
 // Option is an option to apply to a tooltip.
@@ -16,39 +17,29 @@ type Option components.Option[*Props]
 
 // Props defines the properties of the tooltip.
 type Props struct {
-	from       OpenFrom
-	stateColor color.StateColor
-	themeColor color.ThemeColor
-	text       string
+	classes    *components.Classes
+	attributes *attributes.Attributes
+	tip        string
 }
 
-// WithThemeColor option sets a theme color for the component.
-func WithThemeColor(themeColor color.ThemeColor) Option {
-	return func(p *Props) {
-		p.themeColor = themeColor
+func WithAttributes(attrs templ.Attributes) Option {
+	return func(tt *Props) {
+		tt.attributes.AddAttributes(attrs)
 	}
 }
 
-// WithStateColor option sets a state color for the component.
-func WithStateColor(stateColor color.StateColor) Option {
-	return func(p *Props) {
-		p.stateColor = stateColor
-	}
-}
-
-// WithOpenFrom option sets where the tooltip will open from. If not specified, the tooltip will open from above the
-// element.
-func WithOpenFrom(from OpenFrom) Option {
-	return func(p *Props) {
-		p.from = from
+func WithClasses(classes ...components.Class) Option {
+	return func(tt *Props) {
+		tt.classes.Add(classes...)
 	}
 }
 
 // Build generates tooltip properties with the given options.
-func Build(text string, options ...Option) *Props {
+func Build(tip string, options ...Option) *Props {
 	tooltip := &Props{
-		text: text,
-		from: Top,
+		tip:        tip,
+		classes:    components.NewClasses(),
+		attributes: attributes.New(),
 	}
 
 	for _, option := range options {
