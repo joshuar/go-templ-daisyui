@@ -10,34 +10,23 @@ import (
 	"github.com/a-h/templ"
 	components "github.com/joshuar/go-templ-daisyui"
 	"github.com/joshuar/go-templ-daisyui/attributes"
-	"github.com/joshuar/go-templ-daisyui/classes/width"
-	"github.com/joshuar/go-templ-daisyui/display/image"
-	"github.com/joshuar/go-templ-daisyui/layout/mask"
 )
 
 // Props are the avatar properties.
 type Props struct {
-	attributes   *attributes.Attributes
-	classes      *components.Classes
-	imageURL     string
-	imageOptions []image.Option
-	presence     components.Class
+	attributes  *attributes.Attributes
+	classes     *components.Classes
+	presence    components.Class
+	placeholder bool
 }
 
 // Option is a functional option to apply to an avatar component.
 type Option components.Option[*Props]
 
-// WithWidth sets a width class for the avatar, which can control its size.
-func WithWidth(w components.Class) Option {
+// AsPlaceholder option sets the avatar-placeholder class.
+func AsPlaceholder() Option {
 	return func(p *Props) {
-		p.classes.Add(w)
-	}
-}
-
-// WithMask option sets a mask to apply to the avatar.
-func WithMask(m mask.Mask) Option {
-	return func(p *Props) {
-		p.classes.Add(m)
+		p.placeholder = true
 	}
 }
 
@@ -48,43 +37,29 @@ func WithPresence(presence Presence) Option {
 	}
 }
 
-// WithImageOptions option sets additional options for the avatar image.
-func WithImageOptions(options ...image.Option) Option {
-	return func(p *Props) {
-		p.imageOptions = options
-	}
-}
-
-// WithExtraAttributes options sets any additional attributes for the component.
-func WithExtraAttributes(attrs templ.Attributes) Option {
+// WithAttributes options sets any additional attributes for the component.
+func WithAttributes(attrs templ.Attributes) Option {
 	return func(p *Props) {
 		p.attributes.AddAttributes(attrs)
 	}
 }
 
-// WithExtraClasses options sets any additional classes for the component.
-func WithExtraClasses(extraClasses ...components.Class) Option {
+// WithClasses options sets any additional classes for the component.
+func WithClasses(extraClasses ...components.Class) Option {
 	return func(p *Props) {
 		p.classes.Add(extraClasses...)
 	}
 }
 
 // Build creates an avatar from the given url and options.
-func Build(url string, options ...Option) *Props {
+func Build(options ...Option) *Props {
 	avatar := &Props{
 		attributes: attributes.New(),
 		classes:    components.NewClasses(),
-		imageURL:   url,
 	}
 
 	for _, option := range options {
 		option(avatar)
-	}
-
-	// Set some default class values if none specified.
-	if !avatar.classes.HasClasses() {
-		WithWidth(width.W24)(avatar)
-		avatar.classes.Add(Rounded)
 	}
 
 	return avatar

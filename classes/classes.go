@@ -11,6 +11,7 @@ import (
 	"github.com/a-h/templ"
 )
 
+// Class represents a CSS class.
 type Class = string
 
 // Classes holds custom classes for a component.
@@ -28,7 +29,7 @@ func (c *Classes) ShowClasses() templ.KeyValue[string, bool] {
 	return templ.KV(strings.Join(c.classes, " "), c.HasClasses())
 }
 
-// AddClass will add the given class to the list of classes.
+// AddClasses will add the given class to the list of classes.
 func (c *Classes) AddClasses(class ...Class) {
 	c.classes = append(c.classes, class...)
 }

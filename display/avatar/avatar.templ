@@ -3,11 +3,15 @@
 
 package avatar
 
-import "github.com/joshuar/go-templ-daisyui/display/image"
-import "github.com/joshuar/go-templ-daisyui"
+import (
+	"context"
+	"github.com/joshuar/go-templ-daisyui"
+	"io"
+)
 
 const (
-	Rounded Style = "rounded"
+	// Placeholder styles the avatar as a placeholder.
+	Placeholder Style = "avatar-placeholder"
 )
 
 // Style represents a style class for the avatar.
@@ -21,10 +25,14 @@ const (
 // Presence sets a presence indicator for the avatar.
 type Presence = components.Class
 
-templ (avatar *Props) Show() {
-	<div class={ "avatar", avatar.presence.Show() }>
+templ (avatar *Props) template() {
+	<div class={ "avatar", avatar.presence.Show(), templ.KV(Placeholder.String(),avatar.placeholder) }>
 		<div class={ avatar.classes.Show() }>
-			@image.Build(avatar.imageURL, avatar.imageOptions...).Show()
+			{ children... }
 		</div>
 	</div>
+}
+
+func (avatar *Props) Render(ctx context.Context, w io.Writer) error {
+	return avatar.template().Render(ctx, w)
 }
