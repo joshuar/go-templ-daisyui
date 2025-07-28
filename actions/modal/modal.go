@@ -14,11 +14,12 @@ import (
 	"github.com/joshuar/go-templ-daisyui/attributes"
 )
 
+// Option is a functional option for the modal.
 type Option components.Option[*Props]
 
 // Props represents the properties for a DaisyUI Modal component.
 type Props struct {
-	*attributes.Attributes
+	attributes   *attributes.Attributes
 	closeButton  bool
 	closeOutside bool
 	actions      []*button.Props
@@ -47,36 +48,28 @@ func WithActions(buttons ...*button.Props) Option {
 	}
 }
 
-func WithName(name attributes.Name) Option {
+// WithAttributes option sets additional attributes on the modal.
+func WithAttributes(attrs templ.Attributes) Option {
 	return func(p *Props) {
-		p.SetName(name)
+		p.attributes.AddAttributes(attrs)
 	}
 }
 
-func WithID(id string) Option {
-	return func(p *Props) {
-		p.SetID(id)
-	}
-}
-
-func WithExtraAttributes(attrs templ.Attributes) Option {
-	return func(p *Props) {
-		p.AddAttributes(attrs)
-	}
-}
-
-func WithExtraClasses(classes ...components.Class) Option {
+// WithClasses option sets additional classes on the modal.
+func WithClasses(classes ...components.Class) Option {
 	return func(p *Props) {
 		p.classes.Add(classes...)
 	}
 }
 
 // Build generates Modal properties from the given options.
-func Build(options ...Option) *Props {
+func Build(id string, options ...Option) *Props {
 	modal := &Props{
-		Attributes: attributes.New(),
+		attributes: attributes.New(),
 		classes:    components.NewClasses(),
 	}
+
+	modal.attributes.SetID(id)
 
 	for _, option := range options {
 		option(modal)

@@ -5,18 +5,24 @@
 package modal
 
 import (
+	"context"
 	"github.com/joshuar/go-templ-daisyui/actions/button"
 	"github.com/sebasvil20/templicons/i"
 	"github.com/sebasvil20/templicons/tabler"
+	"io"
 	"slices"
 )
 
-// Show will display a Modal with its properties.
-templ (modal *Props) Show() {
+// Render will render the modal. Satisfies templ.Component.
+func (modal *Props) Render(ctx context.Context, w io.Writer) error {
+	return modal.template().Render(ctx, w)
+}
+
+templ (modal *Props) template() {
 	<dialog
 		class={ "modal", modal.classes.Show() }
 		_="init add @open to me end on removeModal remove me"
-		{ modal.ShowAttributes()... }
+		{ modal.attributes.ShowAttributes()... }
 	>
 		<div class="modal-box bg-base-200">
 			// If closeButton option is set, generate a close button.
@@ -38,7 +44,7 @@ templ (modal *Props) Show() {
 		</div>
 		// If closeOutside option is set, generate backdrop with close action.
 		if modal.closeOutside {
-			<div class="modal-backdrop" _={ "on click or keyup[key=='Esc'] remove @open from " + modal.GetID() + " then send removeModal" }></div>
+			<div class="modal-backdrop" _={ "on click or keyup[key=='Esc'] remove @open from " + modal.attributes.GetID() + " then send removeModal" }></div>
 		}
 	</dialog>
 }
@@ -48,7 +54,7 @@ templ (modal *Props) showCloseButton() {
 		@button.Build(
 			button.WithClasses(button.Circle, button.SM, "absolute", "right-2", "top-2"),
 			button.WithAttributes(templ.Attributes{
-				"_": "on click or keyup[key=='Esc'] remove @open from " + modal.GetID() + " then send removeModal",
+				"_": "on click or keyup[key=='Esc'] remove @open from " + modal.attributes.GetID() + " then send removeModal",
 			}),
 		) {
 			@tabler.X(i.Props{Size: i.SizeXS})
