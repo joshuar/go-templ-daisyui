@@ -9,57 +9,27 @@ package badge
 import (
 	"github.com/a-h/templ"
 	components "github.com/joshuar/go-templ-daisyui"
-	"github.com/joshuar/go-templ-daisyui/classes"
+	"github.com/joshuar/go-templ-daisyui/attributes"
 )
 
 type Option components.Option[*Props]
 
 // Props represents the properties for a Badge.
 type Props struct {
-	color   BadgeColor
-	style   BadgeStyle
-	size    BadgeSize
-	content templ.Component
-	*components.Property
+	content    templ.Component
+	classes    *components.Classes
+	attributes *attributes.Attributes
 }
 
-// WithText will set the text to display within the Badge.
-func WithContent(content any) Option {
+func WithAttributes(attrs templ.Attributes) Option {
 	return func(p *Props) {
-		p.content = components.SetContent(content)
+		p.attributes.AddAttributes(attrs)
 	}
 }
 
-// WithText will set the text to display within the Badge.
-func WithSize(size BadgeSize) Option {
+func WithClasses(extraClasses ...components.Class) Option {
 	return func(p *Props) {
-		p.size = size
-	}
-}
-
-func WithColor(color BadgeColor) Option {
-	return func(p *Props) {
-		p.color = color
-	}
-}
-
-// WithStyle will set a style for a colored Badge. Styles are Soft, Outline or
-// DashedOutline.
-func WithStyle(style BadgeStyle) Option {
-	return func(p *Props) {
-		p.style = style
-	}
-}
-
-func WithExtraAttributes(attrs templ.Attributes) Option {
-	return func(p *Props) {
-		p.AddAttributes(attrs)
-	}
-}
-
-func WithExtraClasses(extraClasses ...classes.Class) Option {
-	return func(p *Props) {
-		p.AddClasses(extraClasses...)
+		p.classes.Add(extraClasses...)
 	}
 }
 
@@ -67,7 +37,8 @@ func WithExtraClasses(extraClasses ...classes.Class) Option {
 // be modified before finally rendering by calling the Show() method.
 func Build(options ...Option) *Props {
 	badge := &Props{
-		Property: components.InitProperty(),
+		classes:    components.NewClasses(),
+		attributes: attributes.New(),
 	}
 
 	for _, option := range options {

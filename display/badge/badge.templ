@@ -3,7 +3,11 @@
 
 package badge
 
-import "github.com/joshuar/go-templ-daisyui/modifiers"
+import (
+	"context"
+	"github.com/joshuar/go-templ-daisyui"
+	"io"
+)
 
 const (
 	Soft    BadgeStyle = "badge-soft"
@@ -12,7 +16,7 @@ const (
 	Ghost   BadgeStyle = "badge-ghost"
 )
 
-type BadgeStyle = modifiers.Style
+type BadgeStyle = components.Class
 
 const (
 	Primary   BadgeColor = "badge-primary"
@@ -25,7 +29,7 @@ const (
 	Error     BadgeColor = "badge-error"
 )
 
-type BadgeColor = modifiers.Color
+type BadgeColor = components.Class
 
 const (
 	XS BadgeSize = "badge-xs"
@@ -35,21 +39,15 @@ const (
 	XL BadgeSize = "badge-xl"
 )
 
-type BadgeSize = modifiers.Size
+type BadgeSize = components.Class
 
-templ (badge *Props) Show() {
-	<span
-		class={
-			"badge",
-			badge.size.Class(),
-			badge.color.Class(),
-			badge.style.Class(),
-			badge.ShowClasses(),
-		}
-		{ badge.ShowAttributes()... }
-	>
-		if badge.content != nil {
-			@badge.content
-		}
-	</span>
+func (badge *Props) Render(ctx context.Context, w io.Writer) error {
+	return badge.template().Render(ctx, w)
+}
+
+// Show will display a Card with the given options.
+templ (badge *Props) template() {
+	<div class={ "badge", badge.classes.Show() } { badge.attributes.ShowAttributes()... }>
+		{ children... }
+	</div>
 }
