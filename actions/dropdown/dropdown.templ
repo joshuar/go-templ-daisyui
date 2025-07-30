@@ -33,7 +33,7 @@ const (
 type Modifier = components.Class
 
 templ (p *Props) Show() {
-	<div class={ "dropdown", p.classes.Show() }>
+	<div class={ "dropdown", p.classes.Show() } { p.attributes.ShowAttributes()... }>
 		<div tabindex="0" role="button" class={ "btn", p.btnClasses.Show() }>
 			if p.btnContent != nil {
 				@components.SetContent(p.btnContent)

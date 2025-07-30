@@ -74,14 +74,14 @@ func WithMenuClasses(extraClasses ...components.Class) Option {
 }
 
 // WithExtraAttributes adds additional attributes to the component.
-func WithExtraAttributes(attrs templ.Attributes) Option {
+func WithAttributes(attrs templ.Attributes) Option {
 	return func(btn *Props) {
 		btn.attributes.AddAttributes(attrs)
 	}
 }
 
 // WithExtraClasses adds additional classesto the component.
-func WithExtraClasses(extraClasses ...components.Class) Option {
+func WithClasses(extraClasses ...components.Class) Option {
 	return func(p *Props) {
 		p.classes.Add(extraClasses...)
 	}
