@@ -18,27 +18,19 @@ type Option components.Option[*Props]
 
 // Props are the properties of an article component.
 type Props struct {
-	*attributes.Attributes
-	classes *components.Classes
+	attributes *attributes.Attributes
+	classes    *components.Classes
 }
 
-// WithGrayScale adds optional gray scale scheme to the prose.
-// https://github.com/tailwindlabs/tailwindcss-typography/blob/main/README.md#choosing-a-gray-scale
-func WithGrayScale(scale GrayScale) Option {
-	return func(a *Props) {
-		a.classes.Add(scale)
-	}
-}
-
-// WithExtraAttributes assigns additional attributes to the Component.
-func WithExtraAttributes(attrs templ.Attributes) Option {
+// WithAttributes assigns additional attributes to the Component.
+func WithAttributes(attrs templ.Attributes) Option {
 	return func(p *Props) {
-		p.AddAttributes(attrs)
+		p.attributes.AddAttributes(attrs)
 	}
 }
 
-// WithExtraClasses assigns additional classes to the Component.
-func WithExtraClasses(extraClasses ...components.Class) Option {
+// WithClasses assigns additional classes to the Component.
+func WithClasses(extraClasses ...components.Class) Option {
 	return func(p *Props) {
 		p.classes.Add(extraClasses...)
 	}
@@ -47,7 +39,7 @@ func WithExtraClasses(extraClasses ...components.Class) Option {
 // Build creates a new article component with the given options.
 func Build(options ...Option) *Props {
 	article := &Props{
-		Attributes: attributes.New(),
+		attributes: attributes.New(),
 		classes:    components.NewClasses(),
 	}
 

@@ -3,8 +3,11 @@
 
 package article
 
-import "strings"
-import "github.com/joshuar/go-templ-daisyui"
+import (
+	"context"
+	"github.com/joshuar/go-templ-daisyui"
+	"io"
+)
 
 const (
 	Gray    GrayScale = "prose-gray"
@@ -17,14 +20,15 @@ const (
 // Grayscale sets the grayscale class of the article text.
 type GrayScale = components.Class
 
+func (article *Props) Render(ctx context.Context, w io.Writer) error {
+	return article.template().Render(ctx, w)
+}
+
 // Show renders the article component.
-templ (article *Props) Show(classes ...string) {
+templ (article *Props) template() {
 	<article
-		class={ "prose",
-		"dark:prose-invert",
-		article.classes.Show(),
-		templ.KV(strings.Join(classes, " "), len(classes) > 0) }
-		{ article.ShowAttributes()... }
+		class={ "prose", "dark:prose-invert", article.classes.Show() }
+		{ article.attributes.ShowAttributes()... }
 	>
 		{ children... }
 	</article>
